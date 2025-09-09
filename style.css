@@ -148,3 +148,110 @@ footer {
     min-height: 2rem;
     margin-top: 1.5rem;
 }
+
+/* ages-5-6.html: お買い物ゲーム */
+#shopping-game {
+    background-color: #fff;
+    border-radius: 10px;
+    padding: 2rem;
+    max-width: 800px;
+    margin: 2rem auto;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+#game-board {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    padding: 1rem;
+    margin-bottom: 2rem;
+}
+
+#mission-panel, #cart-panel {
+    text-align: center;
+}
+
+#target-amount {
+    color: #ff6347; /* Tomato */
+    font-size: 2.5rem;
+}
+
+#cart-items {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.5rem;
+    min-height: 50px;
+    padding: 0.5rem;
+    background-color: #e0e0e0;
+    border-radius: 5px;
+    margin-top: 0.5rem;
+}
+
+.cart-item {
+    font-size: 2rem;
+}
+
+#current-total {
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+
+#item-shelf {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 1rem;
+    margin-bottom: 2rem;
+}
+
+.shop-item {
+    background-color: #fff8dc; /* Cornsilk */
+    border: 2px solid #fbc02d; /* Gold */
+    border-radius: 10px;
+    padding: 1rem;
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+    text-align: center;
+}
+
+.shop-item:hover {
+    transform: scale(1.05);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+.item-emoji {
+    font-size: 3rem;
+    display: block;
+}
+
+.item-price {
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: #333;
+}
+
+#game-controls button {
+    background-color: #4CAF50; /* Green */
+    color: white;
+    border: none;
+    padding: 1rem 2rem;
+    font-size: 1.2rem;
+    border-radius: 8px;
+    cursor: pointer;
+    margin: 0 0.5rem;
+}
+
+#game-controls #reset-cart-btn {
+    background-color: #f44336; /* Red */
+}
+
+#game-message {
+    font-size: 1.5rem;
+    font-weight: bold;
+    min-height: 2rem;
+    margin-top: 1.5rem;
+    color: #4CAF50;
+}
