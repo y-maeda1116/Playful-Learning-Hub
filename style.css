@@ -356,3 +356,63 @@ footer {
     font-size: 1.2rem;
     text-align: left;
 }
+
+/* ages-9-10.html: 分数ピザゲーム */
+#fraction-pizza-game {
+    background-color: #fefae0; /* Light cream */
+    border: 5px solid #d4a373; /* Brown */
+    border-radius: 10px;
+    padding: 2rem;
+    max-width: 800px;
+    margin: 2rem auto;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+}
+
+#pizza-question {
+    color: #bc6c25; /* Darker brown */
+}
+
+#target-fraction-display {
+    margin: 1.5rem 0;
+    font-size: 4rem;
+    font-weight: bold;
+    color: #283618; /* Dark green */
+}
+
+.frac {
+    display: inline-block;
+    position: relative;
+    vertical-align: middle;
+    letter-spacing: 0.05em;
+    text-align: center;
+}
+.frac > sup { display: block; }
+.frac > sub { display: block; }
+.frac > span { display: none; } /* Hide the slash */
+
+#pizza-choices {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 2rem;
+}
+
+.pizza-choice {
+    cursor: pointer;
+    border: 4px solid transparent;
+    border-radius: 50%;
+    transition: border-color 0.3s, transform 0.3s;
+}
+
+.pizza-choice:hover {
+    transform: scale(1.1);
+    border-color: #606c38; /* Olive green */
+}
+
+#pizza-message {
+    font-size: 1.8rem;
+    font-weight: bold;
+    min-height: 2.5rem;
+    margin-top: 2rem;
+    color: #e63946; /* Red */
+}
