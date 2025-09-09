@@ -102,3 +102,49 @@ footer {
     color: #4682b4;
     text-decoration: none;
 }
+
+/* ages-3-4.html: 分類ゲーム */
+#classification-game {
+    background-color: #fff;
+    border-radius: 10px;
+    padding: 2rem;
+    max-width: 600px;
+    margin: 2rem auto;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+#game-question {
+    font-size: 1.8rem;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 1.5rem;
+}
+
+#item-choices {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 1.5rem;
+    margin: 1rem 0;
+}
+
+.item-choice {
+    font-size: 4rem;
+    cursor: pointer;
+    padding: 1rem;
+    border-radius: 10px;
+    transition: background-color 0.2s, transform 0.2s;
+    user-select: none; /* テキスト選択を防ぐ */
+}
+
+.item-choice:hover {
+    background-color: #f0f0f0;
+    transform: scale(1.1);
+}
+
+#game-result {
+    font-size: 1.5rem;
+    font-weight: bold;
+    min-height: 2rem;
+    margin-top: 1.5rem;
+}
