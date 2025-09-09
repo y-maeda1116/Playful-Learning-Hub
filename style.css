@@ -416,3 +416,70 @@ footer {
     margin-top: 2rem;
     color: #e63946; /* Red */
 }
+
+/* ages-11-12.html: 速さの計算ゲーム */
+#speed-game {
+    background: linear-gradient(135deg, #e0c3fc 0%, #8ec5fc 100%);
+    border-radius: 10px;
+    padding: 2rem 3rem;
+    max-width: 750px;
+    margin: 2rem auto;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+    color: #333;
+}
+
+#problem-display {
+    background-color: rgba(255, 255, 255, 0.7);
+    border-radius: 8px;
+    padding: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+#problem-text {
+    font-size: 1.6rem;
+    line-height: 1.6;
+    font-weight: 500;
+}
+
+#answer-section {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+}
+
+#player-answer {
+    font-size: 1.5rem;
+    padding: 0.8rem;
+    border-radius: 5px;
+    border: 2px solid #888;
+    width: 120px;
+    text-align: center;
+}
+
+#answer-unit {
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+
+#submit-btn {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 0.9rem 2rem;
+    font-size: 1.3rem;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+#submit-btn:hover {
+    background-color: #0056b3;
+}
+
+#feedback-message {
+    font-size: 1.5rem;
+    font-weight: bold;
+    min-height: 2.5rem;
+    margin-top: 2rem;
+}
