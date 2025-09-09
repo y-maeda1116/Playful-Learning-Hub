@@ -255,3 +255,104 @@ footer {
     margin-top: 1.5rem;
     color: #4CAF50;
 }
+
+/* ages-7-8.html: 算数バトルゲーム */
+#math-battle-game {
+    background-color: #000;
+    color: #fff;
+    border: 4px solid #888;
+    border-radius: 10px;
+    padding: 1.5rem;
+    max-width: 700px;
+    margin: 2rem auto;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+    font-family: 'Press Start 2P', cursive; /* レトロゲーム風フォント (要Google Fonts) */
+}
+
+#battle-screen {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+#monster-area {
+    text-align: center;
+}
+
+#monster-emoji {
+    font-size: 6rem;
+    animation: monster-idle 2s infinite ease-in-out;
+}
+
+@keyframes monster-idle {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+}
+
+#hp-bar-container {
+    background-color: #555;
+    border: 2px solid #fff;
+    border-radius: 5px;
+    height: 25px;
+    width: 80%;
+    margin: 0.5rem auto;
+    overflow: hidden;
+}
+
+#hp-bar {
+    background-color: #ff4136; /* Red */
+    height: 100%;
+    width: 100%;
+    transition: width 0.5s ease-in-out;
+}
+
+#hp-text {
+    font-size: 1rem;
+    letter-spacing: 2px;
+}
+
+#player-area {
+    background-color: #333;
+    border: 2px solid #fff;
+    border-radius: 5px;
+    padding: 1rem;
+}
+
+#problem-area {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+}
+
+#problem-text {
+    font-size: 1.8rem;
+}
+
+#answer-input {
+    width: 80px;
+    font-size: 1.8rem;
+    text-align: center;
+    background-color: #222;
+    color: #fff;
+    border: 2px solid #fff;
+}
+
+#submit-answer-btn {
+    background-color: #0074D9; /* Blue */
+    color: #fff;
+    border: 2px solid #fff;
+    padding: 0.8rem 1.5rem;
+    font-size: 1.2rem;
+    cursor: pointer;
+}
+
+#battle-message {
+    background-color: #111;
+    border: 2px solid #fff;
+    padding: 1rem;
+    margin-top: 1rem;
+    min-height: 2.5rem;
+    font-size: 1.2rem;
+    text-align: left;
+}
