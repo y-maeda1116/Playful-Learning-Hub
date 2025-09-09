@@ -1,0 +1,104 @@
+/* 全体的なスタイル */
+body {
+    font-family: 'Helvetica Neue', Arial, 'Hiragino Kaku Gothic ProN', 'Hiragino Sans', Meiryo, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f0f8ff; /* AliceBlue */
+    color: #333;
+    text-align: center;
+}
+
+header {
+    background-color: #4682b4; /* SteelBlue */
+    color: white;
+    padding: 1rem 0;
+}
+
+main {
+    padding: 1rem;
+}
+
+footer {
+    margin-top: 2rem;
+    padding: 1rem;
+    font-size: 0.8rem;
+    color: #777;
+}
+
+/* index.html: 年齢選択 */
+.age-groups {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 1rem;
+}
+
+.age-group-card {
+    background-color: #ffffff;
+    border: 2px solid #4682b4;
+    border-radius: 10px;
+    padding: 1.5rem;
+    width: 200px;
+    text-decoration: none;
+    color: #333;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.age-group-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+/* ages-1-2.html: 動物クイズ */
+#animal-sounds-quiz {
+    background-color: #fff;
+    border-radius: 10px;
+    padding: 2rem;
+    max-width: 500px;
+    margin: 2rem auto;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+#play-sound-button {
+    background-color: #5cb85c; /* ForestGreen */
+    color: white;
+    border: none;
+    padding: 1rem 1.5rem;
+    font-size: 1.2rem;
+    border-radius: 8px;
+    cursor: pointer;
+    margin-bottom: 1rem;
+}
+
+#animal-choices {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    margin: 1rem 0;
+}
+
+.animal-choice {
+    font-size: 4rem;
+    cursor: pointer;
+    padding: 1rem;
+    border-radius: 10px;
+    transition: background-color 0.2s;
+}
+
+.animal-choice:hover {
+    background-color: #f0f0f0;
+}
+
+#result-message {
+    font-size: 1.5rem;
+    font-weight: bold;
+    min-height: 2rem;
+    margin-top: 1rem;
+}
+
+.back-link {
+    display: inline-block;
+    margin-top: 2rem;
+    color: #4682b4;
+    text-decoration: none;
+}
