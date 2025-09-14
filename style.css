@@ -386,13 +386,13 @@ footer {
     letter-spacing: 0.05em;
     text-align: center;
 }
-.frac > sup { display: block; }
-.frac > sub { display: block; }
+.frac > sup { display: block; padding: 0 0.2em; }
+.frac > sub { display: block; padding: 0 0.2em; }
 .frac > span {
     display: block;
-    border-top: 3px solid #283618; /* The fraction line */
-    color: transparent; /* Hides the slash character inside the span */
-    margin: 0.1em 0;
+    border-top: 2px solid #283618; /* Thinner line */
+    color: transparent; /* Hides the slash character */
+    margin: 0.3em 0; /* Adjusted margin for better spacing */
 }
 
 #pizza-choices {
