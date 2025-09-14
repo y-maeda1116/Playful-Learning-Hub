@@ -388,7 +388,12 @@ footer {
 }
 .frac > sup { display: block; }
 .frac > sub { display: block; }
-.frac > span { display: none; } /* Hide the slash */
+.frac > span {
+    display: block;
+    border-top: 3px solid #283618; /* The fraction line */
+    color: transparent; /* Hides the slash character inside the span */
+    margin: 0.1em 0;
+}
 
 #pizza-choices {
     display: flex;
