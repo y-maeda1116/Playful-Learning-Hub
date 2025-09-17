@@ -1,5 +1,8 @@
-document.addEventListener('DOMContentLoaded', () => {
+function initSpeedGame() {
     const gameContainer = document.getElementById('speed-game');
+    if (!gameContainer) {
+        return;
+    }
 
     let currentProblem = null;
 
@@ -24,29 +27,29 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function generateNewProblem() {
-        const problemType = Math.floor(Math.random() * 3); // 0: solve for distance, 1: speed, 2: time
+        const problemType = Math.floor(Math.random() * 3);
 
         let speed, time, distance;
         let question = '';
         let answer, unit;
 
         if (problemType === 0) { // 道のりを求める
-            speed = (Math.floor(Math.random() * 10) + 5) * 10; // 50-140 km/h
-            time = Math.floor(Math.random() * 4) + 2; // 2-5 hours
+            speed = (Math.floor(Math.random() * 10) + 5) * 10;
+            time = Math.floor(Math.random() * 4) + 2;
             distance = speed * time;
             question = `時速 ${speed} kmで ${time} 時間進むと、何km進みますか？`;
             answer = distance;
             unit = 'km';
         } else if (problemType === 1) { // 速さを求める
-            time = Math.floor(Math.random() * 4) + 2; // 2-5 hours
-            speed = (Math.floor(Math.random() * 8) + 5) * 10; // 50-120 km/h
+            time = Math.floor(Math.random() * 4) + 2;
+            speed = (Math.floor(Math.random() * 8) + 5) * 10;
             distance = speed * time;
             question = `${distance} kmの道のりを ${time} 時間で進むには、時速何kmである必要がありますか？`;
             answer = speed;
             unit = 'km/h';
         } else { // 時間を求める
-            speed = (Math.floor(Math.random() * 6) + 5) * 10; // 50-100 km/h
-            time = Math.floor(Math.random() * 5) + 2; // 2-6 hours
+            speed = (Math.floor(Math.random() * 6) + 5) * 10;
+            time = Math.floor(Math.random() * 5) + 2;
             distance = speed * time;
             question = `時速 ${speed} kmで ${distance} km進むには、何時間かかりますか？`;
             answer = time;
@@ -85,4 +88,14 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     startGame();
-});
+}
+
+// Browser environment
+if (typeof window !== 'undefined') {
+    document.addEventListener('DOMContentLoaded', initSpeedGame);
+}
+
+// Node.js for testing
+if (typeof module !== 'undefined') {
+    module.exports = { initSpeedGame };
+}

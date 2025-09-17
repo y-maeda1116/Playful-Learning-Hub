@@ -1,13 +1,17 @@
-import { describe, test, expect, beforeEach, vi } from 'vitest';
+import { describe, test, expect, beforeEach } from 'vitest';
 import fs from 'fs';
 import path from 'path';
+const { initClassificationGame } = require('./classification-game.js');
 
+// HTMLファイルの読み込み
 const html = fs.readFileSync(path.resolve(__dirname, './ages-3-4.html'), 'utf8');
 
 describe('Classification Game', () => {
-  beforeEach(async () => {
+  beforeEach(() => {
+    // JSDOMのセットアップ
     document.body.innerHTML = html;
-    await import('./classification-game.js');
+    // ゲームの初期化
+    initClassificationGame();
   });
 
   test('should display a question and choices on start', () => {

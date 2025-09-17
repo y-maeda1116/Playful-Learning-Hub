@@ -1,20 +1,15 @@
 import { describe, test, expect, beforeEach, vi } from 'vitest';
 import fs from 'fs';
 import path from 'path';
+const { initQuizGame } = require('./quiz.js');
 
-// HTMLファイルを読み込むヘルパー
 const html = fs.readFileSync(path.resolve(__dirname, './ages-1-2.html'), 'utf8');
 
 describe('Animal Sounds Quiz with Vitest', () => {
-  beforeEach(async () => {
-    // JSDOMのdocumentにHTMLを設定
+  beforeEach(() => {
     document.body.innerHTML = html;
-
-    // window.alertをモック
     vi.spyOn(window, 'alert').mockImplementation(() => {});
-
-    // スクリプトを動的にインポートして実行
-    await import('./quiz.js');
+    initQuizGame();
   });
 
   test('should display animal choices on start', () => {

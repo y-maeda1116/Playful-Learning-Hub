@@ -1,13 +1,14 @@
-import { describe, test, expect, beforeEach, vi } from 'vitest';
+import { describe, test, expect, beforeEach } from 'vitest';
 import fs from 'fs';
 import path from 'path';
+const { initShoppingGame } = require('./shopping-game.js');
 
 const html = fs.readFileSync(path.resolve(__dirname, './ages-5-6.html'), 'utf8');
 
 describe('Shopping Game', () => {
-  beforeEach(async () => {
+  beforeEach(() => {
     document.body.innerHTML = html;
-    await import('./shopping-game.js');
+    initShoppingGame();
   });
 
   test('should display target amount and shop items', () => {
