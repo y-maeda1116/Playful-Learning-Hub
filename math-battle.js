@@ -1,5 +1,9 @@
-document.addEventListener('DOMContentLoaded', () => {
+function initMathBattleGame() {
     const gameContainer = document.getElementById('math-battle-game');
+    if (!gameContainer) {
+        return;
+    }
+
     const monsters = ['👹', '👻', '👾', '👽', '💀', '👺'];
 
     let monsterEmoji = '';
@@ -46,12 +50,11 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function askNewQuestion() {
-        const num1 = Math.floor(Math.random() * 20) + 1;
-        const num2 = Math.floor(Math.random() * 20) + 1;
+        let num1 = Math.floor(Math.random() * 20) + 1;
+        let num2 = Math.floor(Math.random() * 20) + 1;
         const operator = Math.random() > 0.5 ? '+' : '-';
 
         if (operator === '-' && num1 < num2) {
-            // Ensure the result is not negative
             [num1, num2] = [num2, num1];
         }
 
@@ -69,12 +72,14 @@ document.addEventListener('DOMContentLoaded', () => {
         hpBar.style.width = `${hpPercentage}%`;
 
         document.getElementById('problem-text').textContent = currentProblem.text;
-        document.getElementById('answer-input').value = '';
-        document.getElementById('answer-input').focus();
+        const answerInput = document.getElementById('answer-input');
+        answerInput.value = '';
+        answerInput.focus();
     }
 
     function checkAnswer() {
-        const playerAnswer = parseInt(document.getElementById('answer-input').value, 10);
+        const answerInput = document.getElementById('answer-input');
+        const playerAnswer = parseInt(answerInput.value, 10);
         const battleMessageEl = document.getElementById('battle-message');
 
         if (isNaN(playerAnswer)) {
@@ -99,4 +104,14 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     startGame();
-});
+}
+
+// Browser environment
+if (typeof window !== 'undefined') {
+    document.addEventListener('DOMContentLoaded', initMathBattleGame);
+}
+
+// Node.js for testing
+if (typeof module !== 'undefined') {
+    module.exports = { initMathBattleGame };
+}

@@ -1,4 +1,9 @@
-document.addEventListener('DOMContentLoaded', () => {
+function initQuizGame() {
+    const quizContainer = document.getElementById('animal-sounds-quiz');
+    if (!quizContainer) {
+        return;
+    }
+
     const animals = [
         { name: 'いぬ', emoji: '🐶', sound: 'sounds/dog.mp3' },
         { name: 'ねこ', emoji: '🐱', sound: 'sounds/cat.mp3' },
@@ -12,17 +17,13 @@ document.addEventListener('DOMContentLoaded', () => {
     const resultMessage = document.getElementById('result-message');
 
     function startQuiz() {
+        if (!animalChoices) return;
         resultMessage.textContent = '';
         animalChoices.innerHTML = '';
 
-        // ランダムに正解の動物を選ぶ
         correctAnimal = animals[Math.floor(Math.random() * animals.length)];
-
-        // "音を鳴らす" ボタンのダミー処理
-        // 本来はここで correctAnimal.sound を再生します
         console.log(`再生する音: ${correctAnimal.name}の鳴き声`);
 
-        // 選択肢を作成
         animals.forEach(animal => {
             const choiceElement = document.createElement('div');
             choiceElement.classList.add('animal-choice');
@@ -37,18 +38,27 @@ document.addEventListener('DOMContentLoaded', () => {
         const selectedName = event.target.dataset.name;
         if (selectedName === correctAnimal.name) {
             resultMessage.textContent = 'せいかい！ 🎉';
-            // 正解したら少し待って次の問題へ
             setTimeout(startQuiz, 2000);
         } else {
             resultMessage.textContent = 'ちがうよ。もういっかい！';
         }
     }
 
-    soundButton.addEventListener('click', () => {
-        // 実際の音声再生機能はまだありません
-        alert('（ここに動物の鳴き声が流れます）');
-    });
+    if (soundButton) {
+        soundButton.addEventListener('click', () => {
+            alert('（ここに動物の鳴き声が流れます）');
+        });
+    }
 
-    // クイズを開始
     startQuiz();
-});
+}
+
+// Browser environment
+if (typeof window !== 'undefined') {
+    document.addEventListener('DOMContentLoaded', initQuizGame);
+}
+
+// Node.js for testing
+if (typeof module !== 'undefined') {
+    module.exports = { initQuizGame };
+}

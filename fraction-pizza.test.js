@@ -1,13 +1,14 @@
-import { describe, test, expect, beforeEach, vi } from 'vitest';
+import { describe, test, expect, beforeEach } from 'vitest';
 import fs from 'fs';
 import path from 'path';
+const { initFractionPizzaGame } = require('./fraction-pizza.js');
 
 const html = fs.readFileSync(path.resolve(__dirname, './ages-9-10.html'), 'utf8');
 
 describe('Fraction Pizza Game', () => {
-  beforeEach(async () => {
+  beforeEach(() => {
     document.body.innerHTML = html;
-    await import('./fraction-pizza.js');
+    initFractionPizzaGame();
   });
 
   test('should display a target fraction and pizza choices', () => {

@@ -1,5 +1,9 @@
-document.addEventListener('DOMContentLoaded', () => {
+function initShoppingGame() {
     const gameContainer = document.getElementById('shopping-game');
+    if (!gameContainer) {
+        return;
+    }
+
     const items = [
         { name: 'りんご', emoji: '🍎', price: 10 },
         { name: 'バナナ', emoji: '🍌', price: 20 },
@@ -37,9 +41,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function setupNewRound() {
         cart = [];
-        // 10円単位で、50円から150円の範囲で目標金額をランダムに設定
         targetAmount = (Math.floor(Math.random() * 11) + 5) * 10;
-
         render();
 
         document.getElementById('check-answer-btn').addEventListener('click', checkAnswer);
@@ -61,7 +63,6 @@ document.addEventListener('DOMContentLoaded', () => {
         itemShelfEl.innerHTML = '';
         cartItemsEl.innerHTML = '';
 
-        // 商品棚に商品を並べる
         items.forEach(item => {
             const itemEl = document.createElement('div');
             itemEl.classList.add('shop-item');
@@ -70,7 +71,6 @@ document.addEventListener('DOMContentLoaded', () => {
             itemShelfEl.appendChild(itemEl);
         });
 
-        // カートの中身を表示
         let currentTotal = 0;
         cart.forEach((item, index) => {
             const cartItemEl = document.createElement('div');
@@ -106,4 +106,14 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     startGame();
-});
+}
+
+// Browser environment
+if (typeof window !== 'undefined') {
+    document.addEventListener('DOMContentLoaded', initShoppingGame);
+}
+
+// Node.js for testing
+if (typeof module !== 'undefined') {
+    module.exports = { initShoppingGame };
+}

@@ -1,5 +1,8 @@
-document.addEventListener('DOMContentLoaded', () => {
+function initFractionPizzaGame() {
     const gameContainer = document.getElementById('fraction-pizza-game');
+    if (!gameContainer) {
+        return;
+    }
 
     const possibleFractions = [
         { n: 1, d: 2 }, { n: 1, d: 3 }, { n: 2, d: 3 },
@@ -21,17 +24,15 @@ document.addEventListener('DOMContentLoaded', () => {
         const center = size / 2;
         const radius = size / 2 - 5;
 
-        // Pizza base
         const base = document.createElementNS(svgNS, "circle");
         base.setAttribute("cx", center);
         base.setAttribute("cy", center);
         base.setAttribute("r", radius);
-        base.setAttribute("fill", "#ffdd99"); // Crust color
+        base.setAttribute("fill", "#ffdd99");
         base.setAttribute("stroke", "#e6a84f");
         base.setAttribute("stroke-width", "5");
         svg.appendChild(base);
 
-        // Slices
         const angleStep = 360 / denominator;
         for (let i = 0; i < denominator; i++) {
             const startAngle = i * angleStep;
@@ -53,9 +54,9 @@ document.addEventListener('DOMContentLoaded', () => {
             path.setAttribute("d", d);
 
             if (i < numerator) {
-                path.setAttribute("fill", "#d43a3a"); // Topping color
+                path.setAttribute("fill", "#d43a3a");
             } else {
-                path.setAttribute("fill", "#f5d061"); // Cheese color
+                path.setAttribute("fill", "#f5d061");
             }
             path.setAttribute("stroke", "#e6a84f");
             path.setAttribute("stroke-width", "2");
@@ -91,7 +92,6 @@ document.addEventListener('DOMContentLoaded', () => {
         messageEl.textContent = '';
         choicesContainer.innerHTML = '';
 
-        // Generate a set of unique fractions for choices
         let choices = [];
         let tempFractions = [...possibleFractions];
         for (let i = 0; i < 3; i++) {
@@ -102,7 +102,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
         fractionDisplay.innerHTML = `<span class="frac"><sup>${correctFraction.n}</sup><span>&frasl;</span><sub>${correctFraction.d}</sub></span>`;
 
-        // Display pizza choices
         choices.forEach(frac => {
             const pizzaChoice = document.createElement('div');
             pizzaChoice.classList.add('pizza-choice');
@@ -124,4 +123,14 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     startGame();
-});
+}
+
+// Browser environment
+if (typeof window !== 'undefined') {
+    document.addEventListener('DOMContentLoaded', initFractionPizzaGame);
+}
+
+// Node.js for testing
+if (typeof module !== 'undefined') {
+    module.exports = { initFractionPizzaGame };
+}

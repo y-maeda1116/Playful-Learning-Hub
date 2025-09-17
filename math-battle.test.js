@@ -1,13 +1,14 @@
-import { describe, test, expect, beforeEach, vi } from 'vitest';
+import { describe, test, expect, beforeEach } from 'vitest';
 import fs from 'fs';
 import path from 'path';
+const { initMathBattleGame } = require('./math-battle.js');
 
 const html = fs.readFileSync(path.resolve(__dirname, './ages-7-8.html'), 'utf8');
 
 describe('Math Battle Game', () => {
-  beforeEach(async () => {
+  beforeEach(() => {
     document.body.innerHTML = html;
-    await import('./math-battle.js');
+    initMathBattleGame();
   });
 
   test('should display a monster and a problem on start', () => {
