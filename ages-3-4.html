@@ -5,6 +5,116 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>3〜4歳 | わくわく学びランド</title>
     <link rel="stylesheet" href="style.css">
+    <style>
+        /* ages-3-4.html: 図形パズル */
+        #shape-puzzle-game {
+            background-color: #fff;
+            border-radius: 10px;
+            padding: 2rem;
+            max-width: 800px;
+            margin: 2rem auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        #puzzle-container {
+            display: flex;
+            justify-content: space-around;
+            margin-top: 2rem;
+            padding: 1rem;
+            min-height: 250px;
+            background-color: #f0f8ff;
+            border-radius: 8px;
+        }
+
+        #puzzle-pieces, #puzzle-silhouettes {
+            width: 45%;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1.5rem;
+            align-content: flex-start;
+        }
+
+        #puzzle-pieces {
+            border-right: 2px dashed #4682b4;
+            padding-right: 1rem;
+        }
+
+        .puzzle-piece {
+            width: 80px;
+            height: 80px;
+            cursor: grab;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 3.5rem;
+            user-select: none;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .puzzle-piece:active {
+            cursor: grabbing;
+            transform: scale(1.1);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+
+        .silhouette {
+            width: 80px;
+            height: 80px;
+            border: 3px dashed #ccc;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #e9ecef;
+            border-radius: 5px;
+            transition: background-color 0.3s, border-color 0.3s;
+        }
+
+        .silhouette.over {
+            background-color: #d4edda; /* Light green */
+            border-color: #28a745; /* Green */
+        }
+
+        .silhouette.placed {
+            border-style: solid;
+        }
+
+        .silhouette.placed .shape-placeholder {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        .shape-placeholder {
+            font-size: 3.5rem;
+            color: #ced4da;
+            opacity: 0.5;
+            transition: opacity 0.3s, transform 0.3s;
+            transform: scale(0.9);
+        }
+
+        #puzzle-message {
+            font-size: 1.5rem;
+            font-weight: bold;
+            min-height: 2rem;
+            margin-top: 1.5rem;
+            color: #28a745;
+        }
+
+        #next-level-btn {
+            background-color: #ffc107; /* Amber */
+            color: #333;
+            border: none;
+            padding: 0.8rem 1.5rem;
+            font-size: 1.2rem;
+            border-radius: 8px;
+            cursor: pointer;
+            margin-top: 1rem;
+            transition: background-color 0.2s;
+        }
+
+        #next-level-btn:hover {
+            background-color: #ffb300;
+        }
+    </style>
 </head>
 <body>
     <header>
@@ -17,6 +127,18 @@
             <h2>なかまさがしゲーム</h2>
             <p>ここにゲームが入ります。</p>
         </div>
+
+        <div id="shape-puzzle-game">
+            <h2>かたちあわせパズル</h2>
+            <p>シルエットに合うピースをドラッグしてみよう！</p>
+            <div id="puzzle-container">
+                <div id="puzzle-pieces"></div>
+                <div id="puzzle-silhouettes"></div>
+            </div>
+            <div id="puzzle-message"></div>
+            <button id="next-level-btn" style="display: none;">つぎのレベルへ</button>
+        </div>
+
         <a href="index.html" class="back-link">トップにもどる</a>
     </main>
 
@@ -25,5 +147,140 @@
     </footer>
 
     <script src="classification-game.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const gameContainer = document.getElementById('shape-puzzle-game');
+            if (!gameContainer) {
+                return;
+            }
+
+            const piecesContainer = document.getElementById('puzzle-pieces');
+            const silhouettesContainer = document.getElementById('puzzle-silhouettes');
+            const messageElement = document.getElementById('puzzle-message');
+            const nextLevelBtn = document.getElementById('next-level-btn');
+
+            const levels = [
+                {
+                    shapes: [
+                        { id: 'circle', emoji: '🔴' },
+                        { id: 'square', emoji: '🟦' },
+                        { id: 'triangle', emoji: '🔺' }
+                    ]
+                },
+                {
+                    shapes: [
+                        { id: 'heart', emoji: '❤️' },
+                        { id: 'star', emoji: '⭐' },
+                        { id: 'diamond', emoji: '🔶' },
+                        { id: 'hexagon', emoji: '⬢' }
+                    ]
+                }
+            ];
+
+            let currentLevel = 0;
+            let placedPieces = 0;
+
+            function startGame(level) {
+                piecesContainer.innerHTML = '';
+                silhouettesContainer.innerHTML = '';
+                messageElement.textContent = '';
+                nextLevelBtn.style.display = 'none';
+                placedPieces = 0;
+
+                const currentShapes = levels[level].shapes;
+                const shuffledShapes = [...currentShapes].sort(() => Math.random() - 0.5);
+                const shuffledSilhouettes = [...currentShapes].sort(() => Math.random() - 0.5);
+
+                shuffledShapes.forEach(shape => {
+                    const piece = document.createElement('div');
+                    piece.classList.add('puzzle-piece');
+                    piece.setAttribute('draggable', true);
+                    piece.dataset.shape = shape.id;
+                    piece.textContent = shape.emoji;
+                    piece.addEventListener('dragstart', handleDragStart);
+                    piecesContainer.appendChild(piece);
+                });
+
+                shuffledSilhouettes.forEach(shape => {
+                    const silhouette = document.createElement('div');
+                    silhouette.classList.add('silhouette');
+                    silhouette.dataset.shape = shape.id;
+
+                    const placeholder = document.createElement('span');
+                    placeholder.classList.add('shape-placeholder');
+                    placeholder.textContent = shape.emoji;
+                    silhouette.appendChild(placeholder);
+
+                    silhouette.addEventListener('dragover', handleDragOver);
+                    silhouette.addEventListener('dragleave', handleDragLeave);
+                    silhouette.addEventListener('drop', handleDrop);
+                    silhouettesContainer.appendChild(silhouette);
+                });
+            }
+
+            function handleDragStart(e) {
+                e.dataTransfer.setData('text/plain', e.target.dataset.shape);
+                e.dataTransfer.effectAllowed = 'move';
+            }
+
+            function handleDragOver(e) {
+                e.preventDefault();
+                if (!e.currentTarget.classList.contains('placed')) {
+                    e.currentTarget.classList.add('over');
+                }
+            }
+
+            function handleDragLeave(e) {
+                e.currentTarget.classList.remove('over');
+            }
+
+            function handleDrop(e) {
+                e.preventDefault();
+                e.currentTarget.classList.remove('over');
+                const droppedShapeId = e.dataTransfer.getData('text/plain');
+                const targetShapeId = e.currentTarget.dataset.shape;
+
+                if (droppedShapeId === targetShapeId && !e.currentTarget.classList.contains('placed')) {
+                    const piece = document.querySelector(`.puzzle-piece[data-shape='${droppedShapeId}']`);
+
+                    if (piece) {
+                        e.currentTarget.classList.add('placed');
+                        e.currentTarget.innerHTML = piece.innerHTML;
+
+                        piece.setAttribute('draggable', false);
+                        piece.style.visibility = 'hidden';
+
+                        placedPieces++;
+                        messageElement.textContent = 'せいかい！上手だね！ ✨';
+
+                        if (placedPieces === levels[currentLevel].shapes.length) {
+                            messageElement.textContent = 'ぜんぶできたね！すごい！ 🎉';
+                            if (currentLevel < levels.length - 1) {
+                                nextLevelBtn.style.display = 'block';
+                            }
+                        }
+                    }
+                } else if (e.currentTarget.classList.contains('placed')) {
+                    // Do nothing, the spot is already correctly filled.
+                } else {
+                    messageElement.textContent = 'おしい！ちがうかたちかな？';
+                    setTimeout(() => {
+                        if (messageElement.textContent === 'おしい！ちがうかたちかな？') {
+                            messageElement.textContent = '';
+                        }
+                    }, 2000);
+                }
+            }
+
+            nextLevelBtn.addEventListener('click', () => {
+                currentLevel++;
+                if (currentLevel < levels.length) {
+                    startGame(currentLevel);
+                }
+            });
+
+            startGame(currentLevel);
+        });
+    </script>
 </body>
 </html>
