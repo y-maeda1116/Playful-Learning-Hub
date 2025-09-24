@@ -40,10 +40,53 @@
                 <p>探究学習</p>
             </a>
         </nav>
+
+        <section id="user-content-section" class="user-content">
+            <h2>みんなの作ったクイズ</h2>
+            <div id="user-quiz-list"></div>
+
+            <h3>新しいクイズを作る</h3>
+            <form id="create-quiz-form">
+                <div class="form-group">
+                    <label for="quiz-title">クイズのタイトル</label>
+                    <input type="text" id="quiz-title" required>
+                </div>
+                <div class="form-group">
+                    <label for="quiz-question">問題文</label>
+                    <input type="text" id="quiz-question" required>
+                </div>
+                <div class="form-group">
+                    <label for="quiz-image">画像 (任意)</label>
+                    <input type="file" id="quiz-image" accept="image/*">
+                </div>
+                <div class="form-group">
+                    <label>選択肢</label>
+                    <input type="text" class="quiz-choice" placeholder="正解の選択肢" required>
+                    <input type="text" class="quiz-choice" placeholder="不正解の選択肢1" required>
+                    <input type="text" class="quiz-choice" placeholder="不正解の選択肢2" required>
+                    <input type="text" class="quiz-choice" placeholder="不正解の選択肢3" required>
+                </div>
+                <button type="submit">クイズを作成</button>
+            </form>
+        </section>
     </main>
 
     <footer>
         <p>&copy; 2024 わくわく学びランド</p>
     </footer>
+
+    <!-- クイズ表示用のモーダル -->
+    <div id="quiz-modal" class="modal" style="display:none;">
+        <div class="modal-content">
+            <span class="close-button">&times;</span>
+            <h2 id="modal-quiz-title"></h2>
+            <p id="modal-quiz-question"></p>
+            <img id="modal-quiz-image" src="" alt="クイズ画像" style="display:none; max-width: 100%; border-radius: 8px;">
+            <div id="modal-quiz-choices"></div>
+            <p id="modal-quiz-feedback"></p>
+        </div>
+    </div>
+
+    <script src="user-content.js"></script>
 </body>
 </html>
