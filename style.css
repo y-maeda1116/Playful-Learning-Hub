@@ -256,6 +256,10 @@ footer {
     color: #4CAF50;
 }
 
+.hidden {
+    display: none !important;
+}
+
 /* ages-7-8.html: 算数バトルゲーム */
 #math-battle-game {
     background-color: #000;
@@ -487,4 +491,155 @@ footer {
     font-weight: bold;
     min-height: 2.5rem;
     margin-top: 2rem;
+}
+
+/* ages-7-8.html: プログラミングゲーム */
+#coding-game {
+    background-color: #eef5ff;
+    border: 3px solid #6a9fde;
+    border-radius: 10px;
+    padding: 2rem;
+    max-width: 900px;
+    margin: 2rem auto;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+
+#level-selection {
+    margin-bottom: 2rem;
+}
+
+#level-selection .level-btn {
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    padding: 1rem 1.5rem;
+    font-size: 1.2rem;
+    border-radius: 8px;
+    cursor: pointer;
+    margin: 0 0.5rem;
+}
+
+#game-container {
+    display: none; /* 初期状態では非表示 */
+    flex-direction: column;
+    align-items: center;
+}
+
+#game-board {
+    display: grid;
+    border: 2px solid #333;
+    margin-bottom: 1.5rem;
+}
+
+.grid-cell {
+    width: 50px;
+    height: 50px;
+    border: 1px solid #ccc;
+    box-sizing: border-box;
+    position: relative;
+}
+
+.wall {
+    background-color: #5a5a5a;
+}
+
+#character {
+    width: 40px;
+    height: 40px;
+    background-color: #ff6347; /* Tomato */
+    border-radius: 50%;
+    position: relative;
+    top: 0;
+    left: 0;
+    transition: all 0.3s ease-in-out;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-weight: bold;
+    margin: 5px; /* Center it within the cell */
+}
+
+#goal {
+    width: 40px;
+    height: 40px;
+    background-color: #ffd700; /* Gold */
+    position: relative;
+    top: 0;
+    left: 0;
+    margin: 5px;
+    text-align: center;
+    line-height: 40px;
+    font-size: 2rem;
+}
+
+#controls-container {
+    display: flex;
+    justify-content: space-around;
+    width: 100%;
+    gap: 2rem;
+    margin-bottom: 1.5rem;
+}
+
+#toolbox, #sequence {
+    background-color: #fff;
+    border: 2px solid #ddd;
+    border-radius: 8px;
+    padding: 1rem;
+    width: 45%;
+}
+
+#toolbox h3, #sequence h3 {
+    margin-top: 0;
+    border-bottom: 2px solid #eee;
+    padding-bottom: 0.5rem;
+}
+
+.command {
+    background-color: #87ceeb; /* SkyBlue */
+    color: #fff;
+    padding: 0.8rem;
+    margin-bottom: 0.5rem;
+    border-radius: 5px;
+    cursor: grab;
+    user-select: none;
+    text-align: center;
+}
+
+.command:active {
+    cursor: grabbing;
+}
+
+#sequence-blocks {
+    min-height: 150px;
+    background-color: #f9f9f9;
+    padding: 0.5rem;
+    border-radius: 5px;
+}
+
+#sequence-blocks .command {
+    background-color: #4682b4; /* SteelBlue */
+}
+
+#execution-controls button {
+    background-color: #f44336; /* Red */
+    color: white;
+    border: none;
+    padding: 1rem 2rem;
+    font-size: 1.3rem;
+    border-radius: 8px;
+    cursor: pointer;
+    margin: 0 0.5rem;
+}
+
+#execution-controls #reset-btn {
+    background-color: #ff9800; /* Orange */
+}
+
+#coding-game #game-message {
+    font-size: 1.5rem;
+    font-weight: bold;
+    min-height: 2.5rem;
+    margin-top: 1.5rem;
+    color: #4CAF50;
 }

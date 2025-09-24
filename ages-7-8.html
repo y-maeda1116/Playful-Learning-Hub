@@ -17,6 +17,37 @@
             <h2>モンスター算数バトル</h2>
             <p>ここにゲームが入ります。</p>
         </div>
+
+        <div id="coding-game">
+            <h2>プログラミングの基礎</h2>
+            <div id="level-selection">
+                <h3>レベルを選んでね</h3>
+                <button class="level-btn" data-level="1">レベル1</button>
+                <button class="level-btn" data-level="2">レベル2</button>
+                <button class="level-btn" data-level="3">レベル3</button>
+            </div>
+            <div id="game-container" class="hidden">
+                <div id="game-board"></div>
+                <div id="controls-container">
+                    <div id="toolbox">
+                        <h3>使えるブロック</h3>
+                        <div class="command" draggable="true" data-command="forward">前に進む</div>
+                        <div class="command" draggable="true" data-command="turnRight">右を向く</div>
+                        <div class="command" draggable="true" data-command="jump">ジャンプする</div>
+                    </div>
+                    <div id="sequence">
+                        <h3>プログラム</h3>
+                        <div id="sequence-blocks"></div>
+                    </div>
+                </div>
+                <div id="execution-controls">
+                    <button id="run-btn">実行</button>
+                    <button id="reset-btn">リセット</button>
+                </div>
+                <p id="game-message"></p>
+            </div>
+        </div>
+
         <a href="index.html" class="back-link">トップにもどる</a>
     </main>
 
@@ -25,5 +56,6 @@
     </footer>
 
     <script src="math-battle.js"></script>
+    <script src="coding-game.js"></script>
 </body>
 </html>
