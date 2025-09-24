@@ -17,6 +17,21 @@
             <h2>分数のピザ屋さん</h2>
             <p>ここにゲームが入ります。</p>
         </div>
+
+        <div id="astronomy-simulation">
+            <h2>天体観測シミュレーション</h2>
+            <div id="simulation-controls">
+                <label for="date-picker">日付:</label>
+                <input type="date" id="date-picker">
+                <label for="time-picker">時間:</label>
+                <input type="time" id="time-picker">
+            </div>
+            <canvas id="sky-canvas" width="800" height="600"></canvas>
+            <div id="info-display">
+                <p>星や惑星をクリックして情報を表示</p>
+            </div>
+        </div>
+
         <a href="index.html" class="back-link">トップにもどる</a>
     </main>
 
@@ -25,5 +40,6 @@
     </footer>
 
     <script src="fraction-pizza.js"></script>
+    <script src="astronomy-sim.js"></script>
 </body>
 </html>

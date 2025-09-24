@@ -488,3 +488,58 @@ footer {
     min-height: 2.5rem;
     margin-top: 2rem;
 }
+
+/* ages-9-10.html: 天体観測シミュレーション */
+#astronomy-simulation {
+    background-color: #000020; /* 深い夜空の色 */
+    color: #fff;
+    border: 5px solid #4a4a8a;
+    border-radius: 10px;
+    padding: 2rem;
+    max-width: 800px;
+    margin: 2rem auto;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+}
+
+#simulation-controls {
+    margin-bottom: 1rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+#simulation-controls label {
+    font-size: 1.1rem;
+}
+
+#simulation-controls input {
+    background-color: #1a1a3a;
+    color: #fff;
+    border: 1px solid #4a4a8a;
+    border-radius: 5px;
+    padding: 0.5rem;
+}
+
+#sky-canvas {
+    background-color: #000;
+    border-radius: 8px;
+    cursor: grab;
+    width: 100%;
+    height: auto;
+}
+
+#sky-canvas:active {
+    cursor: grabbing;
+}
+
+#info-display {
+    background-color: rgba(26, 26, 58, 0.8);
+    border: 1px solid #4a4a8a;
+    border-radius: 5px;
+    padding: 1rem;
+    margin-top: 1rem;
+    min-height: 3rem;
+    text-align: left;
+}
