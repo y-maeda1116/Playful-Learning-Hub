@@ -13,10 +13,48 @@
     </header>
 
     <main>
-        <div id="classification-game">
-            <h2>なかまさがしゲーム</h2>
-            <p>ここにゲームが入ります。</p>
+        <!-- ゲーム選択ナビゲーション -->
+        <div class="game-navigation" role="navigation" aria-label="ゲーム選択">
+            <h2>どのゲームであそぶ？</h2>
+            <div class="game-selector" role="tablist">
+                <button id="classification-game-btn" class="game-nav-button active" 
+                        role="tab" aria-selected="true" aria-controls="classification-game-section"
+                        aria-label="なかまさがしゲーム - おなじなかまをさがそう">
+                    <span class="game-icon" aria-hidden="true">🔍</span>
+                    <span class="game-title">なかまさがし</span>
+                    <span class="game-description">おなじなかまをさがそう</span>
+                </button>
+                <button id="hiragana-game-btn" class="game-nav-button"
+                        role="tab" aria-selected="false" aria-controls="hiragana-learning-section"
+                        aria-label="ひらがな学習ゲーム - もじをおぼえよう">
+                    <span class="game-icon" aria-hidden="true">あ</span>
+                    <span class="game-title">ひらがな</span>
+                    <span class="game-description">もじをおぼえよう</span>
+                </button>
+            </div>
         </div>
+
+        <!-- 分類ゲームセクション -->
+        <div id="classification-game-section" class="game-section active" 
+             role="tabpanel" aria-labelledby="classification-game-btn">
+            <div id="classification-game">
+                <h2>なかまさがしゲーム</h2>
+                <p>ここにゲームが入ります。</p>
+            </div>
+        </div>
+        
+        <!-- ひらがな学習セクション -->
+        <div id="hiragana-learning-section" class="game-section" 
+             role="tabpanel" aria-labelledby="hiragana-game-btn" aria-hidden="true">
+            <h2>ひらがな学習</h2>
+            <div id="hiragana-game-container" role="main" aria-live="polite"></div>
+            <div id="progress-summary-container" role="complementary" aria-label="学習進捗"></div>
+        </div>
+        
+        <div id="parent-controls" role="complementary" aria-label="保護者向けコントロール">
+            <!-- 保護者向けボタンがここに追加されます -->
+        </div>
+        
         <a href="index.html" class="back-link">トップにもどる</a>
     </main>
 
@@ -25,5 +63,136 @@
     </footer>
 
     <script src="classification-game.js"></script>
+    <script src="character-data.js"></script>
+    <script src="audio-manager.js"></script>
+    <script src="progress-tracker.js"></script>
+    <script src="progress-display.js"></script>
+    <script src="progress-integration.js"></script>
+    <script src="hiragana-learning.js"></script>
+    <script>
+        // ページ読み込み後に初期化
+        document.addEventListener('DOMContentLoaded', function() {
+            // 進捗統合システムを初期化
+            progressIntegration.initialize();
+            
+            let hiraganaGame = null;
+            
+            // ゲームナビゲーション機能
+            function switchToGame(gameType) {
+                // すべてのゲームセクションを非表示
+                document.querySelectorAll('.game-section').forEach(section => {
+                    section.classList.remove('active');
+                    section.setAttribute('aria-hidden', 'true');
+                });
+                
+                // すべてのナビゲーションボタンを非アクティブ
+                document.querySelectorAll('.game-nav-button').forEach(btn => {
+                    btn.classList.remove('active');
+                    btn.setAttribute('aria-selected', 'false');
+                });
+                
+                if (gameType === 'classification') {
+                    const section = document.getElementById('classification-game-section');
+                    const button = document.getElementById('classification-game-btn');
+                    section.classList.add('active');
+                    section.setAttribute('aria-hidden', 'false');
+                    button.classList.add('active');
+                    button.setAttribute('aria-selected', 'true');
+                } else if (gameType === 'hiragana') {
+                    const section = document.getElementById('hiragana-learning-section');
+                    const button = document.getElementById('hiragana-game-btn');
+                    section.classList.add('active');
+                    section.setAttribute('aria-hidden', 'false');
+                    button.classList.add('active');
+                    button.setAttribute('aria-selected', 'true');
+                    
+                    // ひらがな学習ゲームを初期化（まだ初期化されていない場合）
+                    if (!hiraganaGame) {
+                        hiraganaGame = new HiraganaLearningGame(
+                            '3-4', 
+                            document.getElementById('hiragana-game-container'),
+                            {
+                                mode: 'hiragana',
+                                audio: { enabled: true }
+                            }
+                        );
+                        
+                        // ゲームと進捗追跡を連携
+                        progressIntegration.connectGameToProgress(hiraganaGame);
+                        
+                        // 進捗サマリーを表示
+                        progressIntegration.showProgressSummary('progress-summary-container');
+                    }
+                }
+            }
+            
+            // ナビゲーションボタンのイベントリスナー
+            document.getElementById('classification-game-btn').addEventListener('click', function() {
+                switchToGame('classification');
+            });
+            
+            document.getElementById('hiragana-game-btn').addEventListener('click', function() {
+                switchToGame('hiragana');
+            });
+            
+            // 保護者向けボタンを追加
+            progressIntegration.addParentButton('parent-controls', '保護者向け進捗確認');
+            
+            // デフォルトで分類ゲームを表示
+            switchToGame('classification');
+        });
+    </script>
 </body>
 </html>
+            // キーボードナビゲーション対応
+            document.addEventListener('keydown', function(event) {
+                // Tab キーでのフォーカス管理
+                if (event.key === 'Tab') {
+                    // デフォルトの Tab 動作を維持
+                    return;
+                }
+                
+                // 矢印キーでのゲーム切り替え
+                if (event.key === 'ArrowLeft' || event.key === 'ArrowRight') {
+                    const activeButton = document.querySelector('.game-nav-button.active');
+                    if (activeButton) {
+                        event.preventDefault();
+                        const buttons = Array.from(document.querySelectorAll('.game-nav-button'));
+                        const currentIndex = buttons.indexOf(activeButton);
+                        let nextIndex;
+                        
+                        if (event.key === 'ArrowRight') {
+                            nextIndex = (currentIndex + 1) % buttons.length;
+                        } else {
+                            nextIndex = (currentIndex - 1 + buttons.length) % buttons.length;
+                        }
+                        
+                        buttons[nextIndex].click();
+                        buttons[nextIndex].focus();
+                    }
+                }
+                
+                // Enter または Space キーでボタン実行
+                if (event.key === 'Enter' || event.key === ' ') {
+                    const focusedElement = document.activeElement;
+                    if (focusedElement && focusedElement.classList.contains('game-nav-button')) {
+                        event.preventDefault();
+                        focusedElement.click();
+                    }
+                }
+            });
+            
+            // フォーカス管理の改善
+            document.querySelectorAll('.game-nav-button').forEach(button => {
+                button.addEventListener('focus', function() {
+                    // フォーカス時にボタンを強調表示
+                    this.style.outline = '4px solid #4A90E2';
+                    this.style.outlineOffset = '2px';
+                });
+                
+                button.addEventListener('blur', function() {
+                    // フォーカス解除時にアウトラインを削除
+                    this.style.outline = '';
+                    this.style.outlineOffset = '';
+                });
+            });

@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>進捗表示機能テスト</title>
+    <style>
+        body {
+            font-family: 'Hiragino Sans', 'Yu Gothic', sans-serif;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        
+        .test-container {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .test-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        
+        .test-section {
+            margin: 20px 0;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+        }
+        
+        .test-section h3 {
+            margin-top: 0;
+            color: #333;
+        }
+        
+        .test-button {
+            background: #28a745;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        
+        .test-button:hover {
+            background: #218838;
+        }
+        
+        #console-output {
+            background: #000;
+            color: #0f0;
+            padding: 15px;
+            border-radius: 5px;
+            font-family: monospace;
+            white-space: pre-wrap;
+            max-height: 400px;
+            overflow-y: auto;
+            margin: 20px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="test-header">
+        <h1>進捗表示機能テスト</h1>
+        <p>保護者向け進捗表示機能のテストページです</p>
+    </div>
+    
+    <div class="test-container">
+        <div class="test-section">
+            <h3>テスト実行</h3>
+            <button class="test-button" onclick="runAllTests()">全テスト実行</button>
+            <button class="test-button" onclick="testProgressDisplay()">進捗表示テスト</button>
+            <button class="test-button" onclick="testIntegration()">統合機能テスト</button>
+            <button class="test-button" onclick="clearConsole()">コンソールクリア</button>
+        </div>
+        
+        <div class="test-section">
+            <h3>コンソール出力</h3>
+            <div id="console-output"></div>
+        </div>
+        
+        <div class="test-section">
+            <h3>進捗表示デモ</h3>
+            <button class="test-button" onclick="showProgressDemo()">進捗表示デモ</button>
+            <div id="progress-demo-container"></div>
+        </div>
+        
+        <div class="test-section">
+            <h3>統合機能デモ</h3>
+            <button class="test-button" onclick="showIntegrationDemo()">統合機能デモ</button>
+            <div id="integration-demo-container"></div>
+            <div id="parent-controls-demo"></div>
+        </div>
+    </div>
+    
+    <!-- 必要なスクリプトを読み込み -->
+    <script src="progress-tracker.js"></script>
+    <script src="progress-display.js"></script>
+    <script src="progress-integration.js"></script>
+    <script src="progress-display.test.js"></script>
+    
+    <script>
+        // コンソール出力をページに表示
+        const originalConsoleLog = console.log;
+        const consoleOutput = document.getElementById('console-output');
+        
+        console.log = function(...args) {
+            originalConsoleLog.apply(console, args);
+            const message = args.map(arg => 
+                typeof arg === 'object' ? JSON.stringify(arg, null, 2) : String(arg)
+            ).join(' ');
+            consoleOutput.textContent += message + '\n';
+            consoleOutput.scrollTop = consoleOutput.scrollHeight;
+        };
+        
+        function clearConsole() {
+            consoleOutput.textContent = '';
+        }
+        
+        function runAllTests() {
+            clearConsole();
+            console.log('=== 全テスト実行開始 ===\n');
+            runProgressDisplayTests();
+        }
+        
+        function testProgressDisplay() {
+            clearConsole();
+            console.log('=== 進捗表示テスト ===\n');
+            testProgressDisplayCreation();
+        }
+        
+        function testIntegration() {
+            clearConsole();
+            console.log('=== 統合機能テスト ===\n');
+            testProgressIntegration();
+        }
+        
+        function showProgressDemo() {
+            const container = document.getElementById('progress-demo-container');
+            container.innerHTML = '<p>進捗表示デモを準備中...</p>';
+            
+            try {
+                const mockTracker = new MockProgressTracker();
+                const progressDisplay = new ProgressDisplay(container, mockTracker, {
+                    refreshInterval: 0 // 自動更新を無効化
+                });
+                
+                console.log('進捗表示デモが作成されました');
+            } catch (error) {
+                container.innerHTML = `<p style="color: red;">エラー: ${error.message}</p>`;
+                console.log('進捗表示デモの作成に失敗:', error.message);
+            }
+        }
+        
+        function showIntegrationDemo() {
+            const container = document.getElementById('integration-demo-container');
+            const parentControls = document.getElementById('parent-controls-demo');
+            
+            container.innerHTML = '<p>統合機能デモを準備中...</p>';
+            
+            try {
+                const integration = new ProgressIntegration();
+                
+                // 進捗サマリーを表示
+                integration.showProgressSummary('integration-demo-container');
+                
+                // 保護者ボタンを追加
+                integration.addParentButton('parent-controls-demo', '進捗確認デモ');
+                
+                console.log('統合機能デモが作成されました');
+            } catch (error) {
+                container.innerHTML = `<p style="color: red;">エラー: ${error.message}</p>`;
+                console.log('統合機能デモの作成に失敗:', error.message);
+            }
+        }
+        
+        // ページ読み込み時の初期化
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('進捗表示機能テストページが読み込まれました');
+            console.log('テストボタンをクリックして機能をテストしてください\n');
+        });
+    </script>
+</body>
+</html>

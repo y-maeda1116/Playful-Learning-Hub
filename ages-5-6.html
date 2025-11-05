@@ -13,10 +13,55 @@
     </header>
 
     <main>
-        <div id="shopping-game">
-            <h2>かずのおかいものゲーム</h2>
-            <p>ここにゲームが入ります。</p>
+        <!-- ゲーム選択ナビゲーション -->
+        <div class="game-navigation" role="navigation" aria-label="ゲーム選択">
+            <h2>どのゲームであそぶ？</h2>
+            <div class="game-selector" role="tablist">
+                <button id="shopping-game-btn" class="game-nav-button active"
+                        role="tab" aria-selected="true" aria-controls="shopping-game-section"
+                        aria-label="おかいものゲーム - かずをつかっておかいもの">
+                    <span class="game-icon" aria-hidden="true">🛒</span>
+                    <span class="game-title">おかいもの</span>
+                    <span class="game-description">かずをつかっておかいもの</span>
+                </button>
+                <button id="hiragana-katakana-game-btn" class="game-nav-button"
+                        role="tab" aria-selected="false" aria-controls="hiragana-katakana-learning-section"
+                        aria-label="ひらがな・カタカナ学習ゲーム - もじをおぼえよう">
+                    <span class="game-icon" aria-hidden="true">あア</span>
+                    <span class="game-title">ひらがな・カタカナ</span>
+                    <span class="game-description">もじをおぼえよう</span>
+                </button>
+            </div>
         </div>
+
+        <!-- お買い物ゲームセクション -->
+        <div id="shopping-game-section" class="game-section active">
+            <div id="shopping-game">
+                <h2>かずのおかいものゲーム</h2>
+                <p>ここにゲームが入ります。</p>
+            </div>
+        </div>
+        
+        <!-- ひらがな・カタカナ学習セクション -->
+        <div id="hiragana-katakana-learning-section" class="game-section"
+             role="tabpanel" aria-labelledby="hiragana-katakana-game-btn" aria-hidden="true">
+            <h2>ひらがな・カタカナ学習</h2>
+            <div class="mode-selector" role="tablist" aria-label="学習モード選択">
+                <button id="hiragana-mode" class="mode-button active"
+                        role="tab" aria-selected="true" aria-label="ひらがなモード">ひらがな</button>
+                <button id="katakana-mode" class="mode-button"
+                        role="tab" aria-selected="false" aria-label="カタカナモード">カタカナ</button>
+                <button id="mixed-mode" class="mode-button"
+                        role="tab" aria-selected="false" aria-label="混合モード">混合</button>
+            </div>
+            <div id="hiragana-game-container" role="main" aria-live="polite"></div>
+            <div id="progress-summary-container" role="complementary" aria-label="学習進捗"></div>
+        </div>
+        
+        <div id="parent-controls" role="complementary" aria-label="保護者向けコントロール">
+            <!-- 保護者向けボタンがここに追加されます -->
+        </div>
+        
         <a href="index.html" class="back-link">トップにもどる</a>
     </main>
 
@@ -25,5 +70,194 @@
     </footer>
 
     <script src="shopping-game.js"></script>
+    <script src="character-data.js"></script>
+    <script src="audio-manager.js"></script>
+    <script src="progress-tracker.js"></script>
+    <script src="progress-display.js"></script>
+    <script src="progress-integration.js"></script>
+    <script src="word-formation-game.js"></script>
+    <script src="hiragana-learning.js"></script>
+    <script>
+        // ページ読み込み後に初期化
+        document.addEventListener('DOMContentLoaded', function() {
+            // 進捗統合システムを初期化
+            progressIntegration.initialize();
+            
+            let currentGame = null;
+            let hiraganaGameInitialized = false;
+            
+            // ゲームナビゲーション機能
+            function switchToGame(gameType) {
+                // すべてのゲームセクションを非表示
+                document.querySelectorAll('.game-section').forEach(section => {
+                    section.classList.remove('active');
+                });
+                
+                // すべてのナビゲーションボタンを非アクティブ
+                document.querySelectorAll('.game-nav-button').forEach(btn => {
+                    btn.classList.remove('active');
+                });
+                
+                if (gameType === 'shopping') {
+                    document.getElementById('shopping-game-section').classList.add('active');
+                    document.getElementById('shopping-game-btn').classList.add('active');
+                } else if (gameType === 'hiragana-katakana') {
+                    document.getElementById('hiragana-katakana-learning-section').classList.add('active');
+                    document.getElementById('hiragana-katakana-game-btn').classList.add('active');
+                    
+                    // ひらがな・カタカナ学習ゲームを初期化（まだ初期化されていない場合）
+                    if (!hiraganaGameInitialized) {
+                        initializeGame('hiragana');
+                        hiraganaGameInitialized = true;
+                    }
+                }
+            }
+            
+            // ひらがな・カタカナ学習ゲームを初期化
+            function initializeGame(mode) {
+                // 既存のゲームを破棄
+                if (currentGame) {
+                    currentGame.destroy();
+                }
+                
+                // 新しいゲームを作成
+                currentGame = new HiraganaLearningGame(
+                    '5-6', 
+                    document.getElementById('hiragana-game-container'),
+                    {
+                        mode: mode,
+                        audio: { enabled: true }
+                    }
+                );
+                
+                // ゲームと進捗追跡を連携
+                progressIntegration.connectGameToProgress(currentGame);
+                
+                // 進捗サマリーを更新
+                progressIntegration.showProgressSummary('progress-summary-container');
+            }
+            
+            // ゲームナビゲーションボタンのイベントリスナー
+            document.getElementById('shopping-game-btn').addEventListener('click', function() {
+                switchToGame('shopping');
+            });
+            
+            document.getElementById('hiragana-katakana-game-btn').addEventListener('click', function() {
+                switchToGame('hiragana-katakana');
+            });
+            
+            // モード切り替えボタンのイベントリスナー
+            document.getElementById('hiragana-mode').addEventListener('click', function() {
+                setActiveMode('hiragana', this);
+                if (hiraganaGameInitialized) {
+                    initializeGame('hiragana');
+                }
+            });
+            
+            document.getElementById('katakana-mode').addEventListener('click', function() {
+                setActiveMode('katakana', this);
+                if (hiraganaGameInitialized) {
+                    initializeGame('katakana');
+                }
+            });
+            
+            document.getElementById('mixed-mode').addEventListener('click', function() {
+                setActiveMode('mixed', this);
+                if (hiraganaGameInitialized) {
+                    initializeGame('mixed');
+                }
+            });
+            
+            // アクティブモードを設定
+            function setActiveMode(mode, button) {
+                document.querySelectorAll('.mode-button').forEach(btn => {
+                    btn.classList.remove('active');
+                    btn.setAttribute('aria-selected', 'false');
+                });
+                button.classList.add('active');
+                button.setAttribute('aria-selected', 'true');
+            }
+            
+            // 保護者向けボタンを追加
+            progressIntegration.addParentButton('parent-controls', '保護者向け進捗確認');
+            
+            // デフォルトでお買い物ゲームを表示
+            switchToGame('shopping');
+        });
+    </script>
 </body>
 </html>
+            // キーボードナビゲーション対応
+            document.addEventListener('keydown', function(event) {
+                // Tab キーでのフォーカス管理
+                if (event.key === 'Tab') {
+                    // デフォルトの Tab 動作を維持
+                    return;
+                }
+                
+                // 矢印キーでのゲーム切り替え
+                if (event.key === 'ArrowLeft' || event.key === 'ArrowRight') {
+                    const activeButton = document.querySelector('.game-nav-button.active');
+                    if (activeButton) {
+                        event.preventDefault();
+                        const buttons = Array.from(document.querySelectorAll('.game-nav-button'));
+                        const currentIndex = buttons.indexOf(activeButton);
+                        let nextIndex;
+                        
+                        if (event.key === 'ArrowRight') {
+                            nextIndex = (currentIndex + 1) % buttons.length;
+                        } else {
+                            nextIndex = (currentIndex - 1 + buttons.length) % buttons.length;
+                        }
+                        
+                        buttons[nextIndex].click();
+                        buttons[nextIndex].focus();
+                    }
+                }
+                
+                // 矢印キーでのモード切り替え（ひらがな・カタカナ学習セクションがアクティブな場合）
+                if ((event.key === 'ArrowUp' || event.key === 'ArrowDown') && 
+                    document.getElementById('hiragana-katakana-learning-section').classList.contains('active')) {
+                    const activeMode = document.querySelector('.mode-button.active');
+                    if (activeMode) {
+                        event.preventDefault();
+                        const modes = Array.from(document.querySelectorAll('.mode-button'));
+                        const currentIndex = modes.indexOf(activeMode);
+                        let nextIndex;
+                        
+                        if (event.key === 'ArrowDown') {
+                            nextIndex = (currentIndex + 1) % modes.length;
+                        } else {
+                            nextIndex = (currentIndex - 1 + modes.length) % modes.length;
+                        }
+                        
+                        modes[nextIndex].click();
+                        modes[nextIndex].focus();
+                    }
+                }
+                
+                // Enter または Space キーでボタン実行
+                if (event.key === 'Enter' || event.key === ' ') {
+                    const focusedElement = document.activeElement;
+                    if (focusedElement && (focusedElement.classList.contains('game-nav-button') || 
+                                          focusedElement.classList.contains('mode-button'))) {
+                        event.preventDefault();
+                        focusedElement.click();
+                    }
+                }
+            });
+            
+            // フォーカス管理の改善
+            document.querySelectorAll('.game-nav-button, .mode-button').forEach(button => {
+                button.addEventListener('focus', function() {
+                    // フォーカス時にボタンを強調表示
+                    this.style.outline = '4px solid #4A90E2';
+                    this.style.outlineOffset = '2px';
+                });
+                
+                button.addEventListener('blur', function() {
+                    // フォーカス解除時にアウトラインを削除
+                    this.style.outline = '';
+                    this.style.outlineOffset = '';
+                });
+            });
