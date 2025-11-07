@@ -632,6 +632,7 @@ class WritingPracticeGame {
 // エクスポート
 if (typeof module !== 'undefined' && module.exports) {
     module.exports = { WritingPracticeGame };
-} else {
+} else if (typeof window !== 'undefined') {
     window.WritingPracticeGame = WritingPracticeGame;
+    console.log('✅ WritingPracticeGame クラスをエクスポートしました');
 }

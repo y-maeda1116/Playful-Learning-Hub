@@ -81,8 +81,57 @@
     <script src="writing-practice.js"></script>
     <script src="hiragana-learning.js"></script>
     <script>
+        // スクリプト読み込み確認
+        console.log('📦 スクリプト読み込み状況:');
+        console.log('- Character:', typeof Character);
+        console.log('- getCharacterSetForAge:', typeof getCharacterSetForAge);
+        console.log('- AudioManager:', typeof AudioManager);
+        console.log('- ProgressTracker:', typeof ProgressTracker);
+        console.log('- HiraganaLearningGame:', typeof HiraganaLearningGame);
+        
         // ページ読み込み後に初期化
         document.addEventListener('DOMContentLoaded', function() {
+            console.log('📄 DOMContentLoaded イベント発火');
+            
+            // 必須スクリプトの読み込み確認
+            const requiredScripts = {
+                'HiraganaLearningGame': typeof HiraganaLearningGame !== 'undefined',
+                'getCharacterSetForAge': typeof getCharacterSetForAge === 'function',
+                'Character': typeof Character !== 'undefined'
+            };
+            
+            const missingScripts = Object.entries(requiredScripts)
+                .filter(([name, loaded]) => !loaded)
+                .map(([name]) => name);
+            
+            if (missingScripts.length > 0) {
+                console.error('❌ 必須スクリプトが読み込まれていません:', missingScripts);
+                
+                // エラーメッセージを表示
+                const container = document.getElementById('hiragana-game-container');
+                if (container) {
+                    container.innerHTML = `
+                        <div style="padding: 20px; background: #fff3cd; color: #856404; border-radius: 8px; text-align: center;">
+                            <h3>⚠️ スクリプトの読み込みエラー</h3>
+                            <p>必要なファイルが読み込まれていません:</p>
+                            <ul style="text-align: left; display: inline-block;">
+                                ${missingScripts.map(name => `<li>${name}</li>`).join('')}
+                            </ul>
+                            <p style="margin-top: 15px;">
+                                <a href="debug-mobile.html" style="color: #856404; text-decoration: underline; font-weight: bold;">
+                                    デバッグページで詳細を確認
+                                </a>
+                            </p>
+                            <button onclick="location.reload()" style="padding: 10px 20px; background: #ffc107; color: #000; border: none; border-radius: 5px; cursor: pointer; margin-top: 10px;">
+                                ページを再読み込み
+                            </button>
+                        </div>
+                    `;
+                }
+                return;
+            }
+            
+            console.log('✅ すべての必須スクリプトが読み込まれました');
             // 進捗統合システムを初期化
             try {
                 if (typeof progressIntegration !== 'undefined') {

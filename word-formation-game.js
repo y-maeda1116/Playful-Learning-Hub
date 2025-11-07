@@ -1009,7 +1009,8 @@ class WordFormationGame {
 if (typeof module !== 'undefined' && module.exports) {
     // Node.js環境
     module.exports = { WordFormationGame };
-} else {
+} else if (typeof window !== 'undefined') {
     // ブラウザ環境
     window.WordFormationGame = WordFormationGame;
+    console.log('✅ WordFormationGame クラスをエクスポートしました');
 }

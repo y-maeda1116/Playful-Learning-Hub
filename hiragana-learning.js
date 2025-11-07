@@ -1757,7 +1757,8 @@ class HiraganaLearningGame {
 if (typeof module !== 'undefined' && module.exports) {
     // Node.js環境
     module.exports = { HiraganaLearningGame };
-} else {
-    // ブラウザ環境
+} else if (typeof window !== 'undefined') {
+    // ブラウザ環境 - iOS Safari互換性のため即座にエクスポート
     window.HiraganaLearningGame = HiraganaLearningGame;
+    console.log('✅ HiraganaLearningGame クラスをグローバルスコープにエクスポートしました');
 }
