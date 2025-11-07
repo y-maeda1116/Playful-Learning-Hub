@@ -256,8 +256,18 @@ if (typeof module !== 'undefined' && module.exports) {
         getRandomCharacters,
         findCharacterById
     };
-} else {
-    // ブラウザ環境
+} else if (typeof window !== 'undefined') {
+    // ブラウザ環境 - グローバルスコープに直接エクスポート（iOS Safari互換性のため）
+    window.Character = Character;
+    window.basicHiraganaData = basicHiraganaData;
+    window.fullHiraganaData = fullHiraganaData;
+    window.katakanaData = katakanaData;
+    window.getCharacterSetForAge = getCharacterSetForAge;
+    window.getCharactersByDifficulty = getCharactersByDifficulty;
+    window.getRandomCharacters = getRandomCharacters;
+    window.findCharacterById = findCharacterById;
+    
+    // 後方互換性のためにCharacterDataオブジェクトも保持
     window.CharacterData = {
         Character,
         basicHiraganaData,

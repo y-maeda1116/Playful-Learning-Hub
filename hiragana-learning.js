@@ -80,22 +80,33 @@ class HiraganaLearningGame {
     getCharacterSet() {
         let characters = [];
         
-        if (typeof window !== 'undefined' && window.CharacterData) {
-            characters = window.CharacterData.getCharacterSetForAge(this.ageGroup, this.mode);
-        } else if (typeof require !== 'undefined') {
-            const CharacterData = require('./character-data.js');
-            characters = CharacterData.getCharacterSetForAge(this.ageGroup, this.mode);
+        try {
+            // グローバル関数を直接使用（より互換性が高い）
+            if (typeof getCharacterSetForAge === 'function') {
+                characters = getCharacterSetForAge(this.ageGroup, this.mode);
+            } else if (typeof window !== 'undefined' && window.CharacterData) {
+                characters = window.CharacterData.getCharacterSetForAge(this.ageGroup, this.mode);
+            } else if (typeof require !== 'undefined') {
+                const CharacterData = require('./character-data.js');
+                characters = CharacterData.getCharacterSetForAge(this.ageGroup, this.mode);
+            } else {
+                console.error('Character data functions not available');
+                return [];
+            }
+            
+            // 重点練習モードの場合は指定された文字のみを使用
+            if (this.isFocusedPractice && this.focusedCharacters.length > 0) {
+                characters = characters.filter(char => 
+                    this.focusedCharacters.some(focusChar => focusChar.character === char.id)
+                );
+            }
+            
+            // 年齢別難易度フィルタリング
+            return this.filterCharactersByDifficulty(characters);
+        } catch (error) {
+            console.error('Error getting character set:', error);
+            return [];
         }
-        
-        // 重点練習モードの場合は指定された文字のみを使用
-        if (this.isFocusedPractice && this.focusedCharacters.length > 0) {
-            characters = characters.filter(char => 
-                this.focusedCharacters.some(focusChar => focusChar.character === char.id)
-            );
-        }
-        
-        // 年齢別難易度フィルタリング
-        return this.filterCharactersByDifficulty(characters);
     }
     
     /**
@@ -222,9 +233,49 @@ class HiraganaLearningGame {
      * ゲーム初期化
      */
     initializeGame() {
-        this.createGameUI();
-        this.bindEvents();
-        this.isGameActive = true;
+        try {
+            // 文字データが正しく読み込まれているか確認
+            if (!this.characters || this.characters.length === 0) {
+                throw new Error('No characters available for this age group and mode');
+            }
+            
+            this.createGameUI();
+            this.bindEvents();
+            this.isGameActive = true;
+            
+            console.log('Game initialized successfully:', {
+                ageGroup: this.ageGroup,
+                mode: this.mode,
+                characterCount: this.characters.length
+            });
+        } catch (error) {
+            console.error('Game initialization failed:', error);
+            this.showInitializationError(error.message);
+            throw error;
+        }
+    }
+    
+    /**
+     * 初期化エラーを表示
+     */
+    showInitializationError(message) {
+        if (this.container) {
+            this.container.innerHTML = `
+                <div style="padding: 20px; background: #f8d7da; color: #721c24; border-radius: 8px; text-align: center;">
+                    <h3>⚠️ ゲームの読み込みに失敗しました</h3>
+                    <p>${message}</p>
+                    <p>以下を確認してください：</p>
+                    <ul style="text-align: left; display: inline-block;">
+                        <li>インターネット接続が正常か</li>
+                        <li>ブラウザが最新版か</li>
+                        <li>JavaScriptが有効になっているか</li>
+                    </ul>
+                    <button onclick="location.reload()" style="padding: 10px 20px; background: #dc3545; color: white; border: none; border-radius: 5px; cursor: pointer; margin-top: 10px;">
+                        ページを再読み込み
+                    </button>
+                </div>
+            `;
+        }
     }
     
     /**
