@@ -1,0 +1,557 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ひらがな・カタカナ学習システム テストランナー</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #333;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .test-section {
+            margin-bottom: 30px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            overflow: hidden;
+        }
+        .test-header {
+            background: #4CAF50;
+            color: white;
+            padding: 15px;
+            font-weight: bold;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .test-header.failed {
+            background: #f44336;
+        }
+        .test-header.running {
+            background: #ff9800;
+        }
+        .test-content {
+            padding: 15px;
+            background: #fafafa;
+            display: none;
+        }
+        .test-content.show {
+            display: block;
+        }
+        .test-result {
+            margin: 5px 0;
+            padding: 8px;
+            border-radius: 3px;
+        }
+        .test-pass {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        .test-fail {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        .test-skip {
+            background: #fff3cd;
+            color: #856404;
+            border: 1px solid #ffeaa7;
+        }
+        .run-button {
+            background: #2196F3;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 5px;
+            font-size: 14px;
+        }
+        .run-button:hover {
+            background: #1976D2;
+        }
+        .run-button:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+        .summary {
+            background: #e3f2fd;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        .controls {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .status-badge {
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+        .status-pass {
+            background: #4CAF50;
+            color: white;
+        }
+        .status-fail {
+            background: #f44336;
+            color: white;
+        }
+        .status-running {
+            background: #ff9800;
+            color: white;
+        }
+        .status-pending {
+            background: #9e9e9e;
+            color: white;
+        }
+        pre {
+            background: #f5f5f5;
+            padding: 10px;
+            border-radius: 3px;
+            overflow-x: auto;
+            font-size: 12px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🧪 ひらがな・カタカナ学習システム テストランナー</h1>
+        
+        <div class="summary" id="summary">
+            <h3>テスト実行準備完了</h3>
+            <p>下のボタンをクリックしてテストを開始してください</p>
+        </div>
+
+        <div class="controls">
+            <button class="run-button" onclick="runAllTests()">🚀 すべてのテストを実行</button>
+            <button class="run-button" onclick="runCoreTests()">⚡ コア機能のみ実行</button>
+            <button class="run-button" onclick="clearResults()">🗑️ 結果をクリア</button>
+        </div>
+
+        <div id="test-results"></div>
+    </div>
+
+    <!-- テスト対象のスクリプトを読み込み -->
+    <script src="character-data.js"></script>
+    <script src="audio-manager.js"></script>
+    <script src="progress-tracker.js"></script>
+    <script src="badge-system.js"></script>
+    <script src="gamification-system.js"></script>
+    <script src="hiragana-learning.js"></script>
+    <script src="word-formation-game.js"></script>
+    <script src="writing-practice.js"></script>
+    <script src="progress-display.js"></script>
+    <script src="progress-integration.js"></script>
+
+    <script>
+        // シンプルなテストフレームワーク
+        class SimpleTestRunner {
+            constructor() {
+                this.tests = [];
+                this.results = [];
+                this.currentSuite = null;
+            }
+
+            describe(name, fn) {
+                this.currentSuite = { name, tests: [], results: [] };
+                fn();
+                this.tests.push(this.currentSuite);
+                this.currentSuite = null;
+            }
+
+            test(name, fn) {
+                if (this.currentSuite) {
+                    this.currentSuite.tests.push({ name, fn });
+                }
+            }
+
+            expect(actual) {
+                return {
+                    toBe: (expected) => {
+                        if (actual !== expected) {
+                            throw new Error(`Expected ${expected}, but got ${actual}`);
+                        }
+                    },
+                    toEqual: (expected) => {
+                        if (JSON.stringify(actual) !== JSON.stringify(expected)) {
+                            throw new Error(`Expected ${JSON.stringify(expected)}, but got ${JSON.stringify(actual)}`);
+                        }
+                    },
+                    toBeGreaterThan: (expected) => {
+                        if (actual <= expected) {
+                            throw new Error(`Expected ${actual} to be greater than ${expected}`);
+                        }
+                    },
+                    toBeDefined: () => {
+                        if (actual === undefined) {
+                            throw new Error(`Expected value to be defined, but got undefined`);
+                        }
+                    },
+                    toHaveLength: (expected) => {
+                        if (!actual || actual.length !== expected) {
+                            throw new Error(`Expected length ${expected}, but got ${actual ? actual.length : 'undefined'}`);
+                        }
+                    },
+                    toContain: (expected) => {
+                        if (!actual || !actual.includes(expected)) {
+                            throw new Error(`Expected array to contain ${expected}`);
+                        }
+                    },
+                    toHaveProperty: (prop) => {
+                        if (!actual || !(prop in actual)) {
+                            throw new Error(`Expected object to have property ${prop}`);
+                        }
+                    }
+                };
+            }
+
+            async runTests(suiteNames = null) {
+                const suitesToRun = suiteNames ? 
+                    this.tests.filter(suite => suiteNames.includes(suite.name)) : 
+                    this.tests;
+
+                for (const suite of suitesToRun) {
+                    await this.runSuite(suite);
+                }
+                
+                this.displayResults();
+            }
+
+            async runSuite(suite) {
+                suite.results = [];
+                
+                for (const test of suite.tests) {
+                    try {
+                        await test.fn();
+                        suite.results.push({ name: test.name, status: 'pass', error: null });
+                    } catch (error) {
+                        suite.results.push({ name: test.name, status: 'fail', error: error.message });
+                    }
+                }
+            }
+
+            displayResults() {
+                const container = document.getElementById('test-results');
+                container.innerHTML = '';
+
+                let totalTests = 0;
+                let passedTests = 0;
+                let failedTests = 0;
+
+                this.tests.forEach(suite => {
+                    if (!suite.results || suite.results.length === 0) return;
+
+                    const suiteDiv = document.createElement('div');
+                    suiteDiv.className = 'test-section';
+
+                    const suitePassed = suite.results.every(r => r.status === 'pass');
+                    const suitePassCount = suite.results.filter(r => r.status === 'pass').length;
+                    const suiteFailCount = suite.results.filter(r => r.status === 'fail').length;
+
+                    totalTests += suite.results.length;
+                    passedTests += suitePassCount;
+                    failedTests += suiteFailCount;
+
+                    const headerDiv = document.createElement('div');
+                    headerDiv.className = `test-header ${suitePassed ? '' : 'failed'}`;
+                    headerDiv.innerHTML = `
+                        <span>${suite.name}</span>
+                        <span class="status-badge ${suitePassed ? 'status-pass' : 'status-fail'}">
+                            ${suitePassCount}/${suite.results.length} passed
+                        </span>
+                    `;
+                    headerDiv.onclick = () => {
+                        const content = suiteDiv.querySelector('.test-content');
+                        content.classList.toggle('show');
+                    };
+
+                    const contentDiv = document.createElement('div');
+                    contentDiv.className = 'test-content';
+
+                    suite.results.forEach(result => {
+                        const resultDiv = document.createElement('div');
+                        resultDiv.className = `test-result test-${result.status}`;
+                        
+                        let content = `${result.status === 'pass' ? '✅' : '❌'} ${result.name}`;
+                        if (result.error) {
+                            content += `<pre>${result.error}</pre>`;
+                        }
+                        
+                        resultDiv.innerHTML = content;
+                        contentDiv.appendChild(resultDiv);
+                    });
+
+                    suiteDiv.appendChild(headerDiv);
+                    suiteDiv.appendChild(contentDiv);
+                    container.appendChild(suiteDiv);
+                });
+
+                // サマリーを更新
+                const summary = document.getElementById('summary');
+                const successRate = totalTests > 0 ? Math.round((passedTests / totalTests) * 100) : 0;
+                
+                summary.innerHTML = `
+                    <h3>テスト実行結果</h3>
+                    <p><strong>合計:</strong> ${totalTests} テスト</p>
+                    <p><strong>成功:</strong> ${passedTests} | <strong>失敗:</strong> ${failedTests}</p>
+                    <p><strong>成功率:</strong> ${successRate}%</p>
+                `;
+                
+                if (failedTests === 0 && totalTests > 0) {
+                    summary.style.background = '#d4edda';
+                    summary.style.color = '#155724';
+                } else if (failedTests > 0) {
+                    summary.style.background = '#f8d7da';
+                    summary.style.color = '#721c24';
+                }
+            }
+        }
+
+        // グローバルなテストランナーインスタンス
+        const testRunner = new SimpleTestRunner();
+        const describe = (name, fn) => testRunner.describe(name, fn);
+        const test = (name, fn) => testRunner.test(name, fn);
+        const expect = (actual) => testRunner.expect(actual);
+
+        // モックDOM環境
+        const mockElement = () => ({
+            appendChild: () => {},
+            removeChild: () => {},
+            querySelector: () => mockElement(),
+            querySelectorAll: () => [],
+            addEventListener: () => {},
+            classList: {
+                add: () => {},
+                remove: () => {},
+                contains: () => false
+            },
+            style: {},
+            innerHTML: '',
+            textContent: '',
+            disabled: false,
+            dataset: {}
+        });
+
+        // テスト定義
+        describe('Character Data Tests', () => {
+            test('Character class should create instances correctly', () => {
+                const char = new Character('あ', 'hiragana', 'a', 1);
+                expect(char.id).toBe('あ');
+                expect(char.type).toBe('hiragana');
+                expect(char.romaji).toBe('a');
+                expect(char.difficulty).toBe(1);
+            });
+
+            test('Basic hiragana data should be defined', () => {
+                expect(basicHiraganaData).toBeDefined();
+                expect(basicHiraganaData.length).toBeGreaterThan(0);
+            });
+
+            test('Full hiragana data should contain basic data', () => {
+                expect(fullHiraganaData).toBeDefined();
+                expect(fullHiraganaData.length).toBeGreaterThan(basicHiraganaData.length);
+            });
+
+            test('Katakana data should be defined', () => {
+                expect(katakanaData).toBeDefined();
+                expect(katakanaData.length).toBeGreaterThan(0);
+                expect(katakanaData[0].type).toBe('katakana');
+            });
+
+            test('getCharacterSetForAge should return correct sets', () => {
+                const age3to4 = getCharacterSetForAge('3-4');
+                expect(age3to4).toEqual(basicHiraganaData);
+
+                const age5to6Hiragana = getCharacterSetForAge('5-6', 'hiragana');
+                expect(age5to6Hiragana).toEqual(fullHiraganaData);
+            });
+
+            test('getRandomCharacters should return requested count', () => {
+                const random3 = getRandomCharacters(basicHiraganaData, 3);
+                expect(random3).toHaveLength(3);
+            });
+        });
+
+        describe('Audio Manager Tests', () => {
+            test('AudioManager should initialize correctly', () => {
+                const audioManager = new AudioManager();
+                expect(audioManager).toBeDefined();
+                expect(audioManager.audioCache).toBeDefined();
+            });
+
+            test('Should handle audio loading gracefully', () => {
+                const audioManager = new AudioManager();
+                // 実際の音声ファイルがなくてもエラーにならないことを確認
+                expect(() => audioManager.preloadCharacterAudio('あ')).not.toThrow();
+            });
+        });
+
+        describe('Progress Tracker Tests', () => {
+            test('ProgressTracker should initialize correctly', () => {
+                const tracker = new ProgressTracker('test-user');
+                expect(tracker).toBeDefined();
+                expect(tracker.userId).toBe('test-user');
+            });
+
+            test('Should record session data', () => {
+                const tracker = new ProgressTracker('test-user');
+                tracker.startSession('3-4', 'hiragana');
+                expect(tracker.currentSession).toBeDefined();
+                expect(tracker.currentSession.ageGroup).toBe('3-4');
+                expect(tracker.currentSession.mode).toBe('hiragana');
+            });
+
+            test('Should calculate accuracy correctly', () => {
+                const tracker = new ProgressTracker('test-user');
+                tracker.startSession('3-4', 'hiragana');
+                
+                // 正解を記録
+                tracker.recordAttempt('あ', true, 1000);
+                tracker.recordAttempt('い', false, 2000);
+                tracker.recordAttempt('う', true, 1500);
+                
+                const accuracy = tracker.calculateAccuracy();
+                expect(accuracy).toBe(66.67); // 2/3 * 100, rounded to 2 decimal places
+            });
+        });
+
+        describe('Badge System Tests', () => {
+            test('BadgeSystem should initialize correctly', () => {
+                const badgeSystem = new BadgeSystem();
+                expect(badgeSystem).toBeDefined();
+                expect(badgeSystem.earnedBadges).toBeDefined();
+            });
+
+            test('Should award first session badge', () => {
+                const badgeSystem = new BadgeSystem();
+                const mockProgress = {
+                    sessions: [{ sessionId: 'test' }],
+                    totalPlayTime: 60000
+                };
+                
+                const newBadges = badgeSystem.checkAndAwardBadges(mockProgress);
+                expect(newBadges.some(badge => badge.id === 'first-session')).toBe(true);
+            });
+        });
+
+        describe('Hiragana Learning Game Tests', () => {
+            test('Should initialize with correct age group settings', () => {
+                const mockContainer = mockElement();
+                const game = new HiraganaLearningGame('3-4', mockContainer);
+                
+                expect(game.ageGroup).toBe('3-4');
+                expect(game.difficultySettings.choiceCount).toBe(3);
+                expect(game.characters.length).toBeGreaterThan(0);
+            });
+
+            test('Should generate correct number of choices', () => {
+                const mockContainer = mockElement();
+                const game = new HiraganaLearningGame('5-6', mockContainer);
+                const targetChar = game.characters[0];
+                const choices = game.generateChoices(targetChar);
+                
+                expect(choices).toHaveLength(4);
+                expect(choices).toContain(targetChar);
+            });
+        });
+
+        describe('Word Formation Game Tests', () => {
+            test('Should initialize with default settings', () => {
+                const mockContainer = mockElement();
+                const game = new WordFormationGame(mockContainer);
+                
+                expect(game.ageGroup).toBe('5-6');
+                expect(game.mode).toBe('hiragana');
+                expect(game.currentLevel).toBe(1);
+            });
+
+            test('Should have word database for all levels', () => {
+                const mockContainer = mockElement();
+                const game = new WordFormationGame(mockContainer);
+                
+                expect(game.wordDatabase.level1).toBeDefined();
+                expect(game.wordDatabase.level2).toBeDefined();
+                expect(game.wordDatabase.level3).toBeDefined();
+                
+                expect(game.wordDatabase.level1.length).toBeGreaterThan(0);
+            });
+        });
+
+        // テスト実行関数
+        async function runAllTests() {
+            const buttons = document.querySelectorAll('.run-button');
+            buttons.forEach(btn => btn.disabled = true);
+            
+            document.getElementById('summary').innerHTML = `
+                <h3>🔄 テスト実行中...</h3>
+                <p>しばらくお待ちください</p>
+            `;
+            
+            try {
+                await testRunner.runTests();
+            } catch (error) {
+                console.error('Test execution error:', error);
+            }
+            
+            buttons.forEach(btn => btn.disabled = false);
+        }
+
+        async function runCoreTests() {
+            const buttons = document.querySelectorAll('.run-button');
+            buttons.forEach(btn => btn.disabled = true);
+            
+            document.getElementById('summary').innerHTML = `
+                <h3>⚡ コア機能テスト実行中...</h3>
+                <p>しばらくお待ちください</p>
+            `;
+            
+            try {
+                await testRunner.runTests([
+                    'Character Data Tests',
+                    'Progress Tracker Tests',
+                    'Hiragana Learning Game Tests'
+                ]);
+            } catch (error) {
+                console.error('Test execution error:', error);
+            }
+            
+            buttons.forEach(btn => btn.disabled = false);
+        }
+
+        function clearResults() {
+            document.getElementById('test-results').innerHTML = '';
+            document.getElementById('summary').innerHTML = `
+                <h3>テスト実行準備完了</h3>
+                <p>下のボタンをクリックしてテストを開始してください</p>
+            `;
+            document.getElementById('summary').style.background = '#e3f2fd';
+            document.getElementById('summary').style.color = 'inherit';
+        }
+
+        // ページ読み込み完了時の初期化
+        document.addEventListener('DOMContentLoaded', () => {
+            console.log('🧪 Test Runner initialized');
+            console.log(`📊 ${testRunner.tests.length} test suites loaded`);
+        });
+    </script>
+</body>
+</html>

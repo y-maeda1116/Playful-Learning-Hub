@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>クイックテスト - ひらがな学習システム</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            min-height: 100vh;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 30px;
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        }
+        h1 {
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 2.5em;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        .test-button {
+            display: block;
+            width: 100%;
+            padding: 15px;
+            margin: 15px 0;
+            background: rgba(255, 255, 255, 0.2);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 10px;
+            color: white;
+            font-size: 18px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            text-align: center;
+        }
+        .test-button:hover {
+            background: rgba(255, 255, 255, 0.3);
+            border-color: rgba(255, 255, 255, 0.5);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+        .console-output {
+            background: rgba(0, 0, 0, 0.7);
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 20px;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            max-height: 400px;
+            overflow-y: auto;
+            white-space: pre-wrap;
+            display: none;
+        }
+        .info {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            border-left: 4px solid #4CAF50;
+        }
+        .warning {
+            background: rgba(255, 193, 7, 0.2);
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+            border-left: 4px solid #FFC107;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🧪 クイックテスト</h1>
+        
+        <div class="info">
+            <h3>📋 テスト概要</h3>
+            <p>このページでは、npm/npxを使わずにひらがな・カタカナ学習システムのテストを実行できます。</p>
+            <p>ブラウザのコンソールでテスト結果を確認してください。</p>
+        </div>
+
+        <div class="warning">
+            <strong>⚠️ 注意:</strong> テスト実行前に、ブラウザの開発者ツール（F12）を開いてコンソールタブを表示してください。
+        </div>
+
+        <button class="test-button" onclick="runConsoleTests()">
+            🚀 コンソールテストを実行
+        </button>
+
+        <a href="test-runner.html" class="test-button">
+            🎯 フルテストランナーを開く
+        </a>
+
+        <button class="test-button" onclick="runBasicValidation()">
+            ✅ 基本動作確認
+        </button>
+
+        <button class="test-button" onclick="showSystemInfo()">
+            ℹ️ システム情報を表示
+        </button>
+
+        <div id="console-output" class="console-output"></div>
+    </div>
+
+    <!-- 必要なスクリプトを読み込み -->
+    <script src="character-data.js"></script>
+    <script src="audio-manager.js"></script>
+    <script src="progress-tracker.js"></script>
+    <script src="badge-system.js"></script>
+    <script src="gamification-system.js"></script>
+    <script src="hiragana-learning.js"></script>
+    <script src="word-formation-game.js"></script>
+    <script src="writing-practice.js"></script>
+    <script src="progress-display.js"></script>
+    <script src="progress-integration.js"></script>
+    <script src="simple-test.js"></script>
+
+    <script>
+        // コンソール出力をページに表示する関数
+        function captureConsoleOutput(callback) {
+            const output = document.getElementById('console-output');
+            output.style.display = 'block';
+            output.innerHTML = '';
+            
+            const originalLog = console.log;
+            const originalError = console.error;
+            const originalClear = console.clear;
+            
+            console.log = function(...args) {
+                originalLog.apply(console, args);
+                output.innerHTML += args.join(' ') + '\n';
+                output.scrollTop = output.scrollHeight;
+            };
+            
+            console.error = function(...args) {
+                originalError.apply(console, args);
+                output.innerHTML += '❌ ' + args.join(' ') + '\n';
+                output.scrollTop = output.scrollHeight;
+            };
+            
+            console.clear = function() {
+                originalClear.apply(console);
+                output.innerHTML = '';
+            };
+            
+            try {
+                callback();
+            } finally {
+                // 元のconsole関数を復元
+                setTimeout(() => {
+                    console.log = originalLog;
+                    console.error = originalError;
+                    console.clear = originalClear;
+                }, 1000);
+            }
+        }
+
+        function runConsoleTests() {
+            captureConsoleOutput(() => {
+                console.log('🧪 Starting Quick Console Tests...\n');
+                
+                if (typeof runAllSimpleTests === 'function') {
+                    runAllSimpleTests();
+                } else {
+                    console.error('❌ Simple test functions not loaded');
+                }
+            });
+        }
+
+        function runBasicValidation() {
+            captureConsoleOutput(() => {
+                console.log('✅ Running Basic Validation...\n');
+                
+                // 基本的なクラスの存在確認
+                const checks = [
+                    { name: 'Character class', check: () => typeof Character !== 'undefined' },
+                    { name: 'AudioManager class', check: () => typeof AudioManager !== 'undefined' },
+                    { name: 'ProgressTracker class', check: () => typeof ProgressTracker !== 'undefined' },
+                    { name: 'BadgeSystem class', check: () => typeof BadgeSystem !== 'undefined' },
+                    { name: 'HiraganaLearningGame class', check: () => typeof HiraganaLearningGame !== 'undefined' },
+                    { name: 'WordFormationGame class', check: () => typeof WordFormationGame !== 'undefined' },
+                    { name: 'Basic hiragana data', check: () => typeof basicHiraganaData !== 'undefined' && basicHiraganaData.length > 0 },
+                    { name: 'Full hiragana data', check: () => typeof fullHiraganaData !== 'undefined' && fullHiraganaData.length > 0 },
+                    { name: 'Katakana data', check: () => typeof katakanaData !== 'undefined' && katakanaData.length > 0 }
+                ];
+                
+                let passed = 0;
+                checks.forEach(({ name, check }) => {
+                    try {
+                        if (check()) {
+                            console.log(`✅ ${name}: OK`);
+                            passed++;
+                        } else {
+                            console.log(`❌ ${name}: FAILED`);
+                        }
+                    } catch (error) {
+                        console.log(`❌ ${name}: ERROR - ${error.message}`);
+                    }
+                });
+                
+                console.log(`\n📊 Basic Validation Results: ${passed}/${checks.length} checks passed`);
+                
+                if (passed === checks.length) {
+                    console.log('🎉 All basic validations passed!');
+                } else {
+                    console.log('⚠️ Some validations failed. Check the implementation.');
+                }
+            });
+        }
+
+        function showSystemInfo() {
+            captureConsoleOutput(() => {
+                console.log('ℹ️ System Information\n');
+                console.log('='.repeat(40));
+                console.log(`Browser: ${navigator.userAgent}`);
+                console.log(`Language: ${navigator.language}`);
+                console.log(`Platform: ${navigator.platform}`);
+                console.log(`Screen: ${screen.width}x${screen.height}`);
+                console.log(`Viewport: ${window.innerWidth}x${window.innerHeight}`);
+                console.log(`Local Storage Available: ${typeof Storage !== 'undefined'}`);
+                console.log(`Audio Context Available: ${typeof AudioContext !== 'undefined' || typeof webkitAudioContext !== 'undefined'}`);
+                console.log(`Canvas Available: ${typeof HTMLCanvasElement !== 'undefined'}`);
+                
+                console.log('\n📦 Loaded Scripts:');
+                console.log('='.repeat(40));
+                
+                const scriptChecks = [
+                    'Character', 'AudioManager', 'ProgressTracker', 'BadgeSystem',
+                    'GamificationSystem', 'HiraganaLearningGame', 'WordFormationGame',
+                    'WritingPractice', 'ProgressDisplay', 'ProgressIntegration'
+                ];
+                
+                scriptChecks.forEach(className => {
+                    const isLoaded = typeof window[className] !== 'undefined';
+                    console.log(`${isLoaded ? '✅' : '❌'} ${className}: ${isLoaded ? 'Loaded' : 'Not Found'}`);
+                });
+                
+                console.log('\n📊 Data Sets:');
+                console.log('='.repeat(40));
+                console.log(`Basic Hiragana: ${typeof basicHiraganaData !== 'undefined' ? basicHiraganaData.length : 0} characters`);
+                console.log(`Full Hiragana: ${typeof fullHiraganaData !== 'undefined' ? fullHiraganaData.length : 0} characters`);
+                console.log(`Katakana: ${typeof katakanaData !== 'undefined' ? katakanaData.length : 0} characters`);
+            });
+        }
+
+        // ページ読み込み完了時の初期化
+        document.addEventListener('DOMContentLoaded', () => {
+            console.log('🚀 Quick Test Page loaded successfully');
+            console.log('💡 Click the buttons above to run tests');
+            console.log('🔧 Make sure to open Developer Tools (F12) to see detailed output');
+        });
+    </script>
+</body>
+</html>
