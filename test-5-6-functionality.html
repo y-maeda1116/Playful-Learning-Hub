@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>5-6歳機能テスト</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="hiragana-learning.css">
+    <style>
+        .test-container {
+            max-width: 1200px;
+            margin: 20px auto;
+            padding: 20px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        .test-section {
+            margin: 30px 0;
+            padding: 20px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+        }
+        .test-section h3 {
+            color: #333;
+            margin-bottom: 15px;
+        }
+        .status {
+            padding: 10px;
+            border-radius: 5px;
+            margin: 10px 0;
+            font-weight: bold;
+        }
+        .status.success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        .status.error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        .status.info {
+            background: #d1ecf1;
+            color: #0c5460;
+            border: 1px solid #bee5eb;
+        }
+        .test-button {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        .test-button:hover {
+            background: #0056b3;
+        }
+        .game-container {
+            min-height: 400px;
+            border: 2px dashed #ccc;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 15px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="test-container">
+        <h1>🧪 5-6歳向けひらがな・カタカナ学習 機能テスト</h1>
+        
+        <div class="test-section">
+            <h3>📋 システム初期化テスト</h3>
+            <div id="init-status" class="status info">テスト準備中...</div>
+            <button class="test-button" onclick="testInitialization()">初期化テスト実行</button>
+        </div>
+
+        <div class="test-section">
+            <h3>🎮 ひらがな学習ゲームテスト</h3>
+            <div id="hiragana-status" class="status info">未実行</div>
+            <button class="test-button" onclick="testHiraganaGame()">ひらがなゲーム開始</button>
+            <div id="hiragana-game-container" class="game-container"></div>
+        </div>
+
+        <div class="test-section">
+            <h3>🎯 カタカナ学習ゲームテスト</h3>
+            <div id="katakana-status" class="status info">未実行</div>
+            <button class="test-button" onclick="testKatakanaGame()">カタカナゲーム開始</button>
+            <div id="katakana-game-container" class="game-container"></div>
+        </div>
+
+        <div class="test-section">
+            <h3>🔄 混合モードテスト</h3>
+            <div id="mixed-status" class="status info">未実行</div>
+            <button class="test-button" onclick="testMixedMode()">混合モード開始</button>
+            <div id="mixed-game-container" class="game-container"></div>
+        </div>
+
+        <div class="test-section">
+            <h3>📊 進捗追跡テスト</h3>
+            <div id="progress-status" class="status info">未実行</div>
+            <button class="test-button" onclick="testProgressTracking()">進捗追跡テスト</button>
+            <div id="progress-display-container"></div>
+        </div>
+
+        <div class="test-section">
+            <h3>🎨 単語形成ゲームテスト</h3>
+            <div id="word-game-status" class="status info">未実行</div>
+            <button class="test-button" onclick="testWordFormationGame()">単語形成ゲーム開始</button>
+            <div id="word-game-container" class="game-container"></div>
+        </div>
+
+        <div class="test-section">
+            <h3>✏️ 文字書き練習テスト</h3>
+            <div id="writing-status" class="status info">未実行</div>
+            <button class="test-button" onclick="testWritingPractice()">書き練習開始</button>
+            <div id="writing-container" class="game-container"></div>
+        </div>
+
+        <div class="test-section">
+            <h3>🏆 総合テスト結果</h3>
+            <div id="overall-status" class="status info">テスト未完了</div>
+            <button class="test-button" onclick="runAllTests()">すべてのテストを実行</button>
+        </div>
+    </div>
+
+    <!-- 必要なスクリプトを読み込み -->
+    <script src="character-data.js"></script>
+    <script src="audio-manager.js"></script>
+    <script src="progress-tracker.js"></script>
+    <script src="progress-display.js"></script>
+    <script src="progress-integration.js"></script>
+    <script src="badge-system.js"></script>
+    <script src="gamification-system.js"></script>
+    <script src="hiragana-learning.js"></script>
+    <script src="word-formation-game.js"></script>
+    <script src="writing-practice.js"></script>
+
+    <script>
+        let testResults = {
+            initialization: false,
+            hiraganaGame: false,
+            katakanaGame: false,
+            mixedMode: false,
+            progressTracking: false,
+            wordGame: false,
+            writingPractice: false
+        };
+
+        let currentGames = {};
+
+        function updateStatus(elementId, success, message) {
+            const element = document.getElementById(elementId);
+            element.className = `status ${success ? 'success' : 'error'}`;
+            element.textContent = `${success ? '✅' : '❌'} ${message}`;
+        }
+
+        function testInitialization() {
+            try {
+                // 必要なクラスの存在確認
+                const requiredClasses = [
+                    'Character', 'AudioManager', 'ProgressTracker', 
+                    'HiraganaLearningGame', 'WordFormationGame', 'WritingPractice'
+                ];
+                
+                const missingClasses = requiredClasses.filter(className => 
+                    typeof window[className] === 'undefined'
+                );
+                
+                if (missingClasses.length > 0) {
+                    throw new Error(`Missing classes: ${missingClasses.join(', ')}`);
+                }
+
+                // データセットの確認
+                if (!basicHiraganaData || basicHiraganaData.length === 0) {
+                    throw new Error('Basic hiragana data not loaded');
+                }
+                
+                if (!fullHiraganaData || fullHiraganaData.length === 0) {
+                    throw new Error('Full hiragana data not loaded');
+                }
+                
+                if (!katakanaData || katakanaData.length === 0) {
+                    throw new Error('Katakana data not loaded');
+                }
+
+                testResults.initialization = true;
+                updateStatus('init-status', true, 
+                    `初期化成功 - ${requiredClasses.length}個のクラスと${basicHiraganaData.length + katakanaData.length}個の文字データを確認`);
+                
+            } catch (error) {
+                testResults.initialization = false;
+                updateStatus('init-status', false, `初期化失敗: ${error.message}`);
+            }
+        }
+
+        function testHiraganaGame() {
+            try {
+                const container = document.getElementById('hiragana-game-container');
+                container.innerHTML = '';
+                
+                if (currentGames.hiragana) {
+                    currentGames.hiragana.destroy();
+                }
+                
+                currentGames.hiragana = new HiraganaLearningGame('5-6', container, {
+                    mode: 'hiragana',
+                    audio: { enabled: false } // テスト用に音声無効
+                });
+                
+                // ゲームが正しく初期化されたかチェック
+                if (!currentGames.hiragana.characters || currentGames.hiragana.characters.length === 0) {
+                    throw new Error('Game characters not loaded');
+                }
+                
+                if (currentGames.hiragana.mode !== 'hiragana') {
+                    throw new Error('Game mode not set correctly');
+                }
+                
+                testResults.hiraganaGame = true;
+                updateStatus('hiragana-status', true, 
+                    `ひらがなゲーム開始成功 - ${currentGames.hiragana.characters.length}文字で初期化`);
+                
+            } catch (error) {
+                testResults.hiraganaGame = false;
+                updateStatus('hiragana-status', false, `ひらがなゲーム失敗: ${error.message}`);
+            }
+        }
+
+        function testKatakanaGame() {
+            try {
+                const container = document.getElementById('katakana-game-container');
+                container.innerHTML = '';
+                
+                if (currentGames.katakana) {
+                    currentGames.katakana.destroy();
+                }
+                
+                currentGames.katakana = new HiraganaLearningGame('5-6', container, {
+                    mode: 'katakana',
+                    audio: { enabled: false }
+                });
+                
+                if (!currentGames.katakana.characters || currentGames.katakana.characters.length === 0) {
+                    throw new Error('Katakana characters not loaded');
+                }
+                
+                if (currentGames.katakana.mode !== 'katakana') {
+                    throw new Error('Katakana mode not set correctly');
+                }
+                
+                testResults.katakanaGame = true;
+                updateStatus('katakana-status', true, 
+                    `カタカナゲーム開始成功 - ${currentGames.katakana.characters.length}文字で初期化`);
+                
+            } catch (error) {
+                testResults.katakanaGame = false;
+                updateStatus('katakana-status', false, `カタカナゲーム失敗: ${error.message}`);
+            }
+        }
+
+        function testMixedMode() {
+            try {
+                const container = document.getElementById('mixed-game-container');
+                container.innerHTML = '';
+                
+                if (currentGames.mixed) {
+                    currentGames.mixed.destroy();
+                }
+                
+                currentGames.mixed = new HiraganaLearningGame('5-6', container, {
+                    mode: 'mixed',
+                    audio: { enabled: false }
+                });
+                
+                if (!currentGames.mixed.characters || currentGames.mixed.characters.length === 0) {
+                    throw new Error('Mixed mode characters not loaded');
+                }
+                
+                if (currentGames.mixed.mode !== 'mixed') {
+                    throw new Error('Mixed mode not set correctly');
+                }
+                
+                testResults.mixedMode = true;
+                updateStatus('mixed-status', true, 
+                    `混合モード開始成功 - ${currentGames.mixed.characters.length}文字で初期化`);
+                
+            } catch (error) {
+                testResults.mixedMode = false;
+                updateStatus('mixed-status', false, `混合モード失敗: ${error.message}`);
+            }
+        }
+
+        function testProgressTracking() {
+            try {
+                const tracker = new ProgressTracker('test-user-5-6');
+                tracker.startSession('5-6', 'hiragana');
+                
+                // テストデータを記録
+                tracker.recordAttempt('あ', true, 1500);
+                tracker.recordAttempt('か', false, 3000);
+                tracker.recordAttempt('さ', true, 1200);
+                
+                const accuracy = tracker.calculateAccuracy();
+                if (accuracy !== 66.67) {
+                    throw new Error(`Accuracy calculation incorrect: ${accuracy}`);
+                }
+                
+                tracker.endSession();
+                
+                // 進捗表示をテスト
+                const container = document.getElementById('progress-display-container');
+                if (typeof ProgressDisplay !== 'undefined') {
+                    const progressDisplay = new ProgressDisplay(container, tracker);
+                    progressDisplay.render();
+                }
+                
+                testResults.progressTracking = true;
+                updateStatus('progress-status', true, 
+                    `進捗追跡成功 - 正答率${accuracy}%で記録`);
+                
+            } catch (error) {
+                testResults.progressTracking = false;
+                updateStatus('progress-status', false, `進捗追跡失敗: ${error.message}`);
+            }
+        }
+
+        function testWordFormationGame() {
+            try {
+                const container = document.getElementById('word-game-container');
+                container.innerHTML = '';
+                
+                if (currentGames.wordGame) {
+                    currentGames.wordGame.destroy();
+                }
+                
+                currentGames.wordGame = new WordFormationGame(container, {
+                    ageGroup: '5-6',
+                    mode: 'hiragana',
+                    audioManager: null // テスト用に音声無効
+                });
+                
+                if (!currentGames.wordGame.wordDatabase) {
+                    throw new Error('Word database not loaded');
+                }
+                
+                if (currentGames.wordGame.currentLevel !== 1) {
+                    throw new Error('Initial level not set correctly');
+                }
+                
+                testResults.wordGame = true;
+                updateStatus('word-game-status', true, 
+                    `単語形成ゲーム開始成功 - レベル${currentGames.wordGame.currentLevel}で初期化`);
+                
+            } catch (error) {
+                testResults.wordGame = false;
+                updateStatus('word-game-status', false, `単語形成ゲーム失敗: ${error.message}`);
+            }
+        }
+
+        function testWritingPractice() {
+            try {
+                const container = document.getElementById('writing-container');
+                container.innerHTML = '';
+                
+                if (currentGames.writing) {
+                    currentGames.writing.destroy();
+                }
+                
+                currentGames.writing = new WritingPractice(container, {
+                    character: 'あ',
+                    showGuide: true
+                });
+                
+                if (!currentGames.writing.character) {
+                    throw new Error('Writing practice character not set');
+                }
+                
+                testResults.writingPractice = true;
+                updateStatus('writing-status', true, 
+                    `文字書き練習開始成功 - 文字「${currentGames.writing.character}」で初期化`);
+                
+            } catch (error) {
+                testResults.writingPractice = false;
+                updateStatus('writing-status', false, `文字書き練習失敗: ${error.message}`);
+            }
+        }
+
+        function runAllTests() {
+            updateStatus('overall-status', false, 'テスト実行中...');
+            
+            setTimeout(() => {
+                testInitialization();
+                setTimeout(() => testHiraganaGame(), 500);
+                setTimeout(() => testKatakanaGame(), 1000);
+                setTimeout(() => testMixedMode(), 1500);
+                setTimeout(() => testProgressTracking(), 2000);
+                setTimeout(() => testWordFormationGame(), 2500);
+                setTimeout(() => testWritingPractice(), 3000);
+                
+                setTimeout(() => {
+                    const passedTests = Object.values(testResults).filter(result => result).length;
+                    const totalTests = Object.keys(testResults).length;
+                    
+                    if (passedTests === totalTests) {
+                        updateStatus('overall-status', true, 
+                            `すべてのテストが成功しました！ (${passedTests}/${totalTests})`);
+                    } else {
+                        updateStatus('overall-status', false, 
+                            `一部のテストが失敗しました (${passedTests}/${totalTests})`);
+                    }
+                }, 3500);
+            }, 100);
+        }
+
+        // ページ読み込み時に初期化テストを実行
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('🧪 5-6歳機能テストページが読み込まれました');
+            setTimeout(testInitialization, 500);
+        });
+    </script>
+</body>
+</html>
