@@ -66,14 +66,51 @@
     <script src="character-data.js"></script>
     <script src="audio-manager.js"></script>
     <script src="progress-tracker.js"></script>
+    <script src="badge-system.js"></script>
+    <script src="gamification-system.js"></script>
     <script src="progress-display.js"></script>
     <script src="progress-integration.js"></script>
     <script src="hiragana-learning.js"></script>
     <script>
+        // スクリプト読み込み確認
+        console.log('📦 スクリプト読み込み状況 (3-4歳):');
+        console.log('- Character:', typeof Character);
+        console.log('- getCharacterSetForAge:', typeof getCharacterSetForAge);
+        console.log('- AudioManager:', typeof AudioManager);
+        console.log('- ProgressTracker:', typeof ProgressTracker);
+        console.log('- HiraganaLearningGame:', typeof HiraganaLearningGame);
+        
         // ページ読み込み後に初期化
         document.addEventListener('DOMContentLoaded', function() {
+            console.log('📄 DOMContentLoaded イベント発火 (3-4歳)');
+            
+            // 必須スクリプトの読み込み確認
+            const requiredScripts = {
+                'HiraganaLearningGame': typeof HiraganaLearningGame !== 'undefined',
+                'getCharacterSetForAge': typeof getCharacterSetForAge === 'function',
+                'Character': typeof Character !== 'undefined'
+            };
+            
+            const missingScripts = Object.entries(requiredScripts)
+                .filter(([name, loaded]) => !loaded)
+                .map(([name]) => name);
+            
+            if (missingScripts.length > 0) {
+                console.error('❌ 必須スクリプトが読み込まれていません:', missingScripts);
+            } else {
+                console.log('✅ すべての必須スクリプトが読み込まれました');
+            }
+            
             // 進捗統合システムを初期化
-            progressIntegration.initialize();
+            try {
+                if (typeof progressIntegration !== 'undefined') {
+                    progressIntegration.initialize();
+                } else {
+                    console.warn('ProgressIntegration not available');
+                }
+            } catch (error) {
+                console.error('Progress integration initialization failed:', error);
+            }
             
             let hiraganaGame = null;
             
@@ -108,20 +145,61 @@
                     
                     // ひらがな学習ゲームを初期化（まだ初期化されていない場合）
                     if (!hiraganaGame) {
-                        hiraganaGame = new HiraganaLearningGame(
-                            '3-4', 
-                            document.getElementById('hiragana-game-container'),
-                            {
-                                mode: 'hiragana',
-                                audio: { enabled: true }
+                        try {
+                            console.log('🎮 ひらがなゲーム初期化開始 (3-4歳)');
+                            
+                            // 必要なクラスが利用可能かチェック
+                            if (typeof HiraganaLearningGame === 'undefined') {
+                                throw new Error('HiraganaLearningGame クラスが読み込まれていません');
                             }
-                        );
-                        
-                        // ゲームと進捗追跡を連携
-                        progressIntegration.connectGameToProgress(hiraganaGame);
-                        
-                        // 進捗サマリーを表示
-                        progressIntegration.showProgressSummary('progress-summary-container');
+                            
+                            hiraganaGame = new HiraganaLearningGame(
+                                '3-4', 
+                                document.getElementById('hiragana-game-container'),
+                                {
+                                    mode: 'hiragana',
+                                    audio: { enabled: true }
+                                }
+                            );
+                            
+                            console.log('✅ ひらがなゲーム作成成功');
+                            
+                            // ゲームと進捗追跡を連携
+                            if (typeof progressIntegration !== 'undefined' && 
+                                typeof progressIntegration.connectGameToProgress === 'function') {
+                                progressIntegration.connectGameToProgress(hiraganaGame);
+                                console.log('✅ 進捗追跡と連携完了');
+                            }
+                            
+                            // 進捗サマリーを表示
+                            if (typeof progressIntegration !== 'undefined' && 
+                                typeof progressIntegration.showProgressSummary === 'function') {
+                                progressIntegration.showProgressSummary('progress-summary-container');
+                            }
+                            
+                            console.log('🎉 ひらがなゲーム初期化完了');
+                            
+                        } catch (error) {
+                            console.error('❌ ひらがなゲーム初期化失敗:', error);
+                            
+                            const container = document.getElementById('hiragana-game-container');
+                            if (container) {
+                                container.innerHTML = `
+                                    <div style="padding: 20px; background: #f8d7da; color: #721c24; border-radius: 8px;">
+                                        <h3 style="margin-top: 0;">⚠️ ゲームの読み込みに失敗しました</h3>
+                                        <p><strong>エラー:</strong> ${error.message}</p>
+                                        <p style="font-size: 14px; margin: 15px 0;">
+                                            <a href="debug-mobile.html" style="color: #721c24; text-decoration: underline;">
+                                                デバッグページで詳細を確認
+                                            </a>
+                                        </p>
+                                        <button onclick="location.reload()" style="padding: 10px 20px; background: #dc3545; color: white; border: none; border-radius: 5px; cursor: pointer; font-size: 16px;">
+                                            ページを再読み込み
+                                        </button>
+                                    </div>
+                                `;
+                            }
+                        }
                     }
                 }
             }
@@ -136,7 +214,14 @@
             });
             
             // 保護者向けボタンを追加
-            progressIntegration.addParentButton('parent-controls', '保護者向け進捗確認');
+            try {
+                if (typeof progressIntegration !== 'undefined' && 
+                    typeof progressIntegration.addParentButton === 'function') {
+                    progressIntegration.addParentButton('parent-controls', '保護者向け進捗確認');
+                }
+            } catch (error) {
+                console.error('Failed to add parent button:', error);
+            }
             
             // デフォルトで分類ゲームを表示
             switchToGame('classification');
@@ -144,55 +229,3 @@
     </script>
 </body>
 </html>
-            // キーボードナビゲーション対応
-            document.addEventListener('keydown', function(event) {
-                // Tab キーでのフォーカス管理
-                if (event.key === 'Tab') {
-                    // デフォルトの Tab 動作を維持
-                    return;
-                }
-                
-                // 矢印キーでのゲーム切り替え
-                if (event.key === 'ArrowLeft' || event.key === 'ArrowRight') {
-                    const activeButton = document.querySelector('.game-nav-button.active');
-                    if (activeButton) {
-                        event.preventDefault();
-                        const buttons = Array.from(document.querySelectorAll('.game-nav-button'));
-                        const currentIndex = buttons.indexOf(activeButton);
-                        let nextIndex;
-                        
-                        if (event.key === 'ArrowRight') {
-                            nextIndex = (currentIndex + 1) % buttons.length;
-                        } else {
-                            nextIndex = (currentIndex - 1 + buttons.length) % buttons.length;
-                        }
-                        
-                        buttons[nextIndex].click();
-                        buttons[nextIndex].focus();
-                    }
-                }
-                
-                // Enter または Space キーでボタン実行
-                if (event.key === 'Enter' || event.key === ' ') {
-                    const focusedElement = document.activeElement;
-                    if (focusedElement && focusedElement.classList.contains('game-nav-button')) {
-                        event.preventDefault();
-                        focusedElement.click();
-                    }
-                }
-            });
-            
-            // フォーカス管理の改善
-            document.querySelectorAll('.game-nav-button').forEach(button => {
-                button.addEventListener('focus', function() {
-                    // フォーカス時にボタンを強調表示
-                    this.style.outline = '4px solid #4A90E2';
-                    this.style.outlineOffset = '2px';
-                });
-                
-                button.addEventListener('blur', function() {
-                    // フォーカス解除時にアウトラインを削除
-                    this.style.outline = '';
-                    this.style.outlineOffset = '';
-                });
-            });
