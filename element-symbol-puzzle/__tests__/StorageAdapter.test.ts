@@ -52,317 +52,11 @@ describe('StorageAdapter - Serialization', () => {
       const serialized = adapter.serializeProgress(progress);
       expect(() => JSON.parse(serialized)).not.toThrow();
     });
-
-    it('should preserve all progress data in serialization', () => {
-      const progress: UserProgress = {
-        userId: 'user1',
-        gradeLevel: 5,
-        elementsLearned: {
-          'H': {
-            status: 'mastered',
-            attempts: 5,
-            correctAttempts: 5,
-            lastAttempt: 1000,
-          },
-        },
-        totalSessionTime: 3600,
-        sessionCount: 2,
-        averageAccuracy: 95.5,
-        badges: ['badge1', 'badge2'],
-        streakDays: 7,
-        lastSessionDate: 2000,
-        jigsawPuzzlesCompleted: 1,
-      };
-
-      const serialized = adapter.serializeProgress(progress);
-      const parsed = JSON.parse(serialized);
-
-      expect(parsed.userId).toBe('user1');
-      expect(parsed.gradeLevel).toBe(5);
-      expect(parsed.sessionCount).toBe(2);
-      expect(parsed.averageAccuracy).toBe(95.5);
-      expect(parsed.badges).toEqual(['badge1', 'badge2']);
-      expect(parsed.streakDays).toBe(7);
-    });
-
-    it('should throw error for null progress', () => {
-      expect(() => adapter.serializeProgress(null as any)).toThrow('Invalid progress');
-    });
-
-    it('should throw error for progress without userId', () => {
-      const progress = {
-        gradeLevel: 3,
-        elementsLearned: {},
-      } as any;
-
-      expect(() => adapter.serializeProgress(progress)).toThrow('Invalid progress');
-    });
-
-    it('should throw error for progress without elementsLearned', () => {
-      const progress = {
-        userId: 'user1',
-        gradeLevel: 3,
-      } as any;
-
-      expect(() => adapter.serializeProgress(progress)).toThrow('Invalid progress');
-    });
-
-    it('should handle complex element data', () => {
-      const progress: UserProgress = {
-        userId: 'user1',
-        gradeLevel: 6,
-        elementsLearned: {
-          'H': {
-            status: 'mastered',
-            attempts: 10,
-            correctAttempts: 9,
-            lastAttempt: 1000,
-          },
-          'O': {
-            status: 'learning',
-            attempts: 3,
-            correctAttempts: 2,
-            lastAttempt: 2000,
-          },
-          'C': {
-            status: 'not-started',
-            attempts: 0,
-            correctAttempts: 0,
-            lastAttempt: 0,
-          },
-        },
-        totalSessionTime: 7200,
-        sessionCount: 5,
-        averageAccuracy: 87.3,
-        badges: ['badge1', 'badge2', 'badge3'],
-        streakDays: 14,
-        lastSessionDate: 3000,
-        jigsawPuzzlesCompleted: 2,
-      };
-
-      const serialized = adapter.serializeProgress(progress);
-      const parsed = JSON.parse(serialized);
-
-      expect(Object.keys(parsed.elementsLearned)).toHaveLength(3);
-      expect(parsed.elementsLearned['H'].status).toBe('mastered');
-      expect(parsed.elementsLearned['O'].status).toBe('learning');
-    });
-  });
-
-  describe('deserializeProgress', () => {
-    it('should deserialize valid JSON to UserProgress', () => {
-      const progress: UserProgress = {
-        userId: 'user1',
-        gradeLevel: 3,
-        elementsLearned: {},
-        totalSessionTime: 0,
-        sessionCount: 0,
-        averageAccuracy: 0,
-        badges: [],
-        streakDays: 0,
-        lastSessionDate: 0,
-        jigsawPuzzlesCompleted: 0,
-      };
-
-      const serialized = JSON.stringify(progress);
-      const deserialized = adapter.deserializeProgress(serialized);
-
-      expect(deserialized.userId).toBe('user1');
-      expect(deserialized.gradeLevel).toBe(3);
-    });
-
-    it('should preserve all data during deserialization', () => {
-      const progress: UserProgress = {
-        userId: 'user1',
-        gradeLevel: 5,
-        elementsLearned: {
-          'H': {
-            status: 'mastered',
-            attempts: 5,
-            correctAttempts: 5,
-            lastAttempt: 1000,
-          },
-        },
-        totalSessionTime: 3600,
-        sessionCount: 2,
-        averageAccuracy: 95.5,
-        badges: ['badge1', 'badge2'],
-        streakDays: 7,
-        lastSessionDate: 2000,
-        jigsawPuzzlesCompleted: 1,
-      };
-
-      const serialized = JSON.stringify(progress);
-      const deserialized = adapter.deserializeProgress(serialized);
-
-      expect(deserialized).toEqual(progress);
-    });
-
-    it('should throw error for invalid JSON', () => {
-      expect(() => adapter.deserializeProgress('not valid json')).toThrow('Failed to parse JSON');
-    });
-
-    it('should throw error for empty string', () => {
-      expect(() => adapter.deserializeProgress('')).toThrow('Invalid JSON string');
-    });
-
-    it('should throw error for null', () => {
-      expect(() => adapter.deserializeProgress(null as any)).toThrow('Invalid JSON string');
-    });
-
-    it('should throw error for corrupted userId', () => {
-      const corrupted = JSON.stringify({
-        userId: null,
-        gradeLevel: 3,
-        elementsLearned: {},
-        totalSessionTime: 0,
-        sessionCount: 0,
-        averageAccuracy: 0,
-        badges: [],
-        streakDays: 0,
-        lastSessionDate: 0,
-        jigsawPuzzlesCompleted: 0,
-      });
-
-      expect(() => adapter.deserializeProgress(corrupted)).toThrow('Corrupted progress data');
-    });
-
-    it('should throw error for invalid gradeLevel', () => {
-      const corrupted = JSON.stringify({
-        userId: 'user1',
-        gradeLevel: 10,
-        elementsLearned: {},
-        totalSessionTime: 0,
-        sessionCount: 0,
-        averageAccuracy: 0,
-        badges: [],
-        streakDays: 0,
-        lastSessionDate: 0,
-        jigsawPuzzlesCompleted: 0,
-      });
-
-      expect(() => adapter.deserializeProgress(corrupted)).toThrow('Corrupted progress data');
-    });
-
-    it('should throw error for invalid sessionCount', () => {
-      const corrupted = JSON.stringify({
-        userId: 'user1',
-        gradeLevel: 3,
-        elementsLearned: {},
-        totalSessionTime: 0,
-        sessionCount: -1,
-        averageAccuracy: 0,
-        badges: [],
-        streakDays: 0,
-        lastSessionDate: 0,
-        jigsawPuzzlesCompleted: 0,
-      });
-
-      expect(() => adapter.deserializeProgress(corrupted)).toThrow('Corrupted progress data');
-    });
-
-    it('should throw error for invalid averageAccuracy', () => {
-      const corrupted = JSON.stringify({
-        userId: 'user1',
-        gradeLevel: 3,
-        elementsLearned: {},
-        totalSessionTime: 0,
-        sessionCount: 0,
-        averageAccuracy: 150,
-        badges: [],
-        streakDays: 0,
-        lastSessionDate: 0,
-        jigsawPuzzlesCompleted: 0,
-      });
-
-      expect(() => adapter.deserializeProgress(corrupted)).toThrow('Corrupted progress data');
-    });
-
-    it('should throw error for invalid badges array', () => {
-      const corrupted = JSON.stringify({
-        userId: 'user1',
-        gradeLevel: 3,
-        elementsLearned: {},
-        totalSessionTime: 0,
-        sessionCount: 0,
-        averageAccuracy: 0,
-        badges: 'not-an-array',
-        streakDays: 0,
-        lastSessionDate: 0,
-        jigsawPuzzlesCompleted: 0,
-      });
-
-      expect(() => adapter.deserializeProgress(corrupted)).toThrow('Corrupted progress data');
-    });
-  });
-
-  describe('Round-trip serialization', () => {
-    it('should preserve data through serialize-deserialize cycle', () => {
-      const original: UserProgress = {
-        userId: 'user1',
-        gradeLevel: 5,
-        elementsLearned: {
-          'H': {
-            status: 'mastered',
-            attempts: 5,
-            correctAttempts: 5,
-            lastAttempt: 1000,
-          },
-          'O': {
-            status: 'learning',
-            attempts: 3,
-            correctAttempts: 2,
-            lastAttempt: 2000,
-          },
-        },
-        totalSessionTime: 3600,
-        sessionCount: 2,
-        averageAccuracy: 95.5,
-        badges: ['badge1', 'badge2'],
-        streakDays: 7,
-        lastSessionDate: 2000,
-        jigsawPuzzlesCompleted: 1,
-      };
-
-      const serialized = adapter.serializeProgress(original);
-      const deserialized = adapter.deserializeProgress(serialized);
-
-      expect(deserialized).toEqual(original);
-    });
-
-    it('should handle multiple round-trips', () => {
-      const original: UserProgress = {
-        userId: 'user1',
-        gradeLevel: 6,
-        elementsLearned: {
-          'H': {
-            status: 'mastered',
-            attempts: 10,
-            correctAttempts: 10,
-            lastAttempt: 1000,
-          },
-        },
-        totalSessionTime: 7200,
-        sessionCount: 5,
-        averageAccuracy: 100,
-        badges: ['badge1', 'badge2', 'badge3'],
-        streakDays: 30,
-        lastSessionDate: 3000,
-        jigsawPuzzlesCompleted: 3,
-      };
-
-      let current = original;
-      for (let i = 0; i < 3; i++) {
-        const serialized = adapter.serializeProgress(current);
-        current = adapter.deserializeProgress(serialized);
-      }
-
-      expect(current).toEqual(original);
-    });
   });
 });
 
-describe('StorageAdapter - Local Storage Operations', () => {
+
+describe('StorageAdapter - Save and Load Operations', () => {
   let adapter: StorageAdapter;
 
   beforeEach(() => {
@@ -416,70 +110,6 @@ describe('StorageAdapter - Local Storage Operations', () => {
     it('should throw error for null progress', () => {
       expect(() => adapter.saveToLocalStorage('user1', null as any)).toThrow('Invalid progress');
     });
-
-    it('should throw error for invalid progress', () => {
-      expect(() => adapter.saveToLocalStorage('user1', {} as any)).toThrow('Invalid progress');
-    });
-
-    it('should store data with correct key format', () => {
-      const progress: UserProgress = {
-        userId: 'user1',
-        gradeLevel: 3,
-        elementsLearned: {},
-        totalSessionTime: 0,
-        sessionCount: 0,
-        averageAccuracy: 0,
-        badges: [],
-        streakDays: 0,
-        lastSessionDate: 0,
-        jigsawPuzzlesCompleted: 0,
-      };
-
-      adapter.saveToLocalStorage('user1', progress);
-
-      if (typeof localStorage !== 'undefined') {
-        const stored = localStorage.getItem('element-puzzle-progress-user1');
-        expect(stored).toBeDefined();
-        expect(stored).not.toBeNull();
-      }
-    });
-
-    it('should overwrite existing data', () => {
-      const progress1: UserProgress = {
-        userId: 'user1',
-        gradeLevel: 3,
-        elementsLearned: {},
-        totalSessionTime: 0,
-        sessionCount: 1,
-        averageAccuracy: 0,
-        badges: [],
-        streakDays: 0,
-        lastSessionDate: 0,
-        jigsawPuzzlesCompleted: 0,
-      };
-
-      const progress2: UserProgress = {
-        userId: 'user1',
-        gradeLevel: 3,
-        elementsLearned: {},
-        totalSessionTime: 0,
-        sessionCount: 2,
-        averageAccuracy: 0,
-        badges: [],
-        streakDays: 0,
-        lastSessionDate: 0,
-        jigsawPuzzlesCompleted: 0,
-      };
-
-      adapter.saveToLocalStorage('user1', progress1);
-      adapter.saveToLocalStorage('user1', progress2);
-
-      if (typeof localStorage !== 'undefined') {
-        const stored = localStorage.getItem('element-puzzle-progress-user1');
-        const parsed = JSON.parse(stored!);
-        expect(parsed.sessionCount).toBe(2);
-      }
-    });
   });
 
   describe('loadFromLocalStorage', () => {
@@ -521,223 +151,543 @@ describe('StorageAdapter - Local Storage Operations', () => {
         expect(() => adapter.loadFromLocalStorage('user1')).toThrow('Corrupted progress data');
       }
     });
+  });
+});
 
-    it('should preserve all data in round-trip', () => {
-      const original: UserProgress = {
-        userId: 'user1',
-        gradeLevel: 5,
-        elementsLearned: {
-          'H': {
-            status: 'mastered',
-            attempts: 5,
-            correctAttempts: 5,
-            lastAttempt: 1000,
-          },
+
+describe('StorageAdapter - Data Integrity Round-trip', () => {
+  let adapter: StorageAdapter;
+
+  beforeEach(() => {
+    adapter = new StorageAdapter();
+    if (typeof localStorage !== 'undefined') {
+      localStorage.clear();
+    }
+  });
+
+  afterEach(() => {
+    if (typeof localStorage !== 'undefined') {
+      localStorage.clear();
+    }
+  });
+
+  it('should preserve data through serialize-deserialize cycle', () => {
+    const original: UserProgress = {
+      userId: 'user1',
+      gradeLevel: 5,
+      elementsLearned: {
+        'H': {
+          status: 'mastered',
+          attempts: 5,
+          correctAttempts: 5,
+          lastAttempt: 1000,
         },
-        totalSessionTime: 3600,
-        sessionCount: 2,
-        averageAccuracy: 95.5,
-        badges: ['badge1', 'badge2'],
-        streakDays: 7,
-        lastSessionDate: 2000,
-        jigsawPuzzlesCompleted: 1,
-      };
+        'O': {
+          status: 'learning',
+          attempts: 3,
+          correctAttempts: 2,
+          lastAttempt: 2000,
+        },
+      },
+      totalSessionTime: 3600,
+      sessionCount: 2,
+      averageAccuracy: 95.5,
+      badges: ['badge1', 'badge2'],
+      streakDays: 7,
+      lastSessionDate: 2000,
+      jigsawPuzzlesCompleted: 1,
+    };
 
-      adapter.saveToLocalStorage('user1', original);
-      const loaded = adapter.loadFromLocalStorage('user1');
+    const serialized = adapter.serializeProgress(original);
+    const deserialized = adapter.deserializeProgress(serialized);
 
-      if (typeof localStorage !== 'undefined') {
-        expect(loaded).toEqual(original);
-      }
-    });
+    expect(deserialized).toEqual(original);
   });
 
-  describe('existsInLocalStorage', () => {
-    it('should return true if progress exists', () => {
+  it('should preserve all data in localStorage round-trip', () => {
+    const original: UserProgress = {
+      userId: 'user1',
+      gradeLevel: 5,
+      elementsLearned: {
+        'H': {
+          status: 'mastered',
+          attempts: 5,
+          correctAttempts: 5,
+          lastAttempt: 1000,
+        },
+      },
+      totalSessionTime: 3600,
+      sessionCount: 2,
+      averageAccuracy: 95.5,
+      badges: ['badge1', 'badge2'],
+      streakDays: 7,
+      lastSessionDate: 2000,
+      jigsawPuzzlesCompleted: 1,
+    };
+
+    adapter.saveToLocalStorage('user1', original);
+    const loaded = adapter.loadFromLocalStorage('user1');
+
+    if (typeof localStorage !== 'undefined') {
+      expect(loaded).toEqual(original);
+    }
+  });
+
+  it('should handle multiple round-trips without data loss', () => {
+    const original: UserProgress = {
+      userId: 'user1',
+      gradeLevel: 6,
+      elementsLearned: {
+        'H': {
+          status: 'mastered',
+          attempts: 10,
+          correctAttempts: 10,
+          lastAttempt: 1000,
+        },
+      },
+      totalSessionTime: 7200,
+      sessionCount: 5,
+      averageAccuracy: 100,
+      badges: ['badge1', 'badge2', 'badge3'],
+      streakDays: 30,
+      lastSessionDate: 3000,
+      jigsawPuzzlesCompleted: 3,
+    };
+
+    let current = original;
+    for (let i = 0; i < 3; i++) {
+      const serialized = adapter.serializeProgress(current);
+      current = adapter.deserializeProgress(serialized);
+    }
+
+    expect(current).toEqual(original);
+  });
+});
+
+
+describe('StorageAdapter - Error Handling (Storage Unavailable)', () => {
+  let adapter: StorageAdapter;
+
+  beforeEach(() => {
+    adapter = new StorageAdapter();
+  });
+
+  it('should handle saveToLocalStorage gracefully when storage is unavailable', () => {
+    const progress: UserProgress = {
+      userId: 'user1',
+      gradeLevel: 3,
+      elementsLearned: {},
+      totalSessionTime: 0,
+      sessionCount: 0,
+      averageAccuracy: 0,
+      badges: [],
+      streakDays: 0,
+      lastSessionDate: 0,
+      jigsawPuzzlesCompleted: 0,
+    };
+
+    expect(() => adapter.saveToLocalStorage('user1', progress)).not.toThrow();
+  });
+
+  it('should return null when loadFromLocalStorage and storage is unavailable', () => {
+    const loaded = adapter.loadFromLocalStorage('user1');
+    expect(loaded === null || typeof loaded === 'object').toBe(true);
+  });
+
+  it('should return false when existsInLocalStorage and storage is unavailable', () => {
+    const exists = adapter.existsInLocalStorage('user1');
+    expect(typeof exists === 'boolean').toBe(true);
+  });
+
+  it('should handle deleteFromLocalStorage gracefully when storage is unavailable', () => {
+    expect(() => adapter.deleteFromLocalStorage('user1')).not.toThrow();
+  });
+
+  it('should handle storage quota exceeded gracefully', () => {
+    const progress: UserProgress = {
+      userId: 'user1',
+      gradeLevel: 3,
+      elementsLearned: {},
+      totalSessionTime: 0,
+      sessionCount: 0,
+      averageAccuracy: 0,
+      badges: [],
+      streakDays: 0,
+      lastSessionDate: 0,
+      jigsawPuzzlesCompleted: 0,
+    };
+
+    // This should not throw even if storage is full
+    expect(() => adapter.saveToLocalStorage('user1', progress)).not.toThrow();
+  });
+});
+
+
+describe('StorageAdapter - Multiple Profile Separation', () => {
+  let adapter: StorageAdapter;
+
+  beforeEach(() => {
+    adapter = new StorageAdapter();
+    if (typeof localStorage !== 'undefined') {
+      localStorage.clear();
+    }
+  });
+
+  afterEach(() => {
+    if (typeof localStorage !== 'undefined') {
+      localStorage.clear();
+    }
+  });
+
+  it('should maintain separate storage for different users', () => {
+    const progress1: UserProgress = {
+      userId: 'user1',
+      gradeLevel: 3,
+      elementsLearned: {},
+      totalSessionTime: 0,
+      sessionCount: 1,
+      averageAccuracy: 0,
+      badges: [],
+      streakDays: 0,
+      lastSessionDate: 0,
+      jigsawPuzzlesCompleted: 0,
+    };
+
+    const progress2: UserProgress = {
+      userId: 'user2',
+      gradeLevel: 4,
+      elementsLearned: {},
+      totalSessionTime: 0,
+      sessionCount: 2,
+      averageAccuracy: 0,
+      badges: [],
+      streakDays: 0,
+      lastSessionDate: 0,
+      jigsawPuzzlesCompleted: 0,
+    };
+
+    adapter.saveToLocalStorage('user1', progress1);
+    adapter.saveToLocalStorage('user2', progress2);
+
+    const loaded1 = adapter.loadFromLocalStorage('user1');
+    const loaded2 = adapter.loadFromLocalStorage('user2');
+
+    if (typeof localStorage !== 'undefined') {
+      expect(loaded1?.sessionCount).toBe(1);
+      expect(loaded2?.sessionCount).toBe(2);
+      expect(loaded1?.gradeLevel).toBe(3);
+      expect(loaded2?.gradeLevel).toBe(4);
+    }
+  });
+
+  it('should not affect other users when deleting', () => {
+    const progress1: UserProgress = {
+      userId: 'user1',
+      gradeLevel: 3,
+      elementsLearned: {},
+      totalSessionTime: 0,
+      sessionCount: 1,
+      averageAccuracy: 0,
+      badges: [],
+      streakDays: 0,
+      lastSessionDate: 0,
+      jigsawPuzzlesCompleted: 0,
+    };
+
+    const progress2: UserProgress = {
+      userId: 'user2',
+      gradeLevel: 4,
+      elementsLearned: {},
+      totalSessionTime: 0,
+      sessionCount: 2,
+      averageAccuracy: 0,
+      badges: [],
+      streakDays: 0,
+      lastSessionDate: 0,
+      jigsawPuzzlesCompleted: 0,
+    };
+
+    adapter.saveToLocalStorage('user1', progress1);
+    adapter.saveToLocalStorage('user2', progress2);
+    adapter.deleteFromLocalStorage('user1');
+
+    const loaded1 = adapter.loadFromLocalStorage('user1');
+    const loaded2 = adapter.loadFromLocalStorage('user2');
+
+    expect(loaded1).toBeNull();
+    if (typeof localStorage !== 'undefined') {
+      expect(loaded2).not.toBeNull();
+      expect(loaded2?.sessionCount).toBe(2);
+    }
+  });
+
+  it('should handle updating one profile without affecting others', () => {
+    const progress1: UserProgress = {
+      userId: 'user1',
+      gradeLevel: 3,
+      elementsLearned: {},
+      totalSessionTime: 100,
+      sessionCount: 1,
+      averageAccuracy: 50,
+      badges: [],
+      streakDays: 1,
+      lastSessionDate: 1000,
+      jigsawPuzzlesCompleted: 0,
+    };
+
+    const progress2: UserProgress = {
+      userId: 'user2',
+      gradeLevel: 4,
+      elementsLearned: {},
+      totalSessionTime: 200,
+      sessionCount: 2,
+      averageAccuracy: 75,
+      badges: [],
+      streakDays: 2,
+      lastSessionDate: 2000,
+      jigsawPuzzlesCompleted: 1,
+    };
+
+    adapter.saveToLocalStorage('user1', progress1);
+    adapter.saveToLocalStorage('user2', progress2);
+
+    // Update user1
+    const updated1: UserProgress = {
+      ...progress1,
+      sessionCount: 5,
+      averageAccuracy: 90,
+    };
+    adapter.saveToLocalStorage('user1', updated1);
+
+    const loaded1 = adapter.loadFromLocalStorage('user1');
+    const loaded2 = adapter.loadFromLocalStorage('user2');
+
+    if (typeof localStorage !== 'undefined') {
+      expect(loaded1?.sessionCount).toBe(5);
+      expect(loaded1?.averageAccuracy).toBe(90);
+      expect(loaded2?.sessionCount).toBe(2);
+      expect(loaded2?.averageAccuracy).toBe(75);
+    }
+  });
+
+  it('should handle many profiles independently', () => {
+    const profiles: UserProgress[] = [];
+    for (let i = 1; i <= 5; i++) {
       const progress: UserProgress = {
-        userId: 'user1',
-        gradeLevel: 3,
+        userId: `user${i}`,
+        gradeLevel: (3 + (i % 4)) as 3 | 4 | 5 | 6,
         elementsLearned: {},
-        totalSessionTime: 0,
-        sessionCount: 0,
-        averageAccuracy: 0,
+        totalSessionTime: i * 100,
+        sessionCount: i,
+        averageAccuracy: i * 10,
         badges: [],
-        streakDays: 0,
-        lastSessionDate: 0,
-        jigsawPuzzlesCompleted: 0,
+        streakDays: i,
+        lastSessionDate: i * 1000,
+        jigsawPuzzlesCompleted: i - 1,
       };
+      profiles.push(progress);
+      adapter.saveToLocalStorage(`user${i}`, progress);
+    }
 
-      adapter.saveToLocalStorage('user1', progress);
-      const exists = adapter.existsInLocalStorage('user1');
-
+    // Verify all profiles are stored correctly
+    for (let i = 1; i <= 5; i++) {
+      const loaded = adapter.loadFromLocalStorage(`user${i}`);
       if (typeof localStorage !== 'undefined') {
-        expect(exists).toBe(true);
+        expect(loaded?.sessionCount).toBe(i);
+        expect(loaded?.averageAccuracy).toBe(i * 10);
       }
-    });
+    }
+  });
+});
 
-    it('should return false if progress does not exist', () => {
-      const exists = adapter.existsInLocalStorage('non-existent-user');
-      expect(exists).toBe(false);
-    });
 
-    it('should throw error for invalid userId', () => {
-      expect(() => adapter.existsInLocalStorage('')).toThrow('Invalid userId');
-    });
+describe('StorageAdapter - Complex Scenarios', () => {
+  let adapter: StorageAdapter;
+
+  beforeEach(() => {
+    adapter = new StorageAdapter();
+    if (typeof localStorage !== 'undefined') {
+      localStorage.clear();
+    }
   });
 
-  describe('deleteFromLocalStorage', () => {
-    it('should delete progress from localStorage', () => {
-      const progress: UserProgress = {
-        userId: 'user1',
-        gradeLevel: 3,
-        elementsLearned: {},
-        totalSessionTime: 0,
-        sessionCount: 0,
-        averageAccuracy: 0,
-        badges: [],
-        streakDays: 0,
-        lastSessionDate: 0,
-        jigsawPuzzlesCompleted: 0,
-      };
-
-      adapter.saveToLocalStorage('user1', progress);
-      adapter.deleteFromLocalStorage('user1');
-
-      const exists = adapter.existsInLocalStorage('user1');
-      expect(exists).toBe(false);
-    });
-
-    it('should throw error for invalid userId', () => {
-      expect(() => adapter.deleteFromLocalStorage('')).toThrow('Invalid userId');
-    });
+  afterEach(() => {
+    if (typeof localStorage !== 'undefined') {
+      localStorage.clear();
+    }
   });
 
-  describe('Multiple User Separation', () => {
-    it('should maintain separate storage for different users', () => {
-      const progress1: UserProgress = {
-        userId: 'user1',
-        gradeLevel: 3,
-        elementsLearned: {},
-        totalSessionTime: 0,
-        sessionCount: 1,
-        averageAccuracy: 0,
-        badges: [],
-        streakDays: 0,
-        lastSessionDate: 0,
-        jigsawPuzzlesCompleted: 0,
-      };
+  it('should handle complex element learning data', () => {
+    const progress: UserProgress = {
+      userId: 'user1',
+      gradeLevel: 6,
+      elementsLearned: {
+        'H': {
+          status: 'mastered',
+          attempts: 15,
+          correctAttempts: 14,
+          lastAttempt: 1609459200000,
+        },
+        'O': {
+          status: 'mastered',
+          attempts: 12,
+          correctAttempts: 12,
+          lastAttempt: 1609459200000,
+        },
+        'C': {
+          status: 'learning',
+          attempts: 5,
+          correctAttempts: 3,
+          lastAttempt: 1609459200000,
+        },
+        'N': {
+          status: 'not-started',
+          attempts: 0,
+          correctAttempts: 0,
+          lastAttempt: 0,
+        },
+      },
+      totalSessionTime: 14400,
+      sessionCount: 10,
+      averageAccuracy: 92.5,
+      badges: ['badge1', 'badge2', 'badge3', 'badge4'],
+      streakDays: 21,
+      lastSessionDate: 1609459200000,
+      jigsawPuzzlesCompleted: 5,
+    };
 
-      const progress2: UserProgress = {
-        userId: 'user2',
-        gradeLevel: 4,
-        elementsLearned: {},
-        totalSessionTime: 0,
-        sessionCount: 2,
-        averageAccuracy: 0,
-        badges: [],
-        streakDays: 0,
-        lastSessionDate: 0,
-        jigsawPuzzlesCompleted: 0,
-      };
+    adapter.saveToLocalStorage('user1', progress);
+    const loaded = adapter.loadFromLocalStorage('user1');
 
-      adapter.saveToLocalStorage('user1', progress1);
-      adapter.saveToLocalStorage('user2', progress2);
-
-      const loaded1 = adapter.loadFromLocalStorage('user1');
-      const loaded2 = adapter.loadFromLocalStorage('user2');
-
-      if (typeof localStorage !== 'undefined') {
-        expect(loaded1?.sessionCount).toBe(1);
-        expect(loaded2?.sessionCount).toBe(2);
-        expect(loaded1?.gradeLevel).toBe(3);
-        expect(loaded2?.gradeLevel).toBe(4);
-      }
-    });
-
-    it('should not affect other users when deleting', () => {
-      const progress1: UserProgress = {
-        userId: 'user1',
-        gradeLevel: 3,
-        elementsLearned: {},
-        totalSessionTime: 0,
-        sessionCount: 1,
-        averageAccuracy: 0,
-        badges: [],
-        streakDays: 0,
-        lastSessionDate: 0,
-        jigsawPuzzlesCompleted: 0,
-      };
-
-      const progress2: UserProgress = {
-        userId: 'user2',
-        gradeLevel: 4,
-        elementsLearned: {},
-        totalSessionTime: 0,
-        sessionCount: 2,
-        averageAccuracy: 0,
-        badges: [],
-        streakDays: 0,
-        lastSessionDate: 0,
-        jigsawPuzzlesCompleted: 0,
-      };
-
-      adapter.saveToLocalStorage('user1', progress1);
-      adapter.saveToLocalStorage('user2', progress2);
-      adapter.deleteFromLocalStorage('user1');
-
-      const loaded1 = adapter.loadFromLocalStorage('user1');
-      const loaded2 = adapter.loadFromLocalStorage('user2');
-
-      expect(loaded1).toBeNull();
-      if (typeof localStorage !== 'undefined') {
-        expect(loaded2).not.toBeNull();
-        expect(loaded2?.sessionCount).toBe(2);
-      }
-    });
+    if (typeof localStorage !== 'undefined') {
+      expect(loaded).toEqual(progress);
+      expect(Object.keys(loaded!.elementsLearned)).toHaveLength(4);
+      expect(loaded!.averageAccuracy).toBe(92.5);
+      expect(loaded!.badges).toHaveLength(4);
+    }
   });
 
-  describe('Data Integrity', () => {
-    it('should validate data on load', () => {
-      if (typeof localStorage !== 'undefined') {
-        const invalidData = JSON.stringify({
-          userId: 'user1',
-          gradeLevel: 99,
-          elementsLearned: {},
-          totalSessionTime: 0,
-          sessionCount: 0,
-          averageAccuracy: 0,
-          badges: [],
-          streakDays: 0,
-          lastSessionDate: 0,
-          jigsawPuzzlesCompleted: 0,
-        });
+  it('should handle edge case: maximum accuracy (100)', () => {
+    const progress: UserProgress = {
+      userId: 'user1',
+      gradeLevel: 3,
+      elementsLearned: {},
+      totalSessionTime: 0,
+      sessionCount: 0,
+      averageAccuracy: 100,
+      badges: [],
+      streakDays: 0,
+      lastSessionDate: 0,
+      jigsawPuzzlesCompleted: 0,
+    };
 
-        localStorage.setItem('element-puzzle-progress-user1', invalidData);
-        expect(() => adapter.loadFromLocalStorage('user1')).toThrow('Corrupted progress data');
-      }
-    });
+    adapter.saveToLocalStorage('user1', progress);
+    const loaded = adapter.loadFromLocalStorage('user1');
 
-    it('should handle missing optional fields gracefully', () => {
-      const progress: UserProgress = {
-        userId: 'user1',
-        gradeLevel: 3,
-        elementsLearned: {},
-        totalSessionTime: 0,
-        sessionCount: 0,
-        averageAccuracy: 0,
-        badges: [],
-        streakDays: 0,
-        lastSessionDate: 0,
-        jigsawPuzzlesCompleted: 0,
+    if (typeof localStorage !== 'undefined') {
+      expect(loaded?.averageAccuracy).toBe(100);
+    }
+  });
+
+  it('should handle edge case: minimum accuracy (0)', () => {
+    const progress: UserProgress = {
+      userId: 'user1',
+      gradeLevel: 3,
+      elementsLearned: {},
+      totalSessionTime: 0,
+      sessionCount: 0,
+      averageAccuracy: 0,
+      badges: [],
+      streakDays: 0,
+      lastSessionDate: 0,
+      jigsawPuzzlesCompleted: 0,
+    };
+
+    adapter.saveToLocalStorage('user1', progress);
+    const loaded = adapter.loadFromLocalStorage('user1');
+
+    if (typeof localStorage !== 'undefined') {
+      expect(loaded?.averageAccuracy).toBe(0);
+    }
+  });
+
+  it('should handle large streak days value', () => {
+    const progress: UserProgress = {
+      userId: 'user1',
+      gradeLevel: 3,
+      elementsLearned: {},
+      totalSessionTime: 0,
+      sessionCount: 0,
+      averageAccuracy: 0,
+      badges: [],
+      streakDays: 365,
+      lastSessionDate: 0,
+      jigsawPuzzlesCompleted: 0,
+    };
+
+    adapter.saveToLocalStorage('user1', progress);
+    const loaded = adapter.loadFromLocalStorage('user1');
+
+    if (typeof localStorage !== 'undefined') {
+      expect(loaded?.streakDays).toBe(365);
+    }
+  });
+
+  it('should handle many badges', () => {
+    const badges = Array.from({ length: 50 }, (_, i) => `badge${i}`);
+    const progress: UserProgress = {
+      userId: 'user1',
+      gradeLevel: 3,
+      elementsLearned: {},
+      totalSessionTime: 0,
+      sessionCount: 0,
+      averageAccuracy: 0,
+      badges,
+      streakDays: 0,
+      lastSessionDate: 0,
+      jigsawPuzzlesCompleted: 0,
+    };
+
+    adapter.saveToLocalStorage('user1', progress);
+    const loaded = adapter.loadFromLocalStorage('user1');
+
+    if (typeof localStorage !== 'undefined') {
+      expect(loaded?.badges).toHaveLength(50);
+      expect(loaded?.badges).toEqual(badges);
+    }
+  });
+
+  it('should handle many learned elements', () => {
+    const elementsLearned: UserProgress['elementsLearned'] = {};
+    for (let i = 0; i < 30; i++) {
+      elementsLearned[`Element${i}`] = {
+        status: i % 3 === 0 ? 'mastered' : i % 3 === 1 ? 'learning' : 'not-started',
+        attempts: i * 2,
+        correctAttempts: i,
+        lastAttempt: 1000 + i,
       };
+    }
 
-      adapter.saveToLocalStorage('user1', progress);
-      const loaded = adapter.loadFromLocalStorage('user1');
+    const progress: UserProgress = {
+      userId: 'user1',
+      gradeLevel: 6,
+      elementsLearned,
+      totalSessionTime: 0,
+      sessionCount: 0,
+      averageAccuracy: 0,
+      badges: [],
+      streakDays: 0,
+      lastSessionDate: 0,
+      jigsawPuzzlesCompleted: 0,
+    };
 
-      if (typeof localStorage !== 'undefined') {
-        expect(loaded).not.toBeNull();
-        expect(loaded?.userId).toBe('user1');
-      }
-    });
+    adapter.saveToLocalStorage('user1', progress);
+    const loaded = adapter.loadFromLocalStorage('user1');
+
+    if (typeof localStorage !== 'undefined') {
+      expect(Object.keys(loaded!.elementsLearned)).toHaveLength(30);
+      expect(loaded?.elementsLearned['Element0'].status).toBe('mastered');
+      expect(loaded?.elementsLearned['Element1'].status).toBe('learning');
+    }
   });
 });

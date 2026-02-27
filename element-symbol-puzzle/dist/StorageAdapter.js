@@ -141,8 +141,8 @@ class StorageAdapter {
             return this.deserializeProgress(storedData);
         }
         catch (error) {
-            if (error instanceof Error && error.message.includes('Corrupted')) {
-                throw error;
+            if (error instanceof Error && (error.message.includes('Corrupted') || error.message.includes('Failed to parse JSON'))) {
+                throw new Error('Corrupted progress data');
             }
             // For other errors, return null to allow fallback to new progress
             return null;
