@@ -15,19 +15,22 @@ export type {
   UserProgress,
   Badge,
   Achievement,
-} from './types';
+} from './src/data/types';
 
-export { ElementContentManager } from './ElementContentManager';
-export { GameEngine } from './GameEngine';
-export { ProgressTrackingSystem } from './ProgressTrackingSystem';
-export { RewardSystem } from './RewardSystem';
-export { StorageAdapter } from './StorageAdapter';
-export { DifficultyAdjustmentSystem } from './DifficultyAdjustmentSystem';
-export { AudioSystem } from './AudioSystem';
-export type { AudioPlaybackOptions } from './AudioSystem';
-export { PeriodicTableManager } from './PeriodicTableManager';
-export { GameOrchestrator } from './GameOrchestrator';
-export type { GameEvent, GameEventCallback } from './GameOrchestrator';
+// Core Systems
+export { GameEngine } from './src/core/GameEngine';
+export { ProgressTrackingSystem } from './src/core/ProgressTrackingSystem';
+export { RewardSystem } from './src/core/RewardSystem';
+export { StorageAdapter } from './src/core/StorageAdapter';
+export { DifficultyAdjustmentSystem } from './src/core/DifficultyAdjustmentSystem';
+export { AudioSystem } from './src/core/AudioSystem';
+export type { AudioPlaybackOptions } from './src/core/AudioSystem';
+
+// Managers
+export { ElementContentManager } from './src/managers/ElementContentManager';
+export { PeriodicTableManager } from './src/managers/PeriodicTableManager';
+
+// UI Components
 export {
   MatchingGameUI,
   QuizGameUI,
@@ -36,13 +39,19 @@ export {
   ProgressTrackingUI,
   FeedbackUI,
   RewardNotificationUI,
-} from './UIComponents';
-export type { UIComponent, SelectionCallback, DragDropCallback } from './UIComponents';
-export { ELEMENTS, CHEMICAL_FORMULAS } from './elements';
+} from './src/ui/UIComponents';
+export type { UIComponent, SelectionCallback, DragDropCallback } from './src/ui/UIComponents';
+
+// Game Orchestrator
+export { GameOrchestrator } from './GameOrchestrator';
+export type { GameEvent, GameEventCallback } from './GameOrchestrator';
+
+// Data
+export { ELEMENTS, CHEMICAL_FORMULAS } from './src/data/elements';
 export {
   BADGES,
   getBadgesByGrade,
   getBadgeById,
   getBadgesByType,
   getBadgeByTypeAndThreshold,
-} from './badges';
+} from './src/data/badges';

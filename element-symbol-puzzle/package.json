@@ -5,11 +5,11 @@
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
-    "build": "tsc",
-    "test": "jest",
-    "test:watch": "jest --watch",
-    "test:coverage": "jest --coverage",
-    "lint": "eslint . --ext .ts"
+    "build": "tsc --project config/tsconfig.json",
+    "test": "jest --config config/jest.config.js",
+    "test:watch": "jest --watch --config config/jest.config.js",
+    "test:coverage": "jest --coverage --config config/jest.config.js",
+    "lint": "eslint src --ext .ts"
   },
   "keywords": [
     "chemistry",

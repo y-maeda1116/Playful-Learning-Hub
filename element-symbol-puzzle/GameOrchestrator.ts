@@ -5,12 +5,12 @@
  * AudioSystem, and UI components to provide a complete game experience.
  */
 
-import { GameEngine } from './GameEngine';
-import { ProgressTrackingSystem } from './ProgressTrackingSystem';
-import { RewardSystem } from './RewardSystem';
-import { AudioSystem } from './AudioSystem';
-import { PeriodicTableManager } from './PeriodicTableManager';
-import { GameSession, Answer, UserProgress, Badge } from './types';
+import { GameEngine } from './src/core/GameEngine';
+import { ProgressTrackingSystem } from './src/core/ProgressTrackingSystem';
+import { RewardSystem } from './src/core/RewardSystem';
+import { AudioSystem } from './src/core/AudioSystem';
+import { PeriodicTableManager } from './src/managers/PeriodicTableManager';
+import { GameSession, Answer, UserProgress, Badge } from './src/data/types';
 
 /**
  * Callback for game events
