@@ -1049,8 +1049,7 @@ class HiraganaLearningGame {
             }
         });
     }
-    }
-    
+
     /**
      * ゲームコントロールを非表示
      */
