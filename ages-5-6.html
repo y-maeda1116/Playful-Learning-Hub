@@ -31,6 +31,27 @@
                     <span class="game-title">ひらがな・カタカナ</span>
                     <span class="game-description">もじをおぼえよう</span>
                 </button>
+                <button id="word-relay-btn-5" class="game-nav-button"
+                        role="tab" aria-selected="false" aria-controls="word-relay-section"
+                        aria-label="ことばリレー">
+                    <span class="game-icon" aria-hidden="true">🔗</span>
+                    <span class="game-title">ことばリレー</span>
+                    <span class="game-description">しりとりあそび</span>
+                </button>
+                <button id="clock-game-btn-5" class="game-nav-button"
+                        role="tab" aria-selected="false" aria-controls="clock-game-section"
+                        aria-label="とけいあそび">
+                    <span class="game-icon" aria-hidden="true">🕐</span>
+                    <span class="game-title">とけい</span>
+                    <span class="game-description">とけいをよもう</span>
+                </button>
+                <button id="shape-puzzle-btn-5" class="game-nav-button"
+                        role="tab" aria-selected="false" aria-controls="shape-puzzle-section"
+                        aria-label="ずけいパズル">
+                    <span class="game-icon" aria-hidden="true">🔷</span>
+                    <span class="game-title">ずけい</span>
+                    <span class="game-description">ずけいパズル</span>
+                </button>
             </div>
         </div>
 
@@ -57,6 +78,24 @@
             <div id="hiragana-game-container" role="main" aria-live="polite"></div>
             <div id="progress-summary-container" role="complementary" aria-label="学習進捗"></div>
         </div>
+
+        <!-- ことばリレーセクション -->
+        <div id="word-relay-section" class="game-section"
+             role="tabpanel" aria-labelledby="word-relay-btn-5" aria-hidden="true">
+            <div id="word-relay-game"></div>
+        </div>
+
+        <!-- 時計学習セクション -->
+        <div id="clock-game-section" class="game-section"
+             role="tabpanel" aria-labelledby="clock-game-btn-5" aria-hidden="true">
+            <div id="clock-game"></div>
+        </div>
+
+        <!-- 図形パズルセクション -->
+        <div id="shape-puzzle-section" class="game-section"
+             role="tabpanel" aria-labelledby="shape-puzzle-btn-5" aria-hidden="true">
+            <div id="shape-puzzle-game"></div>
+        </div>
         
         <div id="parent-controls" role="complementary" aria-label="保護者向けコントロール">
             <!-- 保護者向けボタンがここに追加されます -->
@@ -80,6 +119,9 @@
     <script src="word-formation-game.js"></script>
     <script src="writing-practice.js"></script>
     <script src="hiragana-learning.js"></script>
+    <script src="word-relay.js"></script>
+    <script src="clock-game.js"></script>
+    <script src="shape-puzzle.js"></script>
     <script>
         // スクリプト読み込み確認
         console.log('📦 スクリプト読み込み状況:');
@@ -170,6 +212,15 @@
                         initializeGame('hiragana');
                         hiraganaGameInitialized = true;
                     }
+                } else if (gameType === 'word-relay') {
+                    document.getElementById('word-relay-section').classList.add('active');
+                    document.getElementById('word-relay-btn-5').classList.add('active');
+                } else if (gameType === 'clock') {
+                    document.getElementById('clock-game-section').classList.add('active');
+                    document.getElementById('clock-game-btn-5').classList.add('active');
+                } else if (gameType === 'shape') {
+                    document.getElementById('shape-puzzle-section').classList.add('active');
+                    document.getElementById('shape-puzzle-btn-5').classList.add('active');
                 }
             }
             
@@ -268,6 +319,18 @@
             
             document.getElementById('hiragana-katakana-game-btn').addEventListener('click', function() {
                 switchToGame('hiragana-katakana');
+            });
+
+            document.getElementById('word-relay-btn-5').addEventListener('click', function() {
+                switchToGame('word-relay');
+            });
+
+            document.getElementById('clock-game-btn-5').addEventListener('click', function() {
+                switchToGame('clock');
+            });
+
+            document.getElementById('shape-puzzle-btn-5').addEventListener('click', function() {
+                switchToGame('shape');
             });
             
             // モード切り替えボタンのイベントリスナー
