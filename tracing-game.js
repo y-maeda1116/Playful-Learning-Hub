@@ -116,9 +116,107 @@ const SHAPES = Object.freeze([
   },
 ]);
 
+function createSvgElement(tag) {
+  return document.createElementNS('http://www.w3.org/2000/svg', tag);
+}
+
+function loadShape(container, state) {
+  const shape = SHAPES[state.currentIndex];
+  const guide = container.querySelector('.tracing-guide');
+  const user = container.querySelector('.tracing-user');
+  const nameEl = container.querySelector('.tracing-shape-name');
+  const feedback = container.querySelector('.tracing-feedback');
+  guide.setAttribute('points', pointsToString(shape.guidePoints));
+  user.setAttribute('points', '');
+  nameEl.textContent = shape.name;
+  feedback.textContent = '';
+  feedback.className = 'tracing-feedback';
+  return Object.assign({}, state, {
+    currentShape: shape,
+    userPoints: [],
+    isTracing: false,
+    evaluated: false,
+  });
+}
+
+function buildUI(container) {
+  container.textContent = '';
+  container.className = 'tracing-game';
+
+  const header = document.createElement('div');
+  header.className = 'tracing-header';
+  const title = document.createElement('h2');
+  title.className = 'tracing-title';
+  title.textContent = 'なぞりあそび';
+  const nameEl = document.createElement('p');
+  nameEl.className = 'tracing-shape-name';
+  header.appendChild(title);
+  header.appendChild(nameEl);
+  container.appendChild(header);
+
+  const canvasWrap = document.createElement('div');
+  canvasWrap.className = 'tracing-canvas-wrap';
+  const svg = createSvgElement('svg');
+  svg.setAttribute('class', 'tracing-canvas');
+  svg.setAttribute('viewBox', '0 0 300 300');
+  svg.setAttribute('preserveAspectRatio', 'xMidYMid meet');
+  svg.setAttribute('role', 'img');
+  svg.setAttribute('aria-label', '点線をなぞるキャンバス');
+
+  const guide = createSvgElement('polyline');
+  guide.setAttribute('class', 'tracing-guide');
+  guide.setAttribute('fill', 'none');
+  guide.setAttribute('stroke', '#bdc3c7');
+  guide.setAttribute('stroke-width', '6');
+  guide.setAttribute('stroke-linecap', 'round');
+  guide.setAttribute('stroke-linejoin', 'round');
+  guide.setAttribute('stroke-dasharray', '2,14');
+  svg.appendChild(guide);
+
+  const user = createSvgElement('polyline');
+  user.setAttribute('class', 'tracing-user');
+  user.setAttribute('fill', 'none');
+  user.setAttribute('stroke', '#e91e63');
+  user.setAttribute('stroke-width', '14');
+  user.setAttribute('stroke-linecap', 'round');
+  user.setAttribute('stroke-linejoin', 'round');
+  svg.appendChild(user);
+
+  canvasWrap.appendChild(svg);
+  container.appendChild(canvasWrap);
+
+  const feedback = document.createElement('p');
+  feedback.className = 'tracing-feedback';
+  feedback.setAttribute('role', 'status');
+  feedback.setAttribute('aria-live', 'polite');
+  container.appendChild(feedback);
+
+  const controls = document.createElement('div');
+  controls.className = 'tracing-controls';
+  const resetBtn = document.createElement('button');
+  resetBtn.type = 'button';
+  resetBtn.className = 'tracing-reset-btn';
+  resetBtn.textContent = 'やりなおし';
+  const nextBtn = document.createElement('button');
+  nextBtn.type = 'button';
+  nextBtn.className = 'tracing-next-btn';
+  nextBtn.textContent = 'つぎ';
+  controls.appendChild(resetBtn);
+  controls.appendChild(nextBtn);
+  container.appendChild(controls);
+}
+
+function initTracingGame() {
+  const container = document.getElementById('tracing-game');
+  if (!container) return;
+  buildUI(container);
+  let state = loadShape(container, { currentIndex: 0, userPoints: [], isTracing: false, evaluated: false, successCount: 0, attemptCount: 0 });
+}
+
 if (typeof module !== 'undefined') {
   module.exports = {
     calculateAccuracy, generateCircleGuide, generateLineGuide,
     generatePolylineGuide, generateWaveGuide, pointsToString, distance, SHAPES,
+    initTracingGame,
   };
 }

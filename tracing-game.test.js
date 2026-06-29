@@ -1,6 +1,6 @@
 const {
   calculateAccuracy, generateCircleGuide, generateLineGuide,
-  generatePolylineGuide, generateWaveGuide, pointsToString, SHAPES,
+  generatePolylineGuide, generateWaveGuide, pointsToString, SHAPES, initTracingGame,
 } = require('./tracing-game.js');
 
 describe('generateCircleGuide', () => {
@@ -77,5 +77,46 @@ describe('SHAPES', () => {
     const diffs = SHAPES.map(s => s.difficulty);
     const sorted = [...diffs].sort((a, b) => a - b);
     expect(diffs).toEqual(sorted);
+  });
+});
+
+describe('initTracingGame - UI生成', () => {
+  let container;
+  beforeEach(() => {
+    container = document.createElement('div');
+    container.id = 'tracing-game';
+    document.body.appendChild(container);
+  });
+  afterEach(() => {
+    if (container.parentNode) document.body.removeChild(container);
+  });
+
+  test('コンテナにゲームUIが生成される', () => {
+    initTracingGame();
+    expect(container.querySelector('.tracing-header')).not.toBeNull();
+    expect(container.querySelector('.tracing-canvas')).not.toBeNull();
+    expect(container.querySelector('.tracing-guide')).not.toBeNull();
+    expect(container.querySelector('.tracing-user')).not.toBeNull();
+    expect(container.querySelector('.tracing-shape-name')).not.toBeNull();
+    expect(container.querySelector('.tracing-next-btn')).not.toBeNull();
+    expect(container.querySelector('.tracing-reset-btn')).not.toBeNull();
+    expect(container.querySelector('.tracing-feedback')).not.toBeNull();
+  });
+
+  test('最初の図形(丸)のガイドと名前が表示される', () => {
+    initTracingGame();
+    const guide = container.querySelector('.tracing-guide');
+    expect(guide.getAttribute('points').trim().length).toBeGreaterThan(0);
+    expect(container.querySelector('.tracing-shape-name').textContent).toBe(SHAPES[0].name);
+  });
+
+  test('ユーザー軌跡polylineは初期状態で空', () => {
+    initTracingGame();
+    expect(container.querySelector('.tracing-user').getAttribute('points')).toBe('');
+  });
+
+  test('コンテナ不在時はnoopで例外なし', () => {
+    document.body.removeChild(container);
+    expect(() => initTracingGame()).not.toThrow();
   });
 });
