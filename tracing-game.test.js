@@ -80,6 +80,11 @@ describe('SHAPES', () => {
       expect(s.guidePoints.length).toBeGreaterThan(10);
     }
   });
+  test('line図形は水平直線（yが一定）', () => {
+    const line = SHAPES.find(s => s.id === 'line');
+    const ys = line.guidePoints.map(p => p.y);
+    expect(ys.every(y => y === ys[0])).toBe(true);
+  });
   test('難易度順（昇順）に並んでいる', () => {
     const diffs = SHAPES.map(s => s.difficulty);
     const sorted = [...diffs].sort((a, b) => a - b);

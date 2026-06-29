@@ -93,7 +93,7 @@ const SHAPES = Object.freeze([
   },
   {
     id: 'line', name: 'まっすぐ', difficulty: 1,
-    guidePoints: generateLineGuide(40, 150, 260, 40, 40),
+    guidePoints: generateLineGuide(40, 150, 260, 150, 40),
   },
   {
     id: 'triangle', name: 'さんかく', difficulty: 2,
