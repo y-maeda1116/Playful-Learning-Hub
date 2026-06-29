@@ -45,6 +45,13 @@
                     <span class="game-title">かずかぞえ</span>
                     <span class="game-description">かずをかぞえよう</span>
                 </button>
+                <button id="tracing-game-btn" class="game-nav-button"
+                        role="tab" aria-selected="false" aria-controls="tracing-game-section"
+                        aria-label="なぞりあそび - せんをなぞろう">
+                    <span class="game-icon" aria-hidden="true">✏️</span>
+                    <span class="game-title">なぞり</span>
+                    <span class="game-description">せんをなぞろう</span>
+                </button>
             </div>
         </div>
 
@@ -76,6 +83,12 @@
              role="tabpanel" aria-labelledby="counting-game-btn-3" aria-hidden="true">
             <div id="counting-game"></div>
         </div>
+
+        <!-- なぞりあそびセクション -->
+        <div id="tracing-game-section" class="game-section"
+             role="tabpanel" aria-labelledby="tracing-game-btn" aria-hidden="true">
+            <div id="tracing-game"></div>
+        </div>
         
         <div id="parent-controls" role="complementary" aria-label="保護者向けコントロール">
             <!-- 保護者向けボタンがここに追加されます -->
@@ -99,6 +112,7 @@
     <script src="hiragana-learning.js"></script>
     <script src="katakana-game.js"></script>
     <script src="counting-game.js"></script>
+    <script src="tracing-game.js"></script>
     <script>
         // スクリプト読み込み確認
         console.log('📦 スクリプト読み込み状況 (3-4歳):');
@@ -243,6 +257,13 @@
                     section.setAttribute('aria-hidden', 'false');
                     button.classList.add('active');
                     button.setAttribute('aria-selected', 'true');
+                } else if (gameType === 'tracing') {
+                    var section = document.getElementById('tracing-game-section');
+                    var button = document.getElementById('tracing-game-btn');
+                    section.classList.add('active');
+                    section.setAttribute('aria-hidden', 'false');
+                    button.classList.add('active');
+                    button.setAttribute('aria-selected', 'true');
                 }
             }
             
@@ -261,6 +282,10 @@
 
             document.getElementById('counting-game-btn-3').addEventListener('click', function() {
                 switchToGame('counting');
+            });
+
+            document.getElementById('tracing-game-btn').addEventListener('click', function() {
+                switchToGame('tracing');
             });
             
             // 保護者向けボタンを追加
