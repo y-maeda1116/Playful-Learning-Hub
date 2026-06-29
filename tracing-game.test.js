@@ -171,4 +171,30 @@ describe('initTracingGame - ポインタイベント', () => {
     dispatchPointer(svg, 'pointermove', 200, 100);
     expect(container.querySelector('.tracing-user').getAttribute('points')).toBe('');
   });
+
+  test('成功判定(70%以上)で緑フィードバックが出る', () => {
+    initTracingGame();
+    const svg = container.querySelector('.tracing-canvas');
+    const guidePts = container.querySelector('.tracing-guide').getAttribute('points').split(' ');
+    const first = guidePts[0].split(',').map(Number);
+    dispatchPointer(svg, 'pointerdown', first[0], first[1]);
+    for (const pt of guidePts) {
+      const [x, y] = pt.split(',').map(Number);
+      dispatchPointer(svg, 'pointermove', x, y);
+    }
+    dispatchPointer(svg, 'pointerup', 0, 0);
+    const feedback = container.querySelector('.tracing-feedback');
+    expect(feedback.classList.contains('tracing-success')).toBe(true);
+    expect(feedback.textContent).not.toBe('');
+  });
+
+  test('点数不足のときは再挑戦フィードバック', () => {
+    initTracingGame();
+    const svg = container.querySelector('.tracing-canvas');
+    dispatchPointer(svg, 'pointerdown', 10, 10);
+    dispatchPointer(svg, 'pointermove', 12, 12);
+    dispatchPointer(svg, 'pointerup', 12, 12);
+    const feedback = container.querySelector('.tracing-feedback');
+    expect(feedback.classList.contains('tracing-retry')).toBe(true);
+  });
 });

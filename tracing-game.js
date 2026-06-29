@@ -219,6 +219,24 @@ function getSvgPoint(svg, clientX, clientY) {
   };
 }
 
+const SUCCESS_THRESHOLD = 70;
+
+function evaluateTrace(container, state, setState) {
+  if (state.userPoints.length < 2 || state.evaluated) return;
+  const accuracy = calculateAccuracy(state.userPoints, state.currentShape.guidePoints, TOLERANCE);
+  const feedback = container.querySelector('.tracing-feedback');
+  const success = accuracy >= SUCCESS_THRESHOLD;
+  feedback.textContent = success
+    ? 'よくできました！ (' + accuracy + '%)'
+    : 'もういっかい！ (' + accuracy + '%)';
+  feedback.className = 'tracing-feedback ' + (success ? 'tracing-success' : 'tracing-retry');
+  setState(Object.assign({}, state, {
+    evaluated: true,
+    successCount: state.successCount + (success ? 1 : 0),
+    attemptCount: state.attemptCount + 1,
+  }));
+}
+
 function bindPointerEvents(container, svg, getState, setState) {
   const user = container.querySelector('.tracing-user');
 
@@ -241,9 +259,10 @@ function bindPointerEvents(container, svg, getState, setState) {
   });
 
   svg.addEventListener('pointerup', () => {
-    const state = getState();
-    if (!state.isTracing) return;
-    setState(Object.assign({}, state, { isTracing: false }));
+    const st = getState();
+    if (!st.isTracing) return;
+    setState(Object.assign({}, st, { isTracing: false }));
+    evaluateTrace(container, getState(), setState);
   });
 
   svg.addEventListener('pointerleave', () => {
