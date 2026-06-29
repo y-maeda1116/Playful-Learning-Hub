@@ -271,6 +271,17 @@ function bindPointerEvents(container, svg, getState, setState) {
   });
 }
 
+function bindControls(container, getState, setState) {
+  container.querySelector('.tracing-reset-btn').addEventListener('click', () => {
+    setState(loadShape(container, getState()));
+  });
+  container.querySelector('.tracing-next-btn').addEventListener('click', () => {
+    const cur = getState();
+    const nextIndex = (cur.currentIndex + 1) % SHAPES.length;
+    setState(loadShape(container, Object.assign({}, cur, { currentIndex: nextIndex })));
+  });
+}
+
 function initTracingGame() {
   const container = document.getElementById('tracing-game');
   if (!container) return;
@@ -280,6 +291,11 @@ function initTracingGame() {
   const setState = (next) => { state = next; };
   const svg = container.querySelector('.tracing-canvas');
   bindPointerEvents(container, svg, getState, setState);
+  bindControls(container, getState, setState);
+}
+
+if (typeof window !== 'undefined') {
+  document.addEventListener('DOMContentLoaded', initTracingGame);
 }
 
 if (typeof module !== 'undefined') {

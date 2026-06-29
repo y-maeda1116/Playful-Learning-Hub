@@ -197,4 +197,29 @@ describe('initTracingGame - ポインタイベント', () => {
     const feedback = container.querySelector('.tracing-feedback');
     expect(feedback.classList.contains('tracing-retry')).toBe(true);
   });
+
+  test('やりなおしボタンで軌跡がクリアされる', () => {
+    initTracingGame();
+    const svg = container.querySelector('.tracing-canvas');
+    dispatchPointer(svg, 'pointerdown', 10, 10);
+    dispatchPointer(svg, 'pointermove', 20, 20);
+    container.querySelector('.tracing-reset-btn').click();
+    expect(container.querySelector('.tracing-user').getAttribute('points')).toBe('');
+    expect(container.querySelector('.tracing-feedback').textContent).toBe('');
+  });
+
+  test('つぎボタンで次の図形に切り替わる', () => {
+    initTracingGame();
+    expect(container.querySelector('.tracing-shape-name').textContent).toBe(SHAPES[0].name);
+    container.querySelector('.tracing-next-btn').click();
+    expect(container.querySelector('.tracing-shape-name').textContent).toBe(SHAPES[1].name);
+  });
+
+  test('最後の図形のつぎで最初に戻る', () => {
+    initTracingGame();
+    for (let i = 0; i < SHAPES.length; i++) {
+      container.querySelector('.tracing-next-btn').click();
+    }
+    expect(container.querySelector('.tracing-shape-name').textContent).toBe(SHAPES[0].name);
+  });
 });
