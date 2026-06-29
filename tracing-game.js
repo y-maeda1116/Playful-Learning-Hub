@@ -86,9 +86,39 @@ function pointsToString(points) {
   return points.map(p => `${p.x.toFixed(1)},${p.y.toFixed(1)}`).join(' ');
 }
 
+const SHAPES = Object.freeze([
+  {
+    id: 'circle', name: 'まる', difficulty: 1,
+    guidePoints: generateCircleGuide(150, 150, 100, 60),
+  },
+  {
+    id: 'line', name: 'まっすぐ', difficulty: 1,
+    guidePoints: generateLineGuide(40, 150, 260, 40, 40),
+  },
+  {
+    id: 'triangle', name: 'さんかく', difficulty: 2,
+    guidePoints: generatePolylineGuide(
+      [{ x: 150, y: 40 }, { x: 260, y: 240 }, { x: 40, y: 240 }, { x: 150, y: 40 }], 60),
+  },
+  {
+    id: 'square', name: 'しかく', difficulty: 2,
+    guidePoints: generatePolylineGuide(
+      [{ x: 50, y: 60 }, { x: 250, y: 60 }, { x: 250, y: 240 }, { x: 50, y: 240 }, { x: 50, y: 60 }], 60),
+  },
+  {
+    id: 'wave', name: 'なみ', difficulty: 3,
+    guidePoints: generateWaveGuide(150, 45, 110, 30, 270, 80),
+  },
+  {
+    id: 'zigzag', name: 'ぎざぎざ', difficulty: 3,
+    guidePoints: generatePolylineGuide(
+      [{ x: 30, y: 210 }, { x: 75, y: 90 }, { x: 120, y: 210 }, { x: 165, y: 90 }, { x: 210, y: 210 }, { x: 255, y: 90 }], 60),
+  },
+]);
+
 if (typeof module !== 'undefined') {
   module.exports = {
     calculateAccuracy, generateCircleGuide, generateLineGuide,
-    generatePolylineGuide, generateWaveGuide, pointsToString, distance,
+    generatePolylineGuide, generateWaveGuide, pointsToString, distance, SHAPES,
   };
 }

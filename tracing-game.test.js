@@ -1,6 +1,6 @@
 const {
   calculateAccuracy, generateCircleGuide, generateLineGuide,
-  generatePolylineGuide, generateWaveGuide, pointsToString,
+  generatePolylineGuide, generateWaveGuide, pointsToString, SHAPES,
 } = require('./tracing-game.js');
 
 describe('generateCircleGuide', () => {
@@ -57,5 +57,25 @@ describe('pointsToString', () => {
   test('点群をSVG points文字列に変換する', () => {
     const s = pointsToString([{ x: 1.234, y: 2 }, { x: 3, y: 4 }]);
     expect(s).toBe('1.2,2.0 3.0,4.0');
+  });
+});
+
+describe('SHAPES', () => {
+  test('6種の図形が定義されている', () => {
+    expect(SHAPES).toHaveLength(6);
+  });
+  test('各図形に id/name/difficulty/guidePoints がある', () => {
+    for (const s of SHAPES) {
+      expect(typeof s.id).toBe('string');
+      expect(typeof s.name).toBe('string');
+      expect(typeof s.difficulty).toBe('number');
+      expect(Array.isArray(s.guidePoints)).toBe(true);
+      expect(s.guidePoints.length).toBeGreaterThan(10);
+    }
+  });
+  test('難易度順（昇順）に並んでいる', () => {
+    const diffs = SHAPES.map(s => s.difficulty);
+    const sorted = [...diffs].sort((a, b) => a - b);
+    expect(diffs).toEqual(sorted);
   });
 });
