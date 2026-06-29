@@ -31,6 +31,27 @@
                     <span class="game-title">ひらがな</span>
                     <span class="game-description">もじをおぼえよう</span>
                 </button>
+                <button id="katakana-game-btn" class="game-nav-button"
+                        role="tab" aria-selected="false" aria-controls="katakana-game-section"
+                        aria-label="カタカナ学習ゲーム">
+                    <span class="game-icon" aria-hidden="true">ア</span>
+                    <span class="game-title">カタカナ</span>
+                    <span class="game-description">カタカナあそび</span>
+                </button>
+                <button id="counting-game-btn-3" class="game-nav-button"
+                        role="tab" aria-selected="false" aria-controls="counting-game-section"
+                        aria-label="かずかぞえゲーム">
+                    <span class="game-icon" aria-hidden="true">🔢</span>
+                    <span class="game-title">かずかぞえ</span>
+                    <span class="game-description">かずをかぞえよう</span>
+                </button>
+                <button id="tracing-game-btn" class="game-nav-button"
+                        role="tab" aria-selected="false" aria-controls="tracing-game-section"
+                        aria-label="なぞりあそび - せんをなぞろう">
+                    <span class="game-icon" aria-hidden="true">✏️</span>
+                    <span class="game-title">なぞり</span>
+                    <span class="game-description">せんをなぞろう</span>
+                </button>
             </div>
         </div>
 
@@ -44,11 +65,29 @@
         </div>
         
         <!-- ひらがな学習セクション -->
-        <div id="hiragana-learning-section" class="game-section" 
+        <div id="hiragana-learning-section" class="game-section"
              role="tabpanel" aria-labelledby="hiragana-game-btn" aria-hidden="true">
             <h2>ひらがな学習</h2>
             <div id="hiragana-game-container" role="main" aria-live="polite"></div>
             <div id="progress-summary-container" role="complementary" aria-label="学習進捗"></div>
+        </div>
+
+        <!-- カタカナ学習セクション -->
+        <div id="katakana-game-section" class="game-section"
+             role="tabpanel" aria-labelledby="katakana-game-btn" aria-hidden="true">
+            <div id="katakana-game"></div>
+        </div>
+
+        <!-- かずかぞえセクション -->
+        <div id="counting-game-section" class="game-section"
+             role="tabpanel" aria-labelledby="counting-game-btn-3" aria-hidden="true">
+            <div id="counting-game"></div>
+        </div>
+
+        <!-- なぞりあそびセクション -->
+        <div id="tracing-game-section" class="game-section"
+             role="tabpanel" aria-labelledby="tracing-game-btn" aria-hidden="true">
+            <div id="tracing-game"></div>
         </div>
         
         <div id="parent-controls" role="complementary" aria-label="保護者向けコントロール">
@@ -71,6 +110,9 @@
     <script src="progress-display.js"></script>
     <script src="progress-integration.js"></script>
     <script src="hiragana-learning.js"></script>
+    <script src="katakana-game.js"></script>
+    <script src="counting-game.js"></script>
+    <script src="tracing-game.js"></script>
     <script>
         // スクリプト読み込み確認
         console.log('📦 スクリプト読み込み状況 (3-4歳):');
@@ -201,6 +243,27 @@
                             }
                         }
                     }
+                } else if (gameType === 'katakana') {
+                    var section = document.getElementById('katakana-game-section');
+                    var button = document.getElementById('katakana-game-btn');
+                    section.classList.add('active');
+                    section.setAttribute('aria-hidden', 'false');
+                    button.classList.add('active');
+                    button.setAttribute('aria-selected', 'true');
+                } else if (gameType === 'counting') {
+                    var section = document.getElementById('counting-game-section');
+                    var button = document.getElementById('counting-game-btn-3');
+                    section.classList.add('active');
+                    section.setAttribute('aria-hidden', 'false');
+                    button.classList.add('active');
+                    button.setAttribute('aria-selected', 'true');
+                } else if (gameType === 'tracing') {
+                    var section = document.getElementById('tracing-game-section');
+                    var button = document.getElementById('tracing-game-btn');
+                    section.classList.add('active');
+                    section.setAttribute('aria-hidden', 'false');
+                    button.classList.add('active');
+                    button.setAttribute('aria-selected', 'true');
                 }
             }
             
@@ -208,9 +271,21 @@
             document.getElementById('classification-game-btn').addEventListener('click', function() {
                 switchToGame('classification');
             });
-            
+
             document.getElementById('hiragana-game-btn').addEventListener('click', function() {
                 switchToGame('hiragana');
+            });
+
+            document.getElementById('katakana-game-btn').addEventListener('click', function() {
+                switchToGame('katakana');
+            });
+
+            document.getElementById('counting-game-btn-3').addEventListener('click', function() {
+                switchToGame('counting');
+            });
+
+            document.getElementById('tracing-game-btn').addEventListener('click', function() {
+                switchToGame('tracing');
             });
             
             // 保護者向けボタンを追加

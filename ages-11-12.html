@@ -13,10 +13,42 @@
     </header>
 
     <main>
-        <div id="speed-game">
-            <h2>速さの計算ゲーム</h2>
-            <p>ここにゲームが入ります。</p>
+        <!-- ゲーム選択ナビゲーション -->
+        <div class="game-navigation" role="navigation" aria-label="ゲーム選択">
+            <h2>どのゲームであそぶ？</h2>
+            <div class="game-selector" role="tablist">
+                <button id="speed-btn" class="game-nav-button active"
+                        role="tab" aria-selected="true" aria-controls="speed-section"
+                        aria-label="速さ計算">
+                    <span class="game-icon" aria-hidden="true">🏃</span>
+                    <span class="game-title">速さ計算</span>
+                    <span class="game-description">はやさのもんだい</span>
+                </button>
+                <button id="kanji-puzzle-btn" class="game-nav-button"
+                        role="tab" aria-selected="false" aria-controls="kanji-puzzle-section"
+                        aria-label="漢字パズル">
+                    <span class="game-icon" aria-hidden="true">漢</span>
+                    <span class="game-title">漢字パズル</span>
+                    <span class="game-description">かんじをならおう</span>
+                </button>
+            </div>
         </div>
+
+        <!-- 速さ計算セクション -->
+        <div id="speed-section" class="game-section active"
+             role="tabpanel" aria-labelledby="speed-btn">
+            <div id="speed-game">
+                <h2>速さの計算ゲーム</h2>
+                <p>ここにゲームが入ります。</p>
+            </div>
+        </div>
+
+        <!-- 漢字パズルセクション -->
+        <div id="kanji-puzzle-section" class="game-section"
+             role="tabpanel" aria-labelledby="kanji-puzzle-btn" aria-hidden="true">
+            <div id="kanji-puzzle-game-container"></div>
+        </div>
+
         <a href="index.html" class="back-link">トップにもどる</a>
     </main>
 
@@ -25,5 +57,46 @@
     </footer>
 
     <script src="speed-game.js"></script>
+    <script src="kanji-data.js"></script>
+    <script src="kanji-puzzle.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var kanjiPuzzleInstance = null;
+
+            function switchToGame(gameType) {
+                document.querySelectorAll('.game-section').forEach(function(section) {
+                    section.classList.remove('active');
+                });
+                document.querySelectorAll('.game-nav-button').forEach(function(btn) {
+                    btn.classList.remove('active');
+                    btn.setAttribute('aria-selected', 'false');
+                });
+
+                var section = document.getElementById(gameType + '-section');
+                var btn = document.getElementById(gameType + '-btn');
+                if (section) section.classList.add('active');
+                if (btn) {
+                    btn.classList.add('active');
+                    btn.setAttribute('aria-selected', 'true');
+                }
+
+                if (gameType === 'kanji-puzzle' && !kanjiPuzzleInstance) {
+                    var container = document.getElementById('kanji-puzzle-game-container');
+                    if (container && typeof KanjiPuzzle !== 'undefined') {
+                        kanjiPuzzleInstance = new KanjiPuzzle(container, { ageGroup: '11-12' });
+                    }
+                }
+            }
+
+            document.getElementById('speed-btn').addEventListener('click', function() {
+                switchToGame('speed');
+            });
+            document.getElementById('kanji-puzzle-btn').addEventListener('click', function() {
+                switchToGame('kanji-puzzle');
+            });
+
+            switchToGame('speed');
+        });
+    </script>
 </body>
 </html>

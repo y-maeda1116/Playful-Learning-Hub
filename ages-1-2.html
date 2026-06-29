@@ -12,15 +12,58 @@
     </header>
 
     <main>
-        <div id="animal-sounds-quiz">
-            <h2>どうぶつのなきごえクイズ</h2>
-            <p>なんのどうぶつのこえかな？</p>
-            <button id="play-sound-button">🔊 音をきく</button>
-            <div id="animal-choices">
-                <!-- JavaScriptによって動物の選択肢がここに生成されます -->
+        <!-- ゲーム選択ナビゲーション -->
+        <div class="game-navigation" role="navigation" aria-label="ゲーム選択">
+            <h2>どのゲームであそぶ？</h2>
+            <div class="game-selector" role="tablist">
+                <button id="quiz-game-btn" class="game-nav-button active"
+                        role="tab" aria-selected="true" aria-controls="quiz-game-section"
+                        aria-label="どうぶつのなきごえクイズ">
+                    <span class="game-icon" aria-hidden="true">🔊</span>
+                    <span class="game-title">どうぶつ</span>
+                    <span class="game-description">なきごえをあてよう</span>
+                </button>
+                <button id="counting-game-btn" class="game-nav-button"
+                        role="tab" aria-selected="false" aria-controls="counting-game-section"
+                        aria-label="かずかぞえゲーム">
+                    <span class="game-icon" aria-hidden="true">🔢</span>
+                    <span class="game-title">かずかぞえ</span>
+                    <span class="game-description">かずをかぞえよう</span>
+                </button>
+                <button id="rhythm-game-btn" class="game-nav-button"
+                        role="tab" aria-selected="false" aria-controls="rhythm-game-section"
+                        aria-label="リズムゲーム">
+                    <span class="game-icon" aria-hidden="true">🎵</span>
+                    <span class="game-title">リズム</span>
+                    <span class="game-description">おとをおぼえよう</span>
+                </button>
             </div>
-            <p id="result-message"></p>
         </div>
+
+        <!-- どうぶつクイズセクション -->
+        <div id="quiz-game-section" class="game-section active"
+             role="tabpanel" aria-labelledby="quiz-game-btn">
+            <div id="animal-sounds-quiz">
+                <h2>どうぶつのなきごえクイズ</h2>
+                <p>なんのどうぶつのこえかな？</p>
+                <button id="play-sound-button">🔊 音をきく</button>
+                <div id="animal-choices"></div>
+                <p id="result-message"></p>
+            </div>
+        </div>
+
+        <!-- かずかぞえセクション -->
+        <div id="counting-game-section" class="game-section"
+             role="tabpanel" aria-labelledby="counting-game-btn" aria-hidden="true">
+            <div id="counting-game"></div>
+        </div>
+
+        <!-- リズムゲームセクション -->
+        <div id="rhythm-game-section" class="game-section"
+             role="tabpanel" aria-labelledby="rhythm-game-btn" aria-hidden="true">
+            <div id="rhythm-game"></div>
+        </div>
+
         <a href="index.html" class="back-link">トップにもどる</a>
     </main>
 
@@ -29,5 +72,40 @@
     </footer>
 
     <script src="quiz.js"></script>
+    <script src="counting-game.js"></script>
+    <script src="rhythm-game.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            function switchToGame(gameType) {
+                document.querySelectorAll('.game-section').forEach(function(section) {
+                    section.classList.remove('active');
+                });
+                document.querySelectorAll('.game-nav-button').forEach(function(btn) {
+                    btn.classList.remove('active');
+                    btn.setAttribute('aria-selected', 'false');
+                });
+
+                var section = document.getElementById(gameType + '-section');
+                var btn = document.getElementById(gameType + '-btn');
+                if (section) section.classList.add('active');
+                if (btn) {
+                    btn.classList.add('active');
+                    btn.setAttribute('aria-selected', 'true');
+                }
+            }
+
+            document.getElementById('quiz-game-btn').addEventListener('click', function() {
+                switchToGame('quiz-game');
+            });
+            document.getElementById('counting-game-btn').addEventListener('click', function() {
+                switchToGame('counting-game');
+            });
+            document.getElementById('rhythm-game-btn').addEventListener('click', function() {
+                switchToGame('rhythm-game');
+            });
+
+            switchToGame('quiz-game');
+        });
+    </script>
 </body>
 </html>

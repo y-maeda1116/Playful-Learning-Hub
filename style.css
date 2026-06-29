@@ -2185,3 +2185,785 @@ footer {
         min-width: 140px;
     }
 }
+
+/* ========================================
+   漢字パズルゲーム
+   ======================================== */
+.kanji-puzzle-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 16px;
+    background: #e8f5e9;
+    border-radius: 8px;
+    margin-bottom: 16px;
+}
+
+.kanji-score {
+    font-weight: bold;
+    color: #2e7d32;
+}
+
+.kanji-grade {
+    font-weight: bold;
+    color: #1565c0;
+    background: #e3f2fd;
+    padding: 4px 12px;
+    border-radius: 16px;
+}
+
+.kanji-question-area {
+    text-align: center;
+    padding: 24px 16px;
+    min-height: 180px;
+}
+
+.kanji-display-char {
+    font-size: 5rem;
+    font-weight: bold;
+    color: #333;
+    margin: 8px 0;
+}
+
+.kanji-composition-display {
+    font-size: 2.5rem;
+    font-weight: bold;
+    color: #333;
+    margin: 8px 0;
+}
+
+.kanji-hint {
+    font-size: 1.2rem;
+    color: #666;
+    margin: 8px 0;
+}
+
+.kanji-prompt {
+    font-size: 1.1rem;
+    color: #555;
+    margin: 12px 0;
+}
+
+.kanji-choices-area {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    max-width: 400px;
+    margin: 0 auto;
+}
+
+.kanji-choice-btn {
+    padding: 16px;
+    font-size: 1.3rem;
+    border: 2px solid #ccc;
+    border-radius: 12px;
+    background: #fff;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.kanji-choice-btn:hover {
+    background: #f5f5f5;
+    border-color: #1976d2;
+}
+
+.kanji-choice-btn.correct {
+    background: #c8e6c9;
+    border-color: #2e7d32;
+}
+
+.kanji-choice-btn.incorrect {
+    background: #ffcdd2;
+    border-color: #c62828;
+}
+
+.kanji-feedback {
+    text-align: center;
+    font-size: 1.2rem;
+    font-weight: bold;
+    margin: 16px 0;
+    min-height: 2em;
+}
+
+/* ========================================
+   カタカナ学習ゲーム
+   ======================================== */
+.katakana-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 16px;
+    background: #e3f2fd;
+    border-radius: 8px;
+    margin-bottom: 16px;
+}
+
+.katakana-header h2 {
+    margin: 0;
+}
+
+.katakana-score {
+    font-weight: bold;
+    color: #1565c0;
+}
+
+.katakana-question-area {
+    text-align: center;
+    padding: 24px 16px;
+}
+
+.katakana-display-char {
+    font-size: 5rem;
+    font-weight: bold;
+    color: #c62828;
+    margin: 8px 0;
+}
+
+.katakana-choices-area {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.katakana-choice-btn {
+    padding: 16px 24px;
+    font-size: 1.5rem;
+    border: 2px solid #90caf9;
+    border-radius: 12px;
+    background: #fff;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.katakana-choice-btn:hover {
+    background: #e3f2fd;
+}
+
+.katakana-choice-btn.correct {
+    background: #c8e6c9;
+    border-color: #2e7d32;
+}
+
+.katakana-choice-btn.incorrect {
+    background: #ffcdd2;
+    border-color: #c62828;
+}
+
+.katakana-feedback {
+    text-align: center;
+    font-size: 1.2rem;
+    font-weight: bold;
+    margin: 16px 0;
+    min-height: 2em;
+}
+
+/* ========================================
+   ことばリレーゲーム
+   ======================================== */
+.word-relay-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 16px;
+    background: #fff3e0;
+    border-radius: 8px;
+    margin-bottom: 16px;
+}
+
+.word-relay-header h2 {
+    margin: 0;
+}
+
+.word-relay-score {
+    font-weight: bold;
+    color: #e65100;
+}
+
+.word-relay-chain {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+    padding: 12px 16px;
+    background: #fafafa;
+    border-radius: 8px;
+    margin-bottom: 16px;
+    min-height: 48px;
+}
+
+.word-relay-word {
+    background: #fff;
+    border: 1px solid #e0e0e0;
+    border-radius: 20px;
+    padding: 6px 14px;
+    font-size: 1rem;
+}
+
+.word-relay-arrow {
+    color: #999;
+    font-size: 1.2rem;
+}
+
+.word-relay-target {
+    text-align: center;
+    padding: 16px;
+}
+
+.word-relay-next-char {
+    font-size: 1.3rem;
+    font-weight: bold;
+    color: #e65100;
+}
+
+.word-relay-choices {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.word-relay-choice-btn {
+    padding: 12px 20px;
+    font-size: 1.1rem;
+    border: 2px solid #ffcc80;
+    border-radius: 12px;
+    background: #fff;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.word-relay-choice-btn:hover {
+    background: #fff3e0;
+}
+
+.word-relay-choice-btn.correct {
+    background: #c8e6c9;
+    border-color: #2e7d32;
+}
+
+.word-relay-choice-btn.incorrect {
+    background: #ffcdd2;
+    border-color: #c62828;
+}
+
+.word-relay-feedback {
+    text-align: center;
+    font-size: 1.2rem;
+    font-weight: bold;
+    margin: 16px 0;
+    min-height: 2em;
+}
+
+/* ========================================
+   九九バトルゲーム
+   ======================================== */
+#kuku-battle-screen {
+    background: #1a1a2e;
+    border-radius: 12px;
+    padding: 20px;
+    color: #fff;
+}
+
+#kuku-monster-area {
+    text-align: center;
+    padding: 20px;
+}
+
+#kuku-monster-emoji {
+    font-size: 4rem;
+}
+
+#kuku-hp-bar-container {
+    background: #333;
+    border-radius: 8px;
+    height: 20px;
+    width: 80%;
+    margin: 12px auto;
+    overflow: hidden;
+}
+
+#kuku-hp-bar {
+    background: linear-gradient(90deg, #ff4444, #ff6b6b);
+    height: 100%;
+    border-radius: 8px;
+    transition: width 0.3s;
+}
+
+#kuku-hp-text {
+    color: #ccc;
+    font-size: 0.9rem;
+}
+
+#kuku-player-area {
+    text-align: center;
+    padding: 20px;
+}
+
+#kuku-problem-area {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+#kuku-problem-text {
+    font-size: 1.8rem;
+    font-weight: bold;
+    color: #ffd54f;
+}
+
+#kuku-answer-input {
+    width: 80px;
+    padding: 8px 12px;
+    font-size: 1.3rem;
+    border-radius: 8px;
+    border: 2px solid #ffd54f;
+    background: #16213e;
+    color: #fff;
+    text-align: center;
+}
+
+#kuku-submit-btn {
+    padding: 10px 24px;
+    font-size: 1.1rem;
+    background: #e53935;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.kuku-stage-display {
+    text-align: center;
+    font-weight: bold;
+    color: #ffd54f;
+    margin-bottom: 12px;
+    font-size: 1.1rem;
+}
+
+/* ========================================
+   時計学習ゲーム
+   ======================================== */
+.clock-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 16px;
+    background: #ede7f6;
+    border-radius: 8px;
+    margin-bottom: 16px;
+}
+
+.clock-header h2 {
+    margin: 0;
+}
+
+.clock-score {
+    font-weight: bold;
+    color: #5e35b1;
+}
+
+.clock-difficulty {
+    font-size: 0.9rem;
+    color: #7e57c2;
+    background: #d1c4e9;
+    padding: 4px 12px;
+    border-radius: 12px;
+}
+
+.clock-display-area {
+    text-align: center;
+    padding: 16px;
+}
+
+.clock-display-area svg {
+    border-radius: 50%;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.clock-prompt {
+    text-align: center;
+    font-size: 1.1rem;
+    color: #555;
+    margin: 12px 0;
+}
+
+.clock-choices-area {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.clock-choice-btn {
+    padding: 16px 28px;
+    font-size: 1.5rem;
+    font-weight: bold;
+    border: 2px solid #b39ddb;
+    border-radius: 12px;
+    background: #fff;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.clock-choice-btn:hover {
+    background: #ede7f6;
+}
+
+.clock-choice-btn.correct {
+    background: #c8e6c9;
+    border-color: #2e7d32;
+}
+
+.clock-choice-btn.incorrect {
+    background: #ffcdd2;
+    border-color: #c62828;
+}
+
+.clock-feedback {
+    text-align: center;
+    font-size: 1.2rem;
+    font-weight: bold;
+    margin: 16px 0;
+    min-height: 2em;
+}
+
+/* ========================================
+   図形パズルゲーム
+   ======================================== */
+.shape-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 16px;
+    background: #fce4ec;
+    border-radius: 8px;
+    margin-bottom: 16px;
+}
+
+.shape-header h2 {
+    margin: 0;
+}
+
+.shape-score {
+    font-weight: bold;
+    color: #c62828;
+}
+
+.shape-target-area {
+    text-align: center;
+    padding: 24px 16px;
+    background: #fafafa;
+    border-radius: 12px;
+    margin-bottom: 16px;
+}
+
+.shape-target-name {
+    font-size: 2rem;
+    font-weight: bold;
+    color: #333;
+}
+
+.shape-target-hint {
+    font-size: 1rem;
+    color: #888;
+    margin-top: 8px;
+}
+
+.shape-prompt {
+    text-align: center;
+    font-size: 1.1rem;
+    color: #555;
+    margin: 12px 0;
+}
+
+.shape-choices-area {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.shape-choice-btn {
+    padding: 14px 20px;
+    font-size: 1.1rem;
+    border: 2px solid #f48fb1;
+    border-radius: 12px;
+    background: #fff;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.shape-choice-btn:hover {
+    background: #fce4ec;
+}
+
+.shape-choice-btn.correct {
+    background: #c8e6c9;
+    border-color: #2e7d32;
+}
+
+.shape-choice-btn.incorrect {
+    background: #ffcdd2;
+    border-color: #c62828;
+}
+
+.shape-feedback {
+    text-align: center;
+    font-size: 1.2rem;
+    font-weight: bold;
+    margin: 16px 0;
+    min-height: 2em;
+}
+
+/* ========================================
+   かずかぞえゲーム
+   ======================================== */
+.counting-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 16px;
+    background: #e0f7fa;
+    border-radius: 8px;
+    margin-bottom: 16px;
+}
+
+.counting-header h2 {
+    margin: 0;
+}
+
+.counting-score {
+    font-weight: bold;
+    color: #00838f;
+}
+
+.counting-question {
+    text-align: center;
+    font-size: 1.2rem;
+    color: #555;
+    margin: 12px 0;
+}
+
+.counting-objects-area {
+    display: flex;
+    gap: 16px;
+    justify-content: center;
+    flex-wrap: wrap;
+    padding: 20px;
+}
+
+.counting-object-btn {
+    font-size: 3rem;
+    width: 90px;
+    height: 90px;
+    border: 3px solid #80deea;
+    border-radius: 16px;
+    background: #fff;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.counting-object-btn:hover {
+    background: #e0f7fa;
+    transform: scale(1.05);
+}
+
+.counting-object-btn.counted {
+    background: #e0e0e0;
+    border-color: #bdbdbd;
+    transform: scale(0.95);
+    opacity: 0.7;
+}
+
+.counting-choices-area {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    flex-wrap: wrap;
+    padding: 16px;
+}
+
+.counting-number-btn {
+    font-size: 2rem;
+    font-weight: bold;
+    width: 70px;
+    height: 70px;
+    border: 3px solid #4dd0e1;
+    border-radius: 50%;
+    background: #fff;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.counting-number-btn:hover {
+    background: #e0f7fa;
+}
+
+.counting-number-btn.correct {
+    background: #c8e6c9;
+    border-color: #2e7d32;
+}
+
+.counting-number-btn.incorrect {
+    background: #ffcdd2;
+    border-color: #c62828;
+}
+
+.counting-feedback {
+    text-align: center;
+    font-size: 1.2rem;
+    font-weight: bold;
+    margin: 16px 0;
+    min-height: 2em;
+}
+
+/* ========================================
+   リズムゲーム
+   ======================================== */
+.rhythm-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 16px;
+    background: #f3e5f5;
+    border-radius: 8px;
+    margin-bottom: 16px;
+}
+
+.rhythm-header h2 {
+    margin: 0;
+}
+
+.rhythm-score {
+    font-weight: bold;
+    color: #7b1fa2;
+}
+
+.rhythm-message {
+    text-align: center;
+    font-size: 1.3rem;
+    font-weight: bold;
+    color: #555;
+    margin: 16px 0;
+    min-height: 2em;
+}
+
+.rhythm-buttons-area {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    max-width: 320px;
+    margin: 24px auto;
+}
+
+.rhythm-button {
+    width: 100%;
+    aspect-ratio: 1;
+    border-radius: 50%;
+    border: 4px solid rgba(0,0,0,0.15);
+    cursor: pointer;
+    transition: all 0.15s;
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: #fff;
+    text-shadow: 0 1px 2px rgba(0,0,0,0.3);
+}
+
+.rhythm-button:hover {
+    transform: scale(1.05);
+}
+
+.rhythm-button.lit {
+    filter: brightness(1.5);
+    transform: scale(1.1);
+    box-shadow: 0 0 20px rgba(255,255,255,0.5);
+}
+
+/* ===== なぞりあそび (tracing-game) ===== */
+.tracing-game {
+  max-width: 360px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.tracing-header {
+  margin-bottom: 12px;
+}
+
+.tracing-title {
+  font-size: 1.4rem;
+  margin: 0 0 4px;
+  color: #333;
+}
+
+.tracing-shape-name {
+  font-size: 1.8rem;
+  margin: 0;
+  color: #e91e63;
+  font-weight: bold;
+}
+
+.tracing-canvas-wrap {
+  background: #fff;
+  border: 4px solid #ffe082;
+  border-radius: 16px;
+  padding: 8px;
+  touch-action: none;
+}
+
+.tracing-canvas {
+  width: 100%;
+  height: auto;
+  max-width: 320px;
+  display: block;
+  margin: 0 auto;
+  cursor: pointer;
+}
+
+.tracing-feedback {
+  font-size: 1.6rem;
+  font-weight: bold;
+  min-height: 2em;
+  margin: 12px 0;
+}
+
+.tracing-feedback.tracing-success {
+  color: #2e7d32;
+}
+
+.tracing-feedback.tracing-retry {
+  color: #ef6c00;
+}
+
+.tracing-controls {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  margin-top: 8px;
+}
+
+.tracing-controls button {
+  font-size: 1.2rem;
+  padding: 12px 24px;
+  border: none;
+  border-radius: 999px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.tracing-reset-btn {
+  background: #eceff1;
+  color: #455a64;
+}
+
+.tracing-next-btn {
+  background: #e91e63;
+  color: #fff;
+}
