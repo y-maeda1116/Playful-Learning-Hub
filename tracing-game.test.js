@@ -3,6 +3,13 @@ const {
   generatePolylineGuide, generateWaveGuide, pointsToString, SHAPES, initTracingGame,
 } = require('./tracing-game.js');
 
+// jsdom 26.x does not expose a global PointerEvent constructor.
+// Alias it to MouseEvent (which PointerEvent extends in browsers) so the
+// pointer-event tests below can construct events exactly as written.
+if (typeof PointerEvent === 'undefined' && typeof MouseEvent !== 'undefined') {
+  global.PointerEvent = MouseEvent;
+}
+
 describe('generateCircleGuide', () => {
   test('指定した点数の円周上の点を生成する', () => {
     const points = generateCircleGuide(150, 150, 100, 60);
@@ -118,5 +125,50 @@ describe('initTracingGame - UI生成', () => {
   test('コンテナ不在時はnoopで例外なし', () => {
     document.body.removeChild(container);
     expect(() => initTracingGame()).not.toThrow();
+  });
+});
+
+describe('initTracingGame - ポインタイベント', () => {
+  let container;
+  let origCreateNS;
+  beforeEach(() => {
+    container = document.createElement('div');
+    container.id = 'tracing-game';
+    document.body.appendChild(container);
+    origCreateNS = document.createElementNS;
+    document.createElementNS = function (ns, tag) {
+      const el = origCreateNS.call(document, ns, tag);
+      if (String(tag).toLowerCase() === 'svg') {
+        el.getBoundingClientRect = () => ({ left: 0, top: 0, width: 300, height: 300 });
+      }
+      return el;
+    };
+  });
+  afterEach(() => {
+    if (container.parentNode) document.body.removeChild(container);
+    document.createElementNS = origCreateNS;
+  });
+
+  function dispatchPointer(svg, type, x, y) {
+    const evt = new PointerEvent(type, { clientX: x, clientY: y, bubbles: true });
+    svg.dispatchEvent(evt);
+  }
+
+  test('pointerdown→move→upでユーザー軌跡が描かれる', () => {
+    initTracingGame();
+    const svg = container.querySelector('.tracing-canvas');
+    const user = container.querySelector('.tracing-user');
+    dispatchPointer(svg, 'pointerdown', 250, 150);
+    dispatchPointer(svg, 'pointermove', 200, 100);
+    dispatchPointer(svg, 'pointermove', 150, 60);
+    dispatchPointer(svg, 'pointerup', 150, 60);
+    expect(user.getAttribute('points').trim().length).toBeGreaterThan(0);
+  });
+
+  test('pointerdown前にmoveしても軌跡は増えない', () => {
+    initTracingGame();
+    const svg = container.querySelector('.tracing-canvas');
+    dispatchPointer(svg, 'pointermove', 200, 100);
+    expect(container.querySelector('.tracing-user').getAttribute('points')).toBe('');
   });
 });

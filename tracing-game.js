@@ -206,11 +206,61 @@ function buildUI(container) {
   container.appendChild(controls);
 }
 
+const VIEW_SIZE = 300;
+const TOLERANCE = 25;
+
+function getSvgPoint(svg, clientX, clientY) {
+  const rect = svg.getBoundingClientRect();
+  const scaleX = rect.width ? VIEW_SIZE / rect.width : 1;
+  const scaleY = rect.height ? VIEW_SIZE / rect.height : 1;
+  return {
+    x: (clientX - rect.left) * scaleX,
+    y: (clientY - rect.top) * scaleY,
+  };
+}
+
+function bindPointerEvents(container, svg, getState, setState) {
+  const user = container.querySelector('.tracing-user');
+
+  svg.addEventListener('pointerdown', (e) => {
+    const state = getState();
+    if (state.evaluated) return;
+    const p = getSvgPoint(svg, e.clientX, e.clientY);
+    const nextPoints = [...state.userPoints, p];
+    user.setAttribute('points', pointsToString(nextPoints));
+    setState(Object.assign({}, state, { isTracing: true, userPoints: nextPoints }));
+  });
+
+  svg.addEventListener('pointermove', (e) => {
+    const state = getState();
+    if (!state.isTracing) return;
+    const p = getSvgPoint(svg, e.clientX, e.clientY);
+    const nextPoints = [...state.userPoints, p];
+    user.setAttribute('points', pointsToString(nextPoints));
+    setState(Object.assign({}, state, { userPoints: nextPoints }));
+  });
+
+  svg.addEventListener('pointerup', () => {
+    const state = getState();
+    if (!state.isTracing) return;
+    setState(Object.assign({}, state, { isTracing: false }));
+  });
+
+  svg.addEventListener('pointerleave', () => {
+    const state = getState();
+    if (state.isTracing) setState(Object.assign({}, state, { isTracing: false }));
+  });
+}
+
 function initTracingGame() {
   const container = document.getElementById('tracing-game');
   if (!container) return;
   buildUI(container);
   let state = loadShape(container, { currentIndex: 0, userPoints: [], isTracing: false, evaluated: false, successCount: 0, attemptCount: 0 });
+  const getState = () => state;
+  const setState = (next) => { state = next; };
+  const svg = container.querySelector('.tracing-canvas');
+  bindPointerEvents(container, svg, getState, setState);
 }
 
 if (typeof module !== 'undefined') {
