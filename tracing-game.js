@@ -10,6 +10,7 @@ function generateCircleGuide(cx, cy, r, count) {
 }
 
 function generateLineGuide(x1, y1, x2, y2, count) {
+  if (!count || count <= 0) return [{ x: x1, y: y1 }];
   const points = [];
   for (let i = 0; i <= count; i++) {
     const t = i / count;
@@ -29,6 +30,7 @@ function generatePolylineGuide(vertices, total) {
     segs.push({ a, b, len });
     totalLen += len;
   }
+  if (totalLen === 0) return vertices.slice();
   const points = [];
   for (const seg of segs) {
     const segCount = Math.max(1, Math.round((seg.len / totalLen) * (total - 1)));
@@ -42,12 +44,14 @@ function generatePolylineGuide(vertices, total) {
 }
 
 function generateWaveGuide(yMid, amplitude, wavelength, xStart, xEnd, count) {
+  if (!count || count <= 0) return [{ x: xStart, y: yMid }];
   const points = [];
   const span = xEnd - xStart;
+  const safeWavelength = wavelength === 0 ? span : wavelength;
   for (let i = 0; i <= count; i++) {
     const t = i / count;
     const x = xStart + span * t;
-    const y = yMid + amplitude * Math.sin((span / wavelength) * t * 2 * Math.PI);
+    const y = yMid + amplitude * Math.sin((span / safeWavelength) * t * 2 * Math.PI);
     points.push({ x, y });
   }
   return points;

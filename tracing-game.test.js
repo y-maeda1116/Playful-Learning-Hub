@@ -243,3 +243,25 @@ describe('initTracingGame - ポインタイベント', () => {
     expect(container.querySelector('.tracing-shape-name').textContent).toBe(SHAPES[0].name);
   });
 });
+
+describe('ガイド点群生成 - edge cases (ゼロ除算対策)', () => {
+  test('generateLineGuide: countが0以下のとき始点1点を返す', () => {
+    expect(generateLineGuide(0, 0, 100, 100, 0)).toEqual([{ x: 0, y: 0 }]);
+    expect(generateLineGuide(0, 0, 100, 100, -5)).toEqual([{ x: 0, y: 0 }]);
+  });
+
+  test('generateWaveGuide: countが0以下のとき始点1点を返す', () => {
+    expect(generateWaveGuide(150, 50, 110, 30, 270, 0)).toEqual([{ x: 30, y: 150 }]);
+  });
+
+  test('generateWaveGuide: wavelengthが0でも有限な座標を返す', () => {
+    const points = generateWaveGuide(150, 50, 0, 30, 270, 10);
+    expect(points.every(p => Number.isFinite(p.x) && Number.isFinite(p.y))).toBe(true);
+  });
+
+  test('generatePolylineGuide: 全頂点同一のとき有限な座標を返す', () => {
+    const points = generatePolylineGuide([{ x: 5, y: 5 }, { x: 5, y: 5 }, { x: 5, y: 5 }], 60);
+    expect(points.every(p => Number.isFinite(p.x) && Number.isFinite(p.y))).toBe(true);
+    expect(points.length).toBeGreaterThan(0);
+  });
+});
