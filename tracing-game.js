@@ -267,7 +267,10 @@ function bindPointerEvents(container, svg, getState, setState) {
 
   svg.addEventListener('pointerleave', () => {
     const state = getState();
-    if (state.isTracing) setState(Object.assign({}, state, { isTracing: false }));
+    if (state.isTracing) {
+      setState(Object.assign({}, state, { isTracing: false }));
+      evaluateTrace(container, getState(), setState);
+    }
   });
 }
 
@@ -285,6 +288,8 @@ function bindControls(container, getState, setState) {
 function initTracingGame() {
   const container = document.getElementById('tracing-game');
   if (!container) return;
+  if (container.dataset.tracingBound) return;
+  container.dataset.tracingBound = 'true';
   buildUI(container);
   let state = loadShape(container, { currentIndex: 0, userPoints: [], isTracing: false, evaluated: false, successCount: 0, attemptCount: 0 });
   const getState = () => state;

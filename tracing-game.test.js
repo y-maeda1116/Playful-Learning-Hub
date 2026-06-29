@@ -193,6 +193,21 @@ describe('initTracingGame - ポインタイベント', () => {
     expect(feedback.textContent).not.toBe('');
   });
 
+  test('pointerleaveでなぞり途中でも評価される', () => {
+    initTracingGame();
+    const svg = container.querySelector('.tracing-canvas');
+    const guidePts = container.querySelector('.tracing-guide').getAttribute('points').split(' ');
+    const first = guidePts[0].split(',').map(Number);
+    dispatchPointer(svg, 'pointerdown', first[0], first[1]);
+    for (const pt of guidePts) {
+      const [x, y] = pt.split(',').map(Number);
+      dispatchPointer(svg, 'pointermove', x, y);
+    }
+    dispatchPointer(svg, 'pointerleave', 0, 0);
+    const feedback = container.querySelector('.tracing-feedback');
+    expect(feedback.classList.contains('tracing-success')).toBe(true);
+  });
+
   test('点数不足のときは再挑戦フィードバック', () => {
     initTracingGame();
     const svg = container.querySelector('.tracing-canvas');
