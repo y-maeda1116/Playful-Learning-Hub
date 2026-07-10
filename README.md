@@ -22,6 +22,7 @@ The website is structured by age group, and each page bundles several games that
     *   Word Relay (ことばリレー) — shiritori word chain
     *   Clock Play (とけいあそび)
     *   Shape Puzzle (ずけいパズル)
+    *   Biology Quiz (せいぶつクイズ) — match creatures to names
 *   **7-8 years old (1st-2nd Grade):** Games to solidify foundational academic skills
     *   Math Battle (算数バトル)
     *   Multiplication Battle (九九バトル)

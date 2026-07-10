@@ -3055,3 +3055,101 @@ footer {
 .emotion-feedback.incorrect {
     color: #c62828;
 }
+
+/* ========================================
+   せいぶつクイズ（生物クイズ）
+   ======================================== */
+.biology-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 16px;
+    background: #e8f5e9;
+    border-radius: 8px;
+    margin-bottom: 16px;
+}
+
+.biology-header h2 {
+    margin: 0;
+}
+
+.biology-score {
+    font-weight: bold;
+    color: #2e7d32;
+}
+
+.biology-question {
+    text-align: center;
+    font-size: 1.2rem;
+    color: #555;
+    margin: 12px 0;
+}
+
+.biology-creature {
+    font-size: 7rem;
+    text-align: center;
+    margin: 20px 0;
+    line-height: 1.2;
+}
+
+.biology-creature.celebrate {
+    animation: biology-celebrate 0.5s ease-in-out 2;
+}
+
+@keyframes biology-celebrate {
+    0%, 100% { transform: scale(1) rotate(0deg); }
+    25% { transform: scale(1.3) rotate(-8deg); }
+    75% { transform: scale(1.3) rotate(8deg); }
+}
+
+.biology-choices {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    flex-wrap: wrap;
+    padding: 16px;
+}
+
+.biology-choice-btn {
+    font-size: 1.4rem;
+    font-weight: bold;
+    min-width: 110px;
+    padding: 14px 20px;
+    border: 3px solid #81c784;
+    border-radius: 16px;
+    background: #fff;
+    color: #1b5e20;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.biology-choice-btn:hover {
+    background: #e8f5e9;
+    transform: scale(1.05);
+}
+
+.biology-choice-btn.correct {
+    background: #c8e6c9;
+    border-color: #2e7d32;
+}
+
+.biology-choice-btn.incorrect {
+    background: #ffcdd2;
+    border-color: #c62828;
+}
+
+.biology-feedback {
+    text-align: center;
+    font-size: 1.2rem;
+    font-weight: bold;
+    margin: 16px 0;
+    min-height: 2em;
+}
+
+.biology-feedback.correct {
+    color: #2e7d32;
+}
+
+.biology-feedback.incorrect {
+    color: #c62828;
+}
