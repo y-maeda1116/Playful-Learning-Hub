@@ -31,6 +31,13 @@
                     <span class="game-title">漢字パズル</span>
                     <span class="game-description">かんじをならおう</span>
                 </button>
+                <button id="chemistry-sim-btn" class="game-nav-button"
+                        role="tab" aria-selected="false" aria-controls="chemistry-sim-section"
+                        aria-label="かがくじっけん - ざいやくをまぜよう">
+                    <span class="game-icon" aria-hidden="true">🧪</span>
+                    <span class="game-title">かがくじっけん</span>
+                    <span class="game-description">ざいやくをまぜよう</span>
+                </button>
             </div>
         </div>
 
@@ -49,6 +56,12 @@
             <div id="kanji-puzzle-game-container"></div>
         </div>
 
+        <!-- かがくじっけんセクション -->
+        <div id="chemistry-sim-section" class="game-section"
+             role="tabpanel" aria-labelledby="chemistry-sim-btn" aria-hidden="true">
+            <div id="chemistry-sim"></div>
+        </div>
+
         <a href="index.html" class="back-link">トップにもどる</a>
     </main>
 
@@ -59,6 +72,7 @@
     <script src="speed-game.js"></script>
     <script src="kanji-data.js"></script>
     <script src="kanji-puzzle.js"></script>
+    <script src="chemistry-sim.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             var kanjiPuzzleInstance = null;
@@ -93,6 +107,9 @@
             });
             document.getElementById('kanji-puzzle-btn').addEventListener('click', function() {
                 switchToGame('kanji-puzzle');
+            });
+            document.getElementById('chemistry-sim-btn').addEventListener('click', function() {
+                switchToGame('chemistry-sim');
             });
 
             switchToGame('speed');

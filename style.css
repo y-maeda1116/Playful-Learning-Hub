@@ -3153,3 +3153,133 @@ footer {
 .biology-feedback.incorrect {
     color: #c62828;
 }
+
+/* ========================================
+   かがくじっけん（化学実験シミュレーション）
+   ======================================== */
+.chemistry-header h2 {
+    margin: 0;
+}
+
+.chemistry-guide {
+    text-align: center;
+    color: #555;
+    margin: 12px 0;
+    font-size: 1.1rem;
+}
+
+.chemistry-beaker {
+    width: 160px;
+    height: 200px;
+    margin: 16px auto;
+    border: 4px solid #90a4ae;
+    border-top: none;
+    border-radius: 0 0 24px 24px;
+    background: #eceff1;
+    overflow: hidden;
+    position: relative;
+}
+
+.chemistry-liquid {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 60%;
+    background: #e0e0e0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2.5rem;
+    transition: background 0.4s;
+}
+
+.chemistry-liquid.bubble {
+    animation: chemistry-bubble 0.6s ease-in-out infinite;
+}
+
+@keyframes chemistry-bubble {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-6px); }
+}
+
+.chemistry-shelf {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin: 16px 0;
+}
+
+.chemistry-chem-btn {
+    font-size: 1.1rem;
+    padding: 10px 16px;
+    border: 3px solid #90a4ae;
+    border-radius: 12px;
+    background: #fff;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.chemistry-chem-btn:hover {
+    background: #eceff1;
+}
+
+.chemistry-chem-btn.selected {
+    background: #cfd8dc;
+    border-color: #455a64;
+}
+
+.chemistry-controls {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    margin: 12px 0;
+}
+
+.chemistry-mix-btn, .chemistry-reset-btn {
+    font-size: 1.1rem;
+    font-weight: bold;
+    padding: 10px 24px;
+    border: none;
+    border-radius: 999px;
+    cursor: pointer;
+}
+
+.chemistry-mix-btn {
+    background: #26a69a;
+    color: #fff;
+}
+
+.chemistry-mix-btn:disabled {
+    background: #b2dfdb;
+    cursor: not-allowed;
+}
+
+.chemistry-reset-btn {
+    background: #eceff1;
+    color: #455a64;
+}
+
+.chemistry-result {
+    text-align: center;
+    margin: 16px 0;
+    min-height: 2em;
+}
+
+.chemistry-reaction-name {
+    font-size: 1.3rem;
+    font-weight: bold;
+    color: #2e7d32;
+    margin: 6px 0;
+}
+
+.chemistry-explain {
+    color: #555;
+    margin: 6px 0;
+}
+
+.chemistry-no-reaction {
+    color: #ff8f00;
+    font-weight: bold;
+}
