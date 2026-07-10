@@ -3383,3 +3383,93 @@ footer {
 .foreign-word-chip:hover {
     background: #c5cae9;
 }
+
+/* ========================================
+   ものがたりづくり（物語作成ツール）
+   ======================================== */
+.story-header h2 {
+    margin: 0;
+}
+
+.story-restart-btn {
+    font-size: 1rem;
+    padding: 8px 16px;
+    border: none;
+    border-radius: 999px;
+    background: #5d4037;
+    color: #fff;
+    cursor: pointer;
+    margin-left: 12px;
+}
+
+.story-scene {
+    background: #fff8e1;
+    border: 2px solid #ffcc80;
+    border-radius: 12px;
+    padding: 20px;
+    margin: 16px 0;
+    min-height: 80px;
+}
+
+.story-text {
+    font-size: 1.2rem;
+    line-height: 1.8;
+    color: #4e342e;
+}
+
+.story-choices {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-top: 16px;
+}
+
+.story-choice-btn {
+    font-size: 1.1rem;
+    padding: 12px 20px;
+    border: 3px solid #ffb74d;
+    border-radius: 16px;
+    background: #fff;
+    color: #5d4037;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.story-choice-btn:hover {
+    background: #fff3e0;
+    transform: scale(1.05);
+}
+
+.story-end {
+    margin-top: 16px;
+    font-weight: bold;
+    color: #e65100;
+}
+
+.story-saved-title {
+    margin-top: 24px;
+    color: #5d4037;
+}
+
+.story-saved {
+    display: flex;
+    gap: 8px;
+    justify-content: center;
+    flex-wrap: wrap;
+    padding: 12px;
+    min-height: 2em;
+    color: #777;
+}
+
+.story-saved-item {
+    padding: 8px 14px;
+    border: 2px solid #ffb74d;
+    border-radius: 999px;
+    background: #fff3e0;
+    cursor: pointer;
+}
+
+.story-saved-item:hover {
+    background: #ffe0b2;
+}
