@@ -2967,3 +2967,91 @@ footer {
   background: #e91e63;
   color: #fff;
 }
+
+/* ========================================
+   きもちあて（感情認識ゲーム）
+   ======================================== */
+.emotion-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 16px;
+    background: #fff3e0;
+    border-radius: 8px;
+    margin-bottom: 16px;
+}
+
+.emotion-header h2 {
+    margin: 0;
+}
+
+.emotion-score {
+    font-weight: bold;
+    color: #ef6c00;
+}
+
+.emotion-question {
+    text-align: center;
+    font-size: 1.2rem;
+    color: #555;
+    margin: 12px 0;
+}
+
+.emotion-face {
+    font-size: 7rem;
+    text-align: center;
+    margin: 20px 0;
+    line-height: 1.2;
+}
+
+.emotion-choices {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    flex-wrap: wrap;
+    padding: 16px;
+}
+
+.emotion-choice-btn {
+    font-size: 1.4rem;
+    font-weight: bold;
+    min-width: 110px;
+    padding: 14px 20px;
+    border: 3px solid #ffb74d;
+    border-radius: 16px;
+    background: #fff;
+    color: #5d4037;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.emotion-choice-btn:hover {
+    background: #fff3e0;
+    transform: scale(1.05);
+}
+
+.emotion-choice-btn.correct {
+    background: #c8e6c9;
+    border-color: #2e7d32;
+}
+
+.emotion-choice-btn.incorrect {
+    background: #ffcdd2;
+    border-color: #c62828;
+}
+
+.emotion-feedback {
+    text-align: center;
+    font-size: 1.2rem;
+    font-weight: bold;
+    margin: 16px 0;
+    min-height: 2em;
+}
+
+.emotion-feedback.correct {
+    color: #2e7d32;
+}
+
+.emotion-feedback.incorrect {
+    color: #c62828;
+}

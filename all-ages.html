@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>みんなのコンテンツ | わくわく学びランド</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <h1>みんなであそぼう</h1>
+        <p>全年齢向けコンテンツ</p>
+    </header>
+
+    <main>
+        <!-- ゲーム選択ナビゲーション -->
+        <div class="game-navigation" role="navigation" aria-label="ゲーム選択">
+            <h2>どのゲームであそぶ？</h2>
+            <div class="game-selector" role="tablist">
+                <button id="emotion-game-btn" class="game-nav-button active"
+                        role="tab" aria-selected="true" aria-controls="emotion-game-section"
+                        aria-label="きもちあて - ひょうじょうを見てきもちを当てよう">
+                    <span class="game-icon" aria-hidden="true">😊</span>
+                    <span class="game-title">きもちあて</span>
+                    <span class="game-description">ひょうじょうをあてよう</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- 感情認識ゲームセクション -->
+        <div id="emotion-game-section" class="game-section active"
+             role="tabpanel" aria-labelledby="emotion-game-btn">
+            <div id="emotion-game"></div>
+        </div>
+
+        <a href="index.html" class="back-link">トップにもどる</a>
+    </main>
+
+    <footer>
+        <p>&copy; 2024 わくわく学びランド</p>
+    </footer>
+
+    <script src="audio-manager.js"></script>
+    <script src="emotion-game.js"></script>
+    <script>
+        // ゲームナビゲーション機能（将来の全年齢向けゲーム追加も gameType で拡張可能）
+        function switchToGame(gameType) {
+            document.querySelectorAll('.game-section').forEach(section => {
+                section.classList.remove('active');
+                section.setAttribute('aria-hidden', 'true');
+            });
+            document.querySelectorAll('.game-nav-button').forEach(btn => {
+                btn.classList.remove('active');
+                btn.setAttribute('aria-selected', 'false');
+            });
+
+            const section = document.getElementById(gameType + '-section');
+            const button = document.getElementById(gameType + '-btn');
+            if (section) {
+                section.classList.add('active');
+                section.setAttribute('aria-hidden', 'false');
+            }
+            if (button) {
+                button.classList.add('active');
+                button.setAttribute('aria-selected', 'true');
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const emotionBtn = document.getElementById('emotion-game-btn');
+            if (emotionBtn) {
+                emotionBtn.addEventListener('click', function() {
+                    switchToGame('emotion');
+                });
+            }
+            switchToGame('emotion');
+        });
+    </script>
+</body>
+</html>
