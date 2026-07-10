@@ -38,6 +38,13 @@
                     <span class="game-title">かがくじっけん</span>
                     <span class="game-description">ざいやくをまぜよう</span>
                 </button>
+                <button id="foreign-lang-btn" class="game-nav-button"
+                        role="tab" aria-selected="false" aria-controls="foreign-lang-section"
+                        aria-label="えいごのことば - たんごをならおう">
+                    <span class="game-icon" aria-hidden="true">ABC</span>
+                    <span class="game-title">えいごのことば</span>
+                    <span class="game-description">たんごをならおう</span>
+                </button>
             </div>
         </div>
 
@@ -62,6 +69,12 @@
             <div id="chemistry-sim"></div>
         </div>
 
+        <!-- えいごのことばセクション -->
+        <div id="foreign-lang-section" class="game-section"
+             role="tabpanel" aria-labelledby="foreign-lang-btn" aria-hidden="true">
+            <div id="foreign-lang-game"></div>
+        </div>
+
         <a href="index.html" class="back-link">トップにもどる</a>
     </main>
 
@@ -73,6 +86,7 @@
     <script src="kanji-data.js"></script>
     <script src="kanji-puzzle.js"></script>
     <script src="chemistry-sim.js"></script>
+    <script src="foreign-lang-game.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             var kanjiPuzzleInstance = null;
@@ -110,6 +124,9 @@
             });
             document.getElementById('chemistry-sim-btn').addEventListener('click', function() {
                 switchToGame('chemistry-sim');
+            });
+            document.getElementById('foreign-lang-btn').addEventListener('click', function() {
+                switchToGame('foreign-lang');
             });
 
             switchToGame('speed');

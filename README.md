@@ -36,6 +36,7 @@ The website is structured by age group, and each page bundles several games that
     *   Speed Calculation (速さ計算)
     *   Kanji Puzzle (漢字パズル)
     *   Chemistry Simulation (かがくじっけん) — mix chemicals and observe reactions
+    *   Foreign Language Words (えいごのことば) — vocabulary quiz with pronunciation
 *   **All ages (みんな):** Content playable across age groups
     *   Emotion Recognition (きもちあて) — match faces to feelings
 
@@ -74,7 +75,7 @@ To preview the app, open `index.html` in a browser, or serve the directory with 
 
 ## Testing
 
-Every game and shared module has a companion `*.test.js` file (27 in total), run with Vitest in a jsdom environment:
+Every game and shared module has a companion `*.test.js` file (29 in total), run with Vitest in a jsdom environment:
 
 ```bash
 npm test
