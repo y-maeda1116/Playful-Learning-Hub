@@ -94,6 +94,15 @@ function initStoryCreator() {
         showNode('start');
     }
 
+    function showNode(id, resetPath = false) {
+        const node = story[id];
+        if (!node) return;
+        
+        if (resetPath) {
+            path = [];
+        }
+        path.push(node.text);
+
     function showNode(id) {
         const node = story[id];
         if (!node) return;
