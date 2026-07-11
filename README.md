@@ -22,6 +22,7 @@ The website is structured by age group, and each page bundles several games that
     *   Word Relay (ことばリレー) — shiritori word chain
     *   Clock Play (とけいあそび)
     *   Shape Puzzle (ずけいパズル)
+    *   Biology Quiz (せいぶつクイズ) — match creatures to names
 *   **7-8 years old (1st-2nd Grade):** Games to solidify foundational academic skills
     *   Math Battle (算数バトル)
     *   Multiplication Battle (九九バトル)
@@ -34,6 +35,8 @@ The website is structured by age group, and each page bundles several games that
 *   **11-12 years old (5th-6th Grade):** Activities that encourage inquiry-based learning
     *   Speed Calculation (速さ計算)
     *   Kanji Puzzle (漢字パズル)
+    *   Chemistry Simulation (かがくじっけん) — mix chemicals and observe reactions
+    *   Foreign Language Words (えいごのことば) — vocabulary quiz with pronunciation
 *   **All ages (みんな):** Content playable across age groups
     *   Emotion Recognition (きもちあて) — match faces to feelings
 
@@ -72,7 +75,7 @@ To preview the app, open `index.html` in a browser, or serve the directory with 
 
 ## Testing
 
-Every game and shared module has a companion `*.test.js` file (26 in total), run with Vitest in a jsdom environment:
+Every game and shared module has a companion `*.test.js` file (31 in total), run with Vitest in a jsdom environment:
 
 ```bash
 npm test
