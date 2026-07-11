@@ -22,7 +22,7 @@ function getSeasonalEvent(date) {
 
 const seasonalQuizzes = {
     halloween: {
-        question: 'ハロウィんで おばけに なるために かぶる ものは？',
+        question: 'ハロウィンで おばけに なるために かぶる ものは？',
         choices: ['おばけのかめん', 'ぼうし', 'くつした'],
         answer: 'おばけのかめん',
     },
