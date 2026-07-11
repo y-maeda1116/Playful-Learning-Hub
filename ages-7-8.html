@@ -45,6 +45,13 @@
                     <span class="game-title">ことばリレー</span>
                     <span class="game-description">しりとりあそび</span>
                 </button>
+                <button id="instrument-sim-btn" class="game-nav-button"
+                        role="tab" aria-selected="false" aria-controls="instrument-sim-section"
+                        aria-label="がっきたいきごう - ピアノやドラムをならそう">
+                    <span class="game-icon" aria-hidden="true">🎹</span>
+                    <span class="game-title">がっき</span>
+                    <span class="game-description">ピアノやドラム</span>
+                </button>
             </div>
         </div>
 
@@ -75,6 +82,12 @@
             <div id="word-relay-game"></div>
         </div>
 
+        <!-- がっきたいきごうセクション -->
+        <div id="instrument-sim-section" class="game-section"
+             role="tabpanel" aria-labelledby="instrument-sim-btn" aria-hidden="true">
+            <div id="instrument-sim"></div>
+        </div>
+
         <a href="index.html" class="back-link">トップにもどる</a>
     </main>
 
@@ -87,6 +100,7 @@
     <script src="kanji-data.js"></script>
     <script src="kanji-puzzle.js"></script>
     <script src="word-relay.js"></script>
+    <script src="instrument-sim.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             var kanjiPuzzleInstance = null;
@@ -127,6 +141,9 @@
             });
             document.getElementById('word-relay-btn').addEventListener('click', function() {
                 switchToGame('word-relay');
+            });
+            document.getElementById('instrument-sim-btn').addEventListener('click', function() {
+                switchToGame('instrument-sim');
             });
 
             switchToGame('math-battle');
