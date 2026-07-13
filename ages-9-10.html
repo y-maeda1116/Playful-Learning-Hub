@@ -38,6 +38,13 @@
                     <span class="game-title">漢字パズル</span>
                     <span class="game-description">かんじをならおう</span>
                 </button>
+                <button id="story-creator-btn" class="game-nav-button"
+                        role="tab" aria-selected="false" aria-controls="story-creator-section"
+                        aria-label="ものがたりづくり - えらんで つくる ものがたり">
+                    <span class="game-icon" aria-hidden="true">📖</span>
+                    <span class="game-title">ものがたり</span>
+                    <span class="game-description">えらんで つくろう</span>
+                </button>
             </div>
         </div>
 
@@ -62,6 +69,12 @@
             <div id="kanji-puzzle-game-container"></div>
         </div>
 
+        <!-- ものがたりづくりセクション -->
+        <div id="story-creator-section" class="game-section"
+             role="tabpanel" aria-labelledby="story-creator-btn" aria-hidden="true">
+            <div id="story-creator"></div>
+        </div>
+
         <a href="index.html" class="back-link">トップにもどる</a>
     </main>
 
@@ -73,6 +86,7 @@
     <script src="multiplication-battle.js"></script>
     <script src="kanji-data.js"></script>
     <script src="kanji-puzzle.js"></script>
+    <script src="story-creator.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             var kanjiPuzzleInstance = null;
@@ -110,6 +124,9 @@
             });
             document.getElementById('kanji-puzzle-btn').addEventListener('click', function() {
                 switchToGame('kanji-puzzle');
+            });
+            document.getElementById('story-creator-btn').addEventListener('click', function() {
+                switchToGame('story-creator');
             });
 
             switchToGame('fraction');
