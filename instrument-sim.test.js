@@ -15,7 +15,9 @@ describe('initInstrumentSim', () => {
     });
 
     afterEach(() => {
-        document.body.removeChild(container);
+        if (container.parentNode) {
+            document.body.removeChild(container);
+        }
         vi.restoreAllMocks();
         delete window.AudioContext;
         delete window.webkitAudioContext;
