@@ -29,6 +29,7 @@ describe('initInstrumentSim', () => {
     });
 
     test('コンテナが存在しない場合はエラーにならない', () => {
+        document.body.removeChild(container);
         expect(() => initInstrumentSim()).not.toThrow();
     });
 
