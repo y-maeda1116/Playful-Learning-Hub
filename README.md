@@ -34,6 +34,8 @@ The website is structured by age group, and each page bundles several games that
     *   Fraction Pizza (分数ピザ)
     *   Multiplication Battle (九九バトル)
     *   Kanji Puzzle (漢字パズル)
+    *   Story Creator (ものがたりづくり) — branching stories with save
+    *   Astronomy (ほしぞら観察) — explore a rotating starry sky
 *   **11-12 years old (5th-6th Grade):** Activities that encourage inquiry-based learning
     *   Speed Calculation (速さ計算)
     *   Kanji Puzzle (漢字パズル)
@@ -78,7 +80,7 @@ To preview the app, open `index.html` in a browser, or serve the directory with 
 
 ## Testing
 
-Every game and shared module has a companion `*.test.js` file (33 in total), run with Vitest in a jsdom environment:
+Every game and shared module has a companion `*.test.js` file (34 in total), run with Vitest in a jsdom environment:
 
 
 ```bash

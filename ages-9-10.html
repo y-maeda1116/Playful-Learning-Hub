@@ -45,6 +45,13 @@
                     <span class="game-title">ものがたり</span>
                     <span class="game-description">えらんで つくろう</span>
                 </button>
+                <button id="astronomy-sim-btn" class="game-nav-button"
+                        role="tab" aria-selected="false" aria-controls="astronomy-sim-section"
+                        aria-label="ほしぞら観察 - ほしや星座をみよう">
+                    <span class="game-icon" aria-hidden="true">🌟</span>
+                    <span class="game-title">ほしぞら</span>
+                    <span class="game-description">ほしをみよう</span>
+                </button>
             </div>
         </div>
 
@@ -75,6 +82,12 @@
             <div id="story-creator"></div>
         </div>
 
+        <!-- ほしぞら観察セクション -->
+        <div id="astronomy-sim-section" class="game-section"
+             role="tabpanel" aria-labelledby="astronomy-sim-btn" aria-hidden="true">
+            <div id="astronomy-sim"></div>
+        </div>
+
         <a href="index.html" class="back-link">トップにもどる</a>
     </main>
 
@@ -87,6 +100,7 @@
     <script src="kanji-data.js"></script>
     <script src="kanji-puzzle.js"></script>
     <script src="story-creator.js"></script>
+    <script src="astronomy-sim.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             var kanjiPuzzleInstance = null;
@@ -127,6 +141,9 @@
             });
             document.getElementById('story-creator-btn').addEventListener('click', function() {
                 switchToGame('story-creator');
+            });
+            document.getElementById('astronomy-sim-btn').addEventListener('click', function() {
+                switchToGame('astronomy-sim');
             });
 
             switchToGame('fraction');
