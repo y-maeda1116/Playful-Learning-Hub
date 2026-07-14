@@ -29,6 +29,7 @@ The website is structured by age group, and each page bundles several games that
     *   Kanji Puzzle (漢字パズル)
     *   Word Relay (ことばリレー)
     *   Instrument Play (がっきたいきごう) — play piano and drums
+    *   Coding Game (プログラミングあそび) — arrange blocks to move the character
 *   **9-10 years old (3rd-4th Grade):** Games that develop practical skills
     *   Fraction Pizza (分数ピザ)
     *   Multiplication Battle (九九バトル)
@@ -77,7 +78,7 @@ To preview the app, open `index.html` in a browser, or serve the directory with 
 
 ## Testing
 
-Every game and shared module has a companion `*.test.js` file (32 in total), run with Vitest in a jsdom environment:
+Every game and shared module has a companion `*.test.js` file (33 in total), run with Vitest in a jsdom environment:
 
 
 ```bash
