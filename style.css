@@ -2969,6 +2969,142 @@ footer {
 }
 
 /* ========================================
+   プログラミングあそび（プログラミング基礎ゲーム）
+   ======================================== */
+.coding-header h2 {
+    margin: 0;
+    display: inline;
+}
+
+.coding-stage {
+    margin-left: 12px;
+    font-weight: bold;
+    color: #00695c;
+}
+
+.coding-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 2px;
+    max-width: 300px;
+    margin: 16px auto;
+    background: #b2dfdb;
+    padding: 2px;
+    border-radius: 8px;
+}
+
+.coding-cell {
+    aspect-ratio: 1;
+    background: #e0f2f1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+}
+
+.coding-cell.goal {
+    background: #fff9c4;
+}
+
+.coding-cell.player {
+    background: #c8e6c9;
+}
+
+.coding-palette {
+    display: flex;
+    gap: 8px;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin: 12px 0;
+}
+
+.coding-block-btn {
+    font-size: 1rem;
+    padding: 8px 14px;
+    border: 2px solid #26a69a;
+    border-radius: 12px;
+    background: #fff;
+    color: #00695c;
+    cursor: pointer;
+}
+
+.coding-block-btn:hover {
+    background: #e0f2f1;
+}
+
+.coding-program {
+    min-height: 2em;
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+    justify-content: center;
+    padding: 8px;
+    color: #777;
+}
+
+.coding-chip {
+    padding: 4px 10px;
+    border-radius: 999px;
+    background: #b2dfdb;
+    color: #004d40;
+    font-size: 0.9rem;
+}
+
+.coding-chip-forward {
+    background: #c8e6c9;
+}
+
+.coding-chip-right {
+    background: #bbdefb;
+}
+
+.coding-chip-left {
+    background: #ffe0b2;
+}
+
+.coding-controls {
+    display: flex;
+    gap: 8px;
+    justify-content: center;
+    margin: 12px 0;
+}
+
+.coding-run-btn {
+    font-size: 1.1rem;
+    font-weight: bold;
+    padding: 8px 20px;
+    border: none;
+    border-radius: 999px;
+    background: #26a69a;
+    color: #fff;
+    cursor: pointer;
+}
+
+.coding-clear-btn, .coding-reset-btn {
+    font-size: 0.9rem;
+    padding: 8px 14px;
+    border: 2px solid #80cbc4;
+    border-radius: 999px;
+    background: #fff;
+    color: #00695c;
+    cursor: pointer;
+}
+
+.coding-message {
+    font-weight: bold;
+    min-height: 1.5em;
+    margin-top: 8px;
+}
+
+.coding-message.success {
+    color: #2e7d32;
+}
+
+.coding-message.fail {
+    color: #c62828;
+}
+
+/* ========================================
    クイズをつくろう（ユーザー作成コンテンツ）
    ======================================== */
 .user-content-header h2 {
