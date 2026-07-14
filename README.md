@@ -40,6 +40,7 @@ The website is structured by age group, and each page bundles several games that
     *   Foreign Language Words (えいごのことば) — vocabulary quiz with pronunciation
 *   **All ages (みんな):** Content playable across age groups
     *   Emotion Recognition (きもちあて) — match faces to feelings
+    *   User-Created Quizzes (クイズをつくろう) — make and play your own quizzes
 
 ## Tech Stack
 
@@ -76,7 +77,7 @@ To preview the app, open `index.html` in a browser, or serve the directory with 
 
 ## Testing
 
-Every game and shared module has a companion `*.test.js` file (31 in total), run with Vitest in a jsdom environment:
+Every game and shared module has a companion `*.test.js` file (32 in total), run with Vitest in a jsdom environment:
 
 
 ```bash
