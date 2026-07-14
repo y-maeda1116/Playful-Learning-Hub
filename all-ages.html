@@ -24,6 +24,13 @@
                     <span class="game-title">きもちあて</span>
                     <span class="game-description">ひょうじょうをあてよう</span>
                 </button>
+                <button id="user-content-btn" class="game-nav-button"
+                        role="tab" aria-selected="false" aria-controls="user-content-section"
+                        aria-label="クイズをつくろう - じぶんだけのクイズをつくろう">
+                    <span class="game-icon" aria-hidden="true">✏️</span>
+                    <span class="game-title">クイズづくり</span>
+                    <span class="game-description">じぶんでつくろう</span>
+                </button>
             </div>
         </div>
 
@@ -31,6 +38,12 @@
         <div id="emotion-game-section" class="game-section active"
              role="tabpanel" aria-labelledby="emotion-game-btn">
             <div id="emotion-game"></div>
+        </div>
+
+        <!-- ユーザー作成コンテンツセクション -->
+        <div id="user-content-section" class="game-section"
+             role="tabpanel" aria-labelledby="user-content-btn" aria-hidden="true">
+            <div id="user-content"></div>
         </div>
 
         <a href="index.html" class="back-link">トップにもどる</a>
@@ -42,6 +55,7 @@
 
     <script src="audio-manager.js"></script>
     <script src="emotion-game.js"></script>
+    <script src="user-content.js"></script>
     <script>
         // ゲームナビゲーション機能（将来の全年齢向けゲーム追加も gameType で拡張可能）
         function switchToGame(gameType) {
@@ -71,6 +85,12 @@
             if (emotionBtn) {
                 emotionBtn.addEventListener('click', function() {
                     switchToGame('emotion');
+                });
+            }
+            const userContentBtn = document.getElementById('user-content-btn');
+            if (userContentBtn) {
+                userContentBtn.addEventListener('click', function() {
+                    switchToGame('user-content');
                 });
             }
             switchToGame('emotion');
