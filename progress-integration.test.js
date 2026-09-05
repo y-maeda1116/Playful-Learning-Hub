@@ -41,10 +41,12 @@ describe('ProgressIntegration', () => {
         });
 
         test('initialize: ProgressTracker定義済みの場合は正常に初期化される', () => {
-            global.ProgressTracker = vi.fn().mockImplementation(() => ({
-                storageKey: 'test',
-                userId: 'default',
-            }));
+            global.ProgressTracker = vi.fn().mockImplementation(function () {
+                return {
+                    storageKey: 'test',
+                    userId: 'default',
+                };
+            });
 
             const result = integration.initialize();
 
@@ -68,7 +70,7 @@ describe('ProgressIntegration', () => {
         });
 
         test('initialize: ProgressTrackerコンストラクタで例外発生時は false を返す', () => {
-            global.ProgressTracker = vi.fn().mockImplementation(() => {
+            global.ProgressTracker = vi.fn().mockImplementation(function () {
                 throw new Error('Tracker init failed');
             });
 
@@ -118,7 +120,9 @@ describe('ProgressIntegration', () => {
             document.body.appendChild(container);
 
             const mockDisplay = { display: true };
-            global.ProgressDisplay = vi.fn().mockReturnValue(mockDisplay);
+            global.ProgressDisplay = vi.fn().mockImplementation(function () {
+                return mockDisplay;
+            });
 
             const result = integration.createParentProgressDisplay('test-container');
 
@@ -142,7 +146,9 @@ describe('ProgressIntegration', () => {
             container.id = 'test-container';
             document.body.appendChild(container);
 
-            global.ProgressDisplay = vi.fn().mockReturnValue({});
+            global.ProgressDisplay = vi.fn().mockImplementation(function () {
+                return {};
+            });
 
             integration.createParentProgressDisplay('test-container', {
                 refreshInterval: 10000,
@@ -167,7 +173,7 @@ describe('ProgressIntegration', () => {
             container.id = 'test-container';
             document.body.appendChild(container);
 
-            global.ProgressDisplay = vi.fn().mockImplementation(() => {
+            global.ProgressDisplay = vi.fn().mockImplementation(function () {
                 throw new Error('Display creation failed');
             });
 
