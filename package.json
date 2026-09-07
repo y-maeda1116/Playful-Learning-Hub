@@ -5,7 +5,8 @@
   "main": "classification-game.js",
   "devDependencies": {
     "jsdom": "^26.1.0",
-    "vitest": "^3.2.4"
+    "vite": "^8.2.2",
+    "vitest": "^5.0.0"
   },
   "scripts": {
     "test": "./node_modules/.bin/vitest"
