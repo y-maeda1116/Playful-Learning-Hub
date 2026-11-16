@@ -20,11 +20,46 @@ class AudioManager {
         // 効果音とフィードバック音声の設定
         this.feedbackSounds = new Map(); // フィードバック音声のキャッシュ
         this.encouragementMessages = this.getEncouragementMessages();
-        
+
+        // ページ非表示時にAudioContextをsuspendするためのリスナー
+        if (typeof document !== 'undefined') {
+            this._visibilityHandler = () => this.handleVisibilityChange();
+            document.addEventListener('visibilitychange', this._visibilityHandler);
+        }
+
         this.initializeAudioContext();
         this.initializeFeedbackSounds();
     }
-    
+
+    /**
+     * ページの表示状態が変わったときの処理
+     */
+    handleVisibilityChange() {
+        if (document.hidden) {
+            this.suspendAudio();
+        } else {
+            this.resumeAudio();
+        }
+    }
+
+    /**
+     * AudioContextの中断（ページ非表示時）
+     */
+    suspendAudio() {
+        if (this.audioContext && this.audioContext.state === 'running') {
+            this.audioContext.suspend();
+        }
+    }
+
+    /**
+     * AudioContextの再開（ページ復帰時）
+     */
+    resumeAudio() {
+        if (this.audioContext && this.audioContext.state === 'suspended') {
+            this.audioContext.resume();
+        }
+    }
+
     /**
      * AudioContextの初期化
      */
@@ -708,6 +743,11 @@ class AudioManager {
      * AudioManagerを破棄
      */
     destroy() {
+        if (typeof document !== 'undefined' && this._visibilityHandler) {
+            document.removeEventListener('visibilitychange', this._visibilityHandler);
+            this._visibilityHandler = null;
+        }
+
         this.clearCache();
         
         if (this.audioContext && this.audioContext.state !== 'closed') {

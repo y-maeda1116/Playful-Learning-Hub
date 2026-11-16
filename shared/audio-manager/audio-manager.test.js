@@ -272,4 +272,67 @@ describe('AudioManager', () => {
             // audioContext は jsdom では null の場合がある
         });
     });
+
+    describe('AudioContext ライフサイクル', () => {
+        function setHidden(hidden) {
+            Object.defineProperty(document, 'hidden', { value: hidden, configurable: true });
+        }
+
+        function fireVisibilityChange() {
+            document.dispatchEvent(new Event('visibilitychange'));
+        }
+
+        function createFakeContext(state) {
+            return { state, suspend: vi.fn(), resume: vi.fn(), close: vi.fn() };
+        }
+
+        afterEach(() => {
+            setHidden(false);
+        });
+
+        test('非表示時に suspend() が呼ばれる', () => {
+            audioManager = new AudioManager();
+            const fakeContext = createFakeContext('running');
+            audioManager.audioContext = fakeContext;
+
+            setHidden(true);
+            fireVisibilityChange();
+
+            expect(fakeContext.suspend).toHaveBeenCalled();
+        });
+
+        test('復帰時に resume() が呼ばれる', () => {
+            audioManager = new AudioManager();
+            const fakeContext = createFakeContext('suspended');
+            audioManager.audioContext = fakeContext;
+
+            setHidden(false);
+            fireVisibilityChange();
+
+            expect(fakeContext.resume).toHaveBeenCalled();
+        });
+
+        test('audioContext が null のとき visibilitychange でもエラーにならない', () => {
+            audioManager = new AudioManager();
+            audioManager.audioContext = null;
+
+            expect(() => {
+                setHidden(true);
+                fireVisibilityChange();
+            }).not.toThrow();
+        });
+
+        test('destroy 後の visibilitychange でエラーにならず suspend も呼ばれない', () => {
+            const manager = new AudioManager();
+            const fakeContext = createFakeContext('running');
+            manager.audioContext = fakeContext;
+            manager.destroy();
+
+            expect(() => {
+                setHidden(true);
+                fireVisibilityChange();
+            }).not.toThrow();
+            expect(fakeContext.suspend).not.toHaveBeenCalled();
+        });
+    });
 });
