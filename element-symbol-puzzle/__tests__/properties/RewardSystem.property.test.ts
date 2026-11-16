@@ -162,17 +162,23 @@ describe('Badge Criteria Consistency - Property-Based Tests', () => {
      */
     it('should award elements-learned badge when user masters enough elements', () => {
       const property = fc.property(userIdArbitrary, (userId) => {
+        // run 間でシステムが共有されるため、各 run の先頭でリセットする
+        progressTrackingSystem.clearAllProgress();
+
         // Create a session with 15 correct answers to master 15 elements
+        // （mastered には要素あたり2回以上の挑戦が必要なため、各要素を2回正解させる）
         const answers = [];
         for (let i = 0; i < 15; i++) {
           const symbol = String.fromCharCode(65 + i); // A, B, C, ...
-          answers.push({
-            elementId: symbol,
-            userAnswer: symbol,
-            correct: true,
-            responseTime: 1000,
-            timestamp: Date.now(),
-          });
+          for (let attempt = 0; attempt < 2; attempt++) {
+            answers.push({
+              elementId: symbol,
+              userAnswer: symbol,
+              correct: true,
+              responseTime: 1000,
+              timestamp: Date.now(),
+            });
+          }
         }
 
         const session: GameSession = {
@@ -185,8 +191,8 @@ describe('Badge Criteria Consistency - Property-Based Tests', () => {
           currentIndex: 0,
           score: 100,
           answers,
-          correctCount: 15,
-          totalCount: 15,
+          correctCount: 30,
+          totalCount: 30,
         };
 
         progressTrackingSystem.updateProgress(userId, session);
@@ -516,17 +522,23 @@ describe('Badge Criteria Consistency - Property-Based Tests', () => {
 
     it('should award multiple badges when user meets multiple criteria', () => {
       const property = fc.property(userIdArbitrary, (userId) => {
+        // run 間でシステムが共有されるため、各 run の先頭でリセットする
+        progressTrackingSystem.clearAllProgress();
+
         // Create a session with 25 correct answers (for elements-25)
+        // （mastered には要素あたり2回以上の挑戦が必要なため、各要素を2回正解させる）
         const answers = [];
         for (let i = 0; i < 25; i++) {
           const symbol = String.fromCharCode(65 + (i % 26));
-          answers.push({
-            elementId: symbol,
-            userAnswer: symbol,
-            correct: true,
-            responseTime: 1000,
-            timestamp: Date.now(),
-          });
+          for (let attempt = 0; attempt < 2; attempt++) {
+            answers.push({
+              elementId: symbol,
+              userAnswer: symbol,
+              correct: true,
+              responseTime: 1000,
+              timestamp: Date.now(),
+            });
+          }
         }
 
         const session: GameSession = {
@@ -539,8 +551,8 @@ describe('Badge Criteria Consistency - Property-Based Tests', () => {
           currentIndex: 0,
           score: 100,
           answers,
-          correctCount: 25,
-          totalCount: 25,
+          correctCount: 50,
+          totalCount: 50,
         };
 
         progressTrackingSystem.updateProgress(userId, session);
@@ -683,17 +695,23 @@ describe('Badge Criteria Consistency - Property-Based Tests', () => {
 
     it('should correctly evaluate all badge types', () => {
       const property = fc.property(userIdArbitrary, (userId) => {
+        // run 間でシステムが共有されるため、各 run の先頭でリセットする
+        progressTrackingSystem.clearAllProgress();
+
         // Create a session with 30 correct answers
+        // （mastered には要素あたり2回以上の挑戦が必要なため、各要素を2回正解させる）
         const answers = [];
         for (let i = 0; i < 30; i++) {
-          const symbol = String.fromCharCode(65 + (i % 26));
-          answers.push({
-            elementId: symbol,
-            userAnswer: symbol,
-            correct: true,
-            responseTime: 1000,
-            timestamp: Date.now(),
-          });
+          const symbol = String.fromCharCode(65 + i); // 30種のユニークな記号
+          for (let attempt = 0; attempt < 2; attempt++) {
+            answers.push({
+              elementId: symbol,
+              userAnswer: symbol,
+              correct: true,
+              responseTime: 1000,
+              timestamp: Date.now(),
+            });
+          }
         }
 
         const session: GameSession = {
@@ -706,8 +724,8 @@ describe('Badge Criteria Consistency - Property-Based Tests', () => {
           currentIndex: 0,
           score: 100,
           answers,
-          correctCount: 30,
-          totalCount: 30,
+          correctCount: 60,
+          totalCount: 60,
         };
 
         progressTrackingSystem.updateProgress(userId, session);

@@ -15,32 +15,32 @@ describe('AudioSystem - Property-Based Tests', () => {
   let contentManager: ElementContentManager;
 
   beforeEach(() => {
-    // Mock Audio API
-    const createMockAudio = () => {
+    // Mock Audio API（vitest では new できるよう function 宣言を使う）
+    function createMockAudio() {
       const listeners: { [key: string]: Function[] } = {};
       return {
-        play: jest.fn().mockImplementation(function () {
+        play: vi.fn().mockImplementation(function () {
           if (listeners['play']) {
             listeners['play'].forEach((cb) => cb());
           }
           return Promise.resolve();
         }),
-        pause: jest.fn(),
-        addEventListener: jest.fn().mockImplementation(function (event: string, cb: Function) {
+        pause: vi.fn(),
+        addEventListener: vi.fn().mockImplementation(function (event: string, cb: Function) {
           if (!listeners[event]) {
             listeners[event] = [];
           }
           listeners[event].push(cb);
         }),
-        removeEventListener: jest.fn(),
+        removeEventListener: vi.fn(),
         volume: 1,
         currentTime: 0,
         paused: true,
         src: '',
       };
-    };
+    }
 
-    global.Audio = jest.fn(createMockAudio) as any;
+    global.Audio = vi.fn(createMockAudio) as any;
     audioSystem = new AudioSystem();
     contentManager = new ElementContentManager();
   });
@@ -88,7 +88,7 @@ describe('AudioSystem - Property-Based Tests', () => {
     });
 
     it('should successfully play audio for any valid element audio URL', async () => {
-      const property = fc.property(
+      const property = fc.asyncProperty(
         fc.oneof(
           fc.constant(3 as const),
           fc.constant(4 as const),
@@ -100,8 +100,8 @@ describe('AudioSystem - Property-Based Tests', () => {
 
           // For each element, audio should be playable
           for (const element of elements) {
-            const onSuccess = jest.fn();
-            const onError = jest.fn();
+            const onSuccess = vi.fn();
+            const onError = vi.fn();
 
             try {
               await audioSystem.playAudio(element.audioUrl, {
@@ -154,7 +154,7 @@ describe('AudioSystem - Property-Based Tests', () => {
     });
 
     it('should handle audio playback with fallback for any element', async () => {
-      const property = fc.property(
+      const property = fc.asyncProperty(
         fc.oneof(
           fc.constant(3 as const),
           fc.constant(4 as const),
@@ -195,7 +195,7 @@ describe('AudioSystem - Property-Based Tests', () => {
     });
 
     it('should never crash when playing audio for any element', async () => {
-      const property = fc.property(
+      const property = fc.asyncProperty(
         fc.oneof(
           fc.constant(3 as const),
           fc.constant(4 as const),
@@ -241,7 +241,7 @@ describe('AudioSystem - Property-Based Tests', () => {
     });
 
     it('should handle volume settings for any valid audio URL', async () => {
-      const property = fc.property(
+      const property = fc.asyncProperty(
         fc.oneof(
           fc.constant(3 as const),
           fc.constant(4 as const),
@@ -273,7 +273,7 @@ describe('AudioSystem - Property-Based Tests', () => {
     });
 
     it('should properly cache audio URLs for repeated playback', async () => {
-      const property = fc.property(
+      const property = fc.asyncProperty(
         fc.oneof(
           fc.constant(3 as const),
           fc.constant(4 as const),
@@ -307,7 +307,7 @@ describe('AudioSystem - Property-Based Tests', () => {
     });
 
     it('should handle stopping audio for any element', async () => {
-      const property = fc.property(
+      const property = fc.asyncProperty(
         fc.oneof(
           fc.constant(3 as const),
           fc.constant(4 as const),

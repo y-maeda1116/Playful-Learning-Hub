@@ -19,11 +19,11 @@ import { getBadgesByGrade } from '../../src/data/badges';
 
 describe('MatchingGameUI', () => {
   let manager: ElementContentManager;
-  let mockCallback: jest.Mock;
+  let mockCallback: vi.Mock;
 
   beforeEach(() => {
     manager = new ElementContentManager();
-    mockCallback = jest.fn();
+    mockCallback = vi.fn();
   });
 
   it('should render matching game UI', () => {
@@ -180,10 +180,10 @@ describe('MatchingGameUI', () => {
 });
 
 describe('QuizGameUI', () => {
-  let mockCallback: jest.Mock;
+  let mockCallback: vi.Mock;
 
   beforeEach(() => {
-    mockCallback = jest.fn();
+    mockCallback = vi.fn();
   });
 
   it('should render quiz game UI', () => {
@@ -338,11 +338,11 @@ describe('QuizGameUI', () => {
 
 describe('ChemicalFormulaPuzzleUI', () => {
   let manager: ElementContentManager;
-  let mockCallback: jest.Mock;
+  let mockCallback: vi.Mock;
 
   beforeEach(() => {
     manager = new ElementContentManager();
-    mockCallback = jest.fn();
+    mockCallback = vi.fn();
   });
 
   it('should render chemical formula puzzle UI', () => {
@@ -510,10 +510,10 @@ describe('ChemicalFormulaPuzzleUI', () => {
 });
 
 describe('PeriodicTableJigsawUI', () => {
-  let mockCallback: jest.Mock;
+  let mockCallback: vi.Mock;
 
   beforeEach(() => {
-    mockCallback = jest.fn();
+    mockCallback = vi.fn();
   });
 
   it('should render periodic table jigsaw UI', () => {
@@ -732,13 +732,17 @@ describe('PeriodicTableJigsawUI', () => {
     const cells = rendered.querySelectorAll('.periodic-table-cell');
     const firstCell = cells[0] as HTMLElement;
 
-    // Simulate drag over
-    const dragOverEvent = new DragEvent('dragover', { bubbles: true });
+    // Simulate drag over（jsdom に DragEvent は無いため Event を使う。ハンドラ内で
+    // dataTransfer.dropEffect を参照するためスタブを注入する）
+    const dragOverEvent = new Event('dragover', { bubbles: true });
+    Object.defineProperty(dragOverEvent, 'dataTransfer', {
+      value: { dropEffect: 'none' },
+    });
     firstCell.dispatchEvent(dragOverEvent);
     expect(firstCell.classList.contains('drag-over')).toBe(true);
 
     // Simulate drag leave
-    const dragLeaveEvent = new DragEvent('dragleave', { bubbles: true });
+    const dragLeaveEvent = new Event('dragleave', { bubbles: true });
     firstCell.dispatchEvent(dragLeaveEvent);
     expect(firstCell.classList.contains('drag-over')).toBe(false);
   });
@@ -762,8 +766,8 @@ describe('PeriodicTableJigsawUI', () => {
     const cells = rendered.querySelectorAll('.periodic-table-cell');
     const firstCell = cells[0] as HTMLElement;
 
-    // Create a drop event with data
-    const dropEvent = new DragEvent('drop', { bubbles: true });
+    // Create a drop event with data（jsdom に DragEvent は無いため Event を使う）
+    const dropEvent = new Event('drop', { bubbles: true });
     Object.defineProperty(dropEvent, 'dataTransfer', {
       value: {
         getData: () => elements[0].id,

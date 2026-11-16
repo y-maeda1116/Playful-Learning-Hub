@@ -193,6 +193,10 @@ describe('Multiple Profile Isolation - Property-Based Tests', () => {
           // Ensure different user IDs
           fc.pre(userId1 !== userId2);
 
+          // run 間でシステムと localStorage が共有されるため、各 run の先頭でリセットする
+          progressTrackingSystem.clearAllProgress();
+          localStorage.clear();
+
           // Initialize both users
           progressTrackingSystem.loadFromLocalStorage(userId1, 3);
           progressTrackingSystem.loadFromLocalStorage(userId2, 4);
@@ -323,6 +327,10 @@ describe('Multiple Profile Isolation - Property-Based Tests', () => {
         (userId1, userId2, session) => {
           // Ensure different user IDs
           fc.pre(userId1 !== userId2);
+
+          // run 間でシステムと localStorage が共有されるため、各 run の先頭でリセットする
+          progressTrackingSystem.clearAllProgress();
+          localStorage.clear();
 
           // Initialize both users with different grade levels
           progressTrackingSystem.loadFromLocalStorage(userId1, 3);

@@ -24,7 +24,7 @@ describe('DifficultyAdjustmentSystem - Property-Based Tests', () => {
     it('should adjust difficulty correctly based on accuracy thresholds', () => {
       fc.assert(
         fc.property(
-          fc.string({ minLength: 1, maxLength: 50 }),
+          fc.string({ minLength: 1, maxLength: 50 }).filter((s) => s.trim().length > 0),
           fc.integer({ min: 0, max: 100 }),
           (userId, accuracy) => {
             const system = new DifficultyAdjustmentSystem();
@@ -64,7 +64,7 @@ describe('DifficultyAdjustmentSystem - Property-Based Tests', () => {
     it('should never skip difficulty levels', () => {
       fc.assert(
         fc.property(
-          fc.string({ minLength: 1, maxLength: 50 }),
+          fc.string({ minLength: 1, maxLength: 50 }).filter((s) => s.trim().length > 0),
           fc.integer({ min: 0, max: 100 }),
           (userId, accuracy) => {
             fc.pre(userId.trim().length > 0); // Ensure valid userId
@@ -101,7 +101,7 @@ describe('DifficultyAdjustmentSystem - Property-Based Tests', () => {
     it('should maintain consistency across multiple adjustments', () => {
       fc.assert(
         fc.property(
-          fc.string({ minLength: 1, maxLength: 50 }),
+          fc.string({ minLength: 1, maxLength: 50 }).filter((s) => s.trim().length > 0),
           fc.array(fc.integer({ min: 0, max: 100 }), { minLength: 1, maxLength: 10 }),
           (userId, accuracies) => {
             fc.pre(userId.trim().length > 0); // Ensure valid userId
@@ -147,7 +147,7 @@ describe('DifficultyAdjustmentSystem - Property-Based Tests', () => {
     it('should converge to appropriate difficulty levels', () => {
       fc.assert(
         fc.property(
-          fc.string({ minLength: 1, maxLength: 50 }),
+          fc.string({ minLength: 1, maxLength: 50 }).filter((s) => s.trim().length > 0),
           fc.integer({ min: 80, max: 100 }),
           (userId, highAccuracy) => {
             const system = new DifficultyAdjustmentSystem();
@@ -172,7 +172,7 @@ describe('DifficultyAdjustmentSystem - Property-Based Tests', () => {
     it('should converge to easy difficulty with low accuracy', () => {
       fc.assert(
         fc.property(
-          fc.string({ minLength: 1, maxLength: 50 }),
+          fc.string({ minLength: 1, maxLength: 50 }).filter((s) => s.trim().length > 0),
           fc.integer({ min: 0, max: 49 }),
           (userId, lowAccuracy) => {
             const system = new DifficultyAdjustmentSystem();
@@ -200,7 +200,7 @@ describe('DifficultyAdjustmentSystem - Property-Based Tests', () => {
      */
     it('should handle 80% accuracy boundary correctly', () => {
       fc.assert(
-        fc.property(fc.string({ minLength: 1, maxLength: 50 }), (userId) => {
+        fc.property(fc.string({ minLength: 1, maxLength: 50 }).filter((s) => s.trim().length > 0), (userId) => {
           const system = new DifficultyAdjustmentSystem();
 
           // From easy at 80%

@@ -307,6 +307,12 @@ describe('Streak Calculation - Property-Based Tests', () => {
             return true;
           }
 
+          // run 間でシステムと localStorage が共有されるため、各 run の先頭でリセットする
+          progressTrackingSystem.clearAllProgress();
+          if (typeof localStorage !== 'undefined') {
+            localStorage.clear();
+          }
+
           progressTrackingSystem.loadFromLocalStorage(userId1, gradeLevel);
           progressTrackingSystem.loadFromLocalStorage(userId2, gradeLevel);
 
