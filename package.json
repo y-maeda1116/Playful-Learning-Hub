@@ -10,7 +10,8 @@
     "vitest": "^5.0.0"
   },
   "scripts": {
-    "test": "./node_modules/.bin/vitest"
+    "test": "./node_modules/.bin/vitest",
+    "build:esp": "vite build --config element-symbol-puzzle/vite.config.ts"
   },
   "repository": {
     "type": "git",

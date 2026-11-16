@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>元素記号パズル</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: "Hiragino Maru Gothic ProN", "Hiragino Sans", "Yu Gothic", sans-serif;
+      background: linear-gradient(180deg, #e0f2fe, #f0f9ff);
+      color: #1e293b;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      padding: 24px 16px;
+    }
+    #app { width: 100%; max-width: 720px; }
+    h2 { margin-bottom: 12px; color: #0369a1; }
+    .view-header { margin-bottom: 12px; }
+    .back-button {
+      padding: 8px 16px; border: none; border-radius: 8px;
+      background: #0369a1; color: #fff; font-size: 14px; cursor: pointer;
+    }
+    .home { text-align: center; }
+    .grade-select, label { margin: 8px 0 16px; }
+    select {
+      padding: 6px 10px; border-radius: 8px; border: 1px solid #94a3b8; font-size: 15px;
+    }
+    .mode-grid {
+      display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-top: 12px;
+    }
+    .mode-card {
+      display: flex; flex-direction: column; gap: 6px; align-items: center;
+      padding: 20px 12px; border: 2px solid #7dd3fc; border-radius: 12px;
+      background: #fff; cursor: pointer; font-size: 16px;
+    }
+    .mode-card:hover { background: #f0f9ff; }
+    .mode-label { font-weight: bold; color: #0369a1; }
+    .mode-desc { font-size: 12px; color: #64748b; }
+    .session-progress { font-size: 15px; margin-bottom: 8px; color: #0369a1; }
+    .matching-question, .quiz-ui, .chemical-formula-puzzle-ui, .periodic-table-jigsaw-ui {
+      background: #fff; border-radius: 12px; padding: 16px; margin-bottom: 12px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+    }
+    .element-symbol { font-size: 48px; font-weight: bold; text-align: center; color: #0369a1; }
+    .matching-options, .quiz-options { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-top: 12px; }
+    .matching-option-button, .quiz-option-button, .element-button {
+      padding: 14px 10px; font-size: 16px; border: 2px solid #7dd3fc; border-radius: 10px;
+      background: #fff; cursor: pointer;
+    }
+    .matching-option-button:hover, .quiz-option-button:hover, .element-button:hover { background: #f0f9ff; }
+    .feedback {
+      position: fixed; left: 50%; bottom: 32px; transform: translateX(-50%);
+      padding: 12px 20px; border-radius: 12px; color: #fff; font-size: 15px;
+      max-width: 90%; z-index: 10;
+    }
+    .feedback-ok { background: #16a34a; }
+    .feedback-ng { background: #dc2626; }
+    .result-view {
+      background: #fff; border-radius: 12px; padding: 24px; text-align: center;
+    }
+    .result-view h2 { color: #0369a1; }
+    .result-view p { margin: 8px 0; font-size: 16px; }
+    .result-view .back-button { margin-top: 12px; }
+    @media (max-width: 480px) {
+      .mode-grid { grid-template-columns: 1fr; }
+      .matching-options, .quiz-options { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <div id="app"></div>
+  <script src="dist/app.js"></script>
+</body>
+</html>
