@@ -160,8 +160,8 @@ describe('End-to-End Integration Tests', () => {
       const userId = 'persistenceTestUser';
       orchestrator.setCurrentUser(userId);
 
-      // Session 1: Complete a matching game
-      let session1 = orchestrator.startGameSession('matching', 3);
+      // Session 1: Complete a matching game（startGameSession は currentUserId を上書きするため userId を渡す）
+      let session1 = orchestrator.startGameSession('matching', 3, userId);
       const question1 = await orchestrator.displayNextQuestion();
       await orchestrator.submitAnswer(question1.name);
       const result1 = await orchestrator.endGameSession();
@@ -169,13 +169,15 @@ describe('End-to-End Integration Tests', () => {
       // Get progress after session 1
       let progress1 = orchestrator.getUserProgress();
       expect(progress1.sessionCount).toBe(1);
+      // progress1 は内部オブジェクトの参照なので、比較用に値を先に取り出す
+      const sessionCount1 = progress1.sessionCount;
       const session1Accuracy = result1.accuracy;
 
       // Save progress to localStorage
       storageAdapter.saveToLocalStorage(userId, progress1);
 
       // Session 2: Complete another game
-      session1 = orchestrator.startGameSession('quiz', 5);
+      session1 = orchestrator.startGameSession('quiz', 5, userId);
       const question2 = await orchestrator.displayNextQuestion();
       await orchestrator.submitAnswer(question2.name);
       const result2 = await orchestrator.endGameSession();
@@ -185,7 +187,7 @@ describe('End-to-End Integration Tests', () => {
       expect(progress2.sessionCount).toBe(2);
 
       // Verify progress was accumulated
-      expect(progress2.sessionCount).toBeGreaterThan(progress1.sessionCount);
+      expect(progress2.sessionCount).toBeGreaterThan(sessionCount1);
 
       // Load progress from localStorage and verify
       const loadedProgress = storageAdapter.loadFromLocalStorage(userId);
@@ -395,9 +397,9 @@ describe('End-to-End Integration Tests', () => {
 
   describe('12. Multiple User Profiles Isolation', () => {
     it('should maintain separate progress for different users', async () => {
-      // User 1 session
+      // User 1 session（startGameSession は currentUserId を上書きするため userId を渡す）
       orchestrator.setCurrentUser('user1');
-      let session = orchestrator.startGameSession('matching', 3);
+      let session = orchestrator.startGameSession('matching', 3, 'user1');
       let question = await orchestrator.displayNextQuestion();
       await orchestrator.submitAnswer(question.name);
       await orchestrator.endGameSession();
@@ -408,7 +410,7 @@ describe('End-to-End Integration Tests', () => {
 
       // User 2 session
       orchestrator.setCurrentUser('user2');
-      session = orchestrator.startGameSession('matching', 3);
+      session = orchestrator.startGameSession('matching', 3, 'user2');
       question = await orchestrator.displayNextQuestion();
       await orchestrator.submitAnswer(question.name);
       await orchestrator.endGameSession();

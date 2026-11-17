@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>みんなのコンテンツ | わくわく学びランド</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
     <header>
@@ -31,6 +31,12 @@
                     <span class="game-title">クイズづくり</span>
                     <span class="game-description">じぶんでつくろう</span>
                 </button>
+                <a href="element-symbol-puzzle/index.html" class="game-nav-button"
+                        aria-label="元素記号パズル - 元素記号と化学式を学ぶゲーム">
+                    <span class="game-icon" aria-hidden="true">⚗️</span>
+                    <span class="game-title">元素記号パズル</span>
+                    <span class="game-description">げんそをまなぼう</span>
+                </a>
             </div>
         </div>
 
@@ -53,9 +59,9 @@
         <p>&copy; 2024 わくわく学びランド</p>
     </footer>
 
-    <script src="audio-manager.js"></script>
-    <script src="emotion-game.js"></script>
-    <script src="user-content.js"></script>
+    <script src="shared/audio-manager/audio-manager.js"></script>
+    <script src="games/emotion-game/emotion-game.js"></script>
+    <script src="shared/user-content/user-content.js"></script>
     <script>
         // ゲームナビゲーション機能（将来の全年齢向けゲーム追加も gameType で拡張可能）
         function switchToGame(gameType) {

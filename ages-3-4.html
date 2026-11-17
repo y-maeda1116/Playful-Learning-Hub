@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>3〜4歳 | わくわく学びランド</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
     <header>
@@ -101,18 +101,18 @@
         <p>&copy; 2024 わくわく学びランド</p>
     </footer>
 
-    <script src="classification-game.js"></script>
-    <script src="character-data.js"></script>
-    <script src="audio-manager.js"></script>
-    <script src="progress-tracker.js"></script>
-    <script src="badge-system.js"></script>
-    <script src="gamification-system.js"></script>
-    <script src="progress-display.js"></script>
-    <script src="progress-integration.js"></script>
-    <script src="hiragana-learning.js"></script>
-    <script src="katakana-game.js"></script>
-    <script src="counting-game.js"></script>
-    <script src="tracing-game.js"></script>
+    <script src="games/classification-game/classification-game.js"></script>
+    <script src="shared/character-data/character-data.js"></script>
+    <script src="shared/audio-manager/audio-manager.js"></script>
+    <script src="shared/progress-tracker/progress-tracker.js"></script>
+    <script src="shared/badge-system/badge-system.js"></script>
+    <script src="shared/gamification-system/gamification-system.js"></script>
+    <script src="shared/progress-display/progress-display.js"></script>
+    <script src="shared/progress-integration/progress-integration.js"></script>
+    <script src="games/hiragana-learning/hiragana-learning.js"></script>
+    <script src="games/katakana-game/katakana-game.js"></script>
+    <script src="games/counting-game/counting-game.js"></script>
+    <script src="games/tracing-game/tracing-game.js"></script>
     <script>
         // スクリプト読み込み確認
         console.log('📦 スクリプト読み込み状況 (3-4歳):');
@@ -231,7 +231,7 @@
                                         <h3 style="margin-top: 0;">⚠️ ゲームの読み込みに失敗しました</h3>
                                         <p><strong>エラー:</strong> ${error.message}</p>
                                         <p style="font-size: 14px; margin: 15px 0;">
-                                            <a href="debug-mobile.html" style="color: #721c24; text-decoration: underline;">
+                                            <a href="dev/debug-mobile.html" style="color: #721c24; text-decoration: underline;">
                                                 デバッグページで詳細を確認
                                             </a>
                                         </p>

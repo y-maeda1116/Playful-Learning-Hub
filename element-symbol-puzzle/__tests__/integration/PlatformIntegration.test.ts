@@ -205,8 +205,10 @@ describe('Platform Integration Tests', () => {
       // Check badge criteria
       const newBadges = rewardSystem.checkBadgeCriteria(userId, session);
 
-      // Should not have earned any badges yet
-      expect(newBadges.length).toBe(0);
+      // 5/5 正解で averageAccuracy=100% となるため、accuracy 系バッジ3種が基準達成で付与される
+      // （elements 系は 15 種未習得のため付与されない）
+      expect(newBadges).toEqual(expect.arrayContaining(['accuracy-70', 'accuracy-80', 'accuracy-90']));
+      expect(newBadges.length).toBe(3);
     });
   });
 

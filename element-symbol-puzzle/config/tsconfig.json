@@ -1,19 +1,16 @@
 {
   "compilerOptions": {
     "target": "ES2020",
-    "module": "commonjs",
+    "module": "esnext",
     "lib": ["ES2020", "DOM"],
-    "declaration": true,
-    "outDir": "../dist",
-    "rootDir": "../",
     "strict": true,
     "esModuleInterop": true,
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
     "resolveJsonModule": true,
-    "moduleResolution": "node",
-    "types": ["jest", "node"]
+    "moduleResolution": "bundler",
+    "noEmit": true
   },
-  "include": ["../src/**/*.ts", "../index.ts", "../GameOrchestrator.ts", "../__tests__/**/*.ts"],
+  "include": ["../src/**/*.ts", "../index.ts", "../GameOrchestrator.ts", "../main.ts"],
   "exclude": ["../node_modules", "../dist"]
 }

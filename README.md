@@ -49,15 +49,18 @@ The website is structured by age group, and each page bundles several games that
 
 *   Vanilla JavaScript (CommonJS modules), HTML, and CSS — no build step
 *   [Vitest](https://vitest.dev/) with [jsdom](https://github.com/jsdom/jsdom) for unit testing
-*   Shared infrastructure for sound (`audio-manager.js`), progress tracking (`progress-tracker.js`), badges (`badge-system.js`), and gamification (`gamification-system.js`)
+*   Shared infrastructure for sound (`shared/audio-manager/`), progress tracking (`shared/progress-tracker/`), badges (`shared/badge-system/`), and gamification (`shared/gamification-system/`)
 
 ## Project Structure
 
 *   `index.html` — landing page linking to each age group
 *   `ages-*.html` — one page per age group, wiring together the games for that age
 *   `all-ages.html` — all-ages content (e.g. emotion recognition)
-*   `*-game.js`, `*-puzzle.js`, etc. — individual game modules (each with a matching `.test.js`)
-*   `style.css` — shared styles
+*   `games/<module>/` — individual game modules (each with a matching `.test.js`)
+*   `shared/<module>/` — shared infrastructure modules
+*   `css/` — stylesheets (`style.css`, `hiragana-learning.css`)
+*   `dev/` — development/debug pages (`debug-mobile.html`, `test-runner.html`, etc.)
+*   `element-symbol-puzzle/` — TypeScript game (element symbol puzzle), bundled with Vite
 
 ## Development
 

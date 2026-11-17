@@ -10,7 +10,6 @@ module.exports = {
     exclude: [
       '**/node_modules/**',
       '**/dist/**',
-      '**/element-symbol-puzzle/**',
       '**/cypress/**',
       '**/.{idea,git,cache,output,temp}/**',
     ],

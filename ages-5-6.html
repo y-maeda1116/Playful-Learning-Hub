@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>5〜6歳 | わくわく学びランド</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
     <header>
@@ -121,21 +121,21 @@
         <p>&copy; 2024 わくわく学びランド</p>
     </footer>
 
-    <script src="shopping-game.js"></script>
-    <script src="character-data.js"></script>
-    <script src="audio-manager.js"></script>
-    <script src="progress-tracker.js"></script>
-    <script src="badge-system.js"></script>
-    <script src="gamification-system.js"></script>
-    <script src="progress-display.js"></script>
-    <script src="progress-integration.js"></script>
-    <script src="word-formation-game.js"></script>
-    <script src="writing-practice.js"></script>
-    <script src="hiragana-learning.js"></script>
-    <script src="word-relay.js"></script>
-    <script src="clock-game.js"></script>
-    <script src="shape-puzzle.js"></script>
-    <script src="biology-quiz.js"></script>
+    <script src="games/shopping-game/shopping-game.js"></script>
+    <script src="shared/character-data/character-data.js"></script>
+    <script src="shared/audio-manager/audio-manager.js"></script>
+    <script src="shared/progress-tracker/progress-tracker.js"></script>
+    <script src="shared/badge-system/badge-system.js"></script>
+    <script src="shared/gamification-system/gamification-system.js"></script>
+    <script src="shared/progress-display/progress-display.js"></script>
+    <script src="shared/progress-integration/progress-integration.js"></script>
+    <script src="games/word-formation-game/word-formation-game.js"></script>
+    <script src="games/writing-practice/writing-practice.js"></script>
+    <script src="games/hiragana-learning/hiragana-learning.js"></script>
+    <script src="games/word-relay/word-relay.js"></script>
+    <script src="games/clock-game/clock-game.js"></script>
+    <script src="games/shape-puzzle/shape-puzzle.js"></script>
+    <script src="games/biology-quiz/biology-quiz.js"></script>
     <script>
         // スクリプト読み込み確認
         console.log('📦 スクリプト読み込み状況:');
@@ -174,7 +174,7 @@
                                 ${missingScripts.map(name => `<li>${name}</li>`).join('')}
                             </ul>
                             <p style="margin-top: 15px;">
-                                <a href="debug-mobile.html" style="color: #856404; text-decoration: underline; font-weight: bold;">
+                                <a href="dev/debug-mobile.html" style="color: #856404; text-decoration: underline; font-weight: bold;">
                                     デバッグページで詳細を確認
                                 </a>
                             </p>
@@ -316,7 +316,7 @@
                                     <pre style="background: #fff; padding: 10px; border-radius: 5px; overflow-x: auto; font-size: 12px; margin-top: 10px;">${error.stack || 'スタックトレースなし'}</pre>
                                 </details>
                                 <p style="font-size: 14px; margin: 15px 0;">
-                                    <a href="debug-mobile.html" style="color: #721c24; text-decoration: underline;">
+                                    <a href="dev/debug-mobile.html" style="color: #721c24; text-decoration: underline;">
                                         デバッグページで詳細を確認
                                     </a>
                                 </p>

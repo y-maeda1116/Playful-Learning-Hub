@@ -10,32 +10,33 @@ describe('AudioSystem', () => {
 
   beforeEach(() => {
     // Mock Audio API BEFORE creating AudioSystem
-    const createMockAudio = () => {
+    // vitest では new できるよう function 宣言を使う（arrow 関数は不可）
+    function createMockAudio() {
       const listeners: { [key: string]: Function[] } = {};
       return {
-        play: jest.fn().mockImplementation(function () {
+        play: vi.fn().mockImplementation(function () {
           // Call 'play' event listeners
           if (listeners['play']) {
             listeners['play'].forEach((cb) => cb());
           }
           return Promise.resolve();
         }),
-        pause: jest.fn(),
-        addEventListener: jest.fn().mockImplementation(function (event: string, cb: Function) {
+        pause: vi.fn(),
+        addEventListener: vi.fn().mockImplementation(function (event: string, cb: Function) {
           if (!listeners[event]) {
             listeners[event] = [];
           }
           listeners[event].push(cb);
         }),
-        removeEventListener: jest.fn(),
+        removeEventListener: vi.fn(),
         volume: 1,
         currentTime: 0,
         paused: true,
         src: '',
       };
-    };
+    }
 
-    global.Audio = jest.fn(createMockAudio) as any;
+    global.Audio = vi.fn(createMockAudio) as any;
     audioSystem = new AudioSystem();
   });
 
@@ -46,7 +47,7 @@ describe('AudioSystem', () => {
   describe('playAudio', () => {
     it('should play audio successfully with valid URL', async () => {
       const audioUrl = 'https://example.com/audio/hydrogen.mp3';
-      const onSuccess = jest.fn();
+      const onSuccess = vi.fn();
 
       await audioSystem.playAudio(audioUrl, { onSuccess });
 
@@ -54,7 +55,7 @@ describe('AudioSystem', () => {
     });
 
     it('should throw error when audio URL is empty', async () => {
-      const onError = jest.fn();
+      const onError = vi.fn();
 
       await expect(audioSystem.playAudio('', { onError })).rejects.toThrow(
         'Audio URL is required'
@@ -63,7 +64,7 @@ describe('AudioSystem', () => {
     });
 
     it('should throw error when audio URL is null', async () => {
-      const onError = jest.fn();
+      const onError = vi.fn();
 
       await expect(audioSystem.playAudio(null as any, { onError })).rejects.toThrow(
         'Audio URL is required'
@@ -74,17 +75,17 @@ describe('AudioSystem', () => {
     it('should set volume when specified', async () => {
       const audioUrl = 'https://example.com/audio/oxygen.mp3';
       const mockAudio = {
-        play: jest.fn().mockResolvedValue(undefined),
-        pause: jest.fn(),
-        addEventListener: jest.fn(),
-        removeEventListener: jest.fn(),
+        play: vi.fn().mockResolvedValue(undefined),
+        pause: vi.fn(),
+        addEventListener: vi.fn(),
+        removeEventListener: vi.fn(),
         volume: 1,
         currentTime: 0,
         paused: true,
         src: audioUrl,
       };
 
-      global.Audio = jest.fn(() => mockAudio) as any;
+      global.Audio = vi.fn(function () { return mockAudio; }) as any;
       audioSystem = new AudioSystem();
 
       await audioSystem.playAudio(audioUrl, { volume: 0.5 });
@@ -95,17 +96,17 @@ describe('AudioSystem', () => {
     it('should clamp volume between 0 and 1', async () => {
       const audioUrl = 'https://example.com/audio/carbon.mp3';
       const mockAudio = {
-        play: jest.fn().mockResolvedValue(undefined),
-        pause: jest.fn(),
-        addEventListener: jest.fn(),
-        removeEventListener: jest.fn(),
+        play: vi.fn().mockResolvedValue(undefined),
+        pause: vi.fn(),
+        addEventListener: vi.fn(),
+        removeEventListener: vi.fn(),
         volume: 1,
         currentTime: 0,
         paused: true,
         src: audioUrl,
       };
 
-      global.Audio = jest.fn(() => mockAudio) as any;
+      global.Audio = vi.fn(function () { return mockAudio; }) as any;
       audioSystem = new AudioSystem();
 
       await audioSystem.playAudio(audioUrl, { volume: 1.5 });
@@ -122,20 +123,20 @@ describe('AudioSystem', () => {
       const createMockAudio = (url: string, paused: boolean) => {
         const listeners: { [key: string]: Function[] } = {};
         return {
-          play: jest.fn().mockImplementation(function () {
+          play: vi.fn().mockImplementation(function () {
             if (listeners['play']) {
               listeners['play'].forEach((cb) => cb());
             }
             return Promise.resolve();
           }),
-          pause: jest.fn(),
-          addEventListener: jest.fn().mockImplementation(function (event: string, cb: Function) {
+          pause: vi.fn(),
+          addEventListener: vi.fn().mockImplementation(function (event: string, cb: Function) {
             if (!listeners[event]) {
               listeners[event] = [];
             }
             listeners[event].push(cb);
           }),
-          removeEventListener: jest.fn(),
+          removeEventListener: vi.fn(),
           volume: 1,
           currentTime: 0,
           paused,
@@ -144,7 +145,7 @@ describe('AudioSystem', () => {
       };
 
       let callCount = 0;
-      global.Audio = jest.fn(() => {
+      global.Audio = vi.fn(function () {
         callCount++;
         return callCount === 1 ? createMockAudio(audioUrl1, false) : createMockAudio(audioUrl2, true);
       }) as any;
@@ -152,7 +153,7 @@ describe('AudioSystem', () => {
       const newAudioSystem = new AudioSystem();
 
       await newAudioSystem.playAudio(audioUrl1);
-      const firstAudioElement = (global.Audio as jest.Mock).mock.results[1].value;
+      const firstAudioElement = (global.Audio as vi.Mock).mock.results[1].value;
 
       await newAudioSystem.playAudio(audioUrl2);
 
@@ -165,20 +166,20 @@ describe('AudioSystem', () => {
       const createMockAudio = () => {
         const listeners: { [key: string]: Function[] } = {};
         return {
-          play: jest.fn().mockImplementation(function () {
+          play: vi.fn().mockImplementation(function () {
             if (listeners['play']) {
               listeners['play'].forEach((cb) => cb());
             }
             return Promise.resolve();
           }),
-          pause: jest.fn(),
-          addEventListener: jest.fn().mockImplementation(function (event: string, cb: Function) {
+          pause: vi.fn(),
+          addEventListener: vi.fn().mockImplementation(function (event: string, cb: Function) {
             if (!listeners[event]) {
               listeners[event] = [];
             }
             listeners[event].push(cb);
           }),
-          removeEventListener: jest.fn(),
+          removeEventListener: vi.fn(),
           volume: 1,
           currentTime: 0,
           paused: true,
@@ -188,7 +189,7 @@ describe('AudioSystem', () => {
 
       const mockAudio = createMockAudio();
       let audioCreationCount = 0;
-      global.Audio = jest.fn(() => {
+      global.Audio = vi.fn(function () {
         audioCreationCount++;
         // Return the same mock for all calls (simulating cache behavior)
         return mockAudio;
@@ -210,17 +211,17 @@ describe('AudioSystem', () => {
     it('should stop currently playing audio', async () => {
       const audioUrl = 'https://example.com/audio/sulfur.mp3';
       const mockAudio = {
-        play: jest.fn().mockResolvedValue(undefined),
-        pause: jest.fn(),
-        addEventListener: jest.fn(),
-        removeEventListener: jest.fn(),
+        play: vi.fn().mockResolvedValue(undefined),
+        pause: vi.fn(),
+        addEventListener: vi.fn(),
+        removeEventListener: vi.fn(),
         volume: 1,
         currentTime: 0,
         paused: false,
         src: audioUrl,
       };
 
-      global.Audio = jest.fn(() => mockAudio) as any;
+      global.Audio = vi.fn(function () { return mockAudio; }) as any;
       audioSystem = new AudioSystem();
 
       await audioSystem.playAudio(audioUrl);
@@ -279,17 +280,17 @@ describe('AudioSystem', () => {
       const pronunciation = 'karushiumu';
 
       const mockAudio = {
-        play: jest.fn().mockRejectedValue(new Error('Network error')),
-        pause: jest.fn(),
-        addEventListener: jest.fn(),
-        removeEventListener: jest.fn(),
+        play: vi.fn().mockRejectedValue(new Error('Network error')),
+        pause: vi.fn(),
+        addEventListener: vi.fn(),
+        removeEventListener: vi.fn(),
         volume: 1,
         currentTime: 0,
         paused: true,
         src: audioUrl,
       };
 
-      global.Audio = jest.fn(() => mockAudio) as any;
+      global.Audio = vi.fn(function () { return mockAudio; }) as any;
       audioSystem = new AudioSystem();
 
       const result = await audioSystem.playAudioWithFallback(
@@ -306,20 +307,20 @@ describe('AudioSystem', () => {
       const audioUrl = 'https://example.com/audio/invalid.mp3';
       const elementName = 'Iron';
       const pronunciation = 'tetsu';
-      const onError = jest.fn();
+      const onError = vi.fn();
 
       const mockAudio = {
-        play: jest.fn().mockRejectedValue(new Error('Network error')),
-        pause: jest.fn(),
-        addEventListener: jest.fn(),
-        removeEventListener: jest.fn(),
+        play: vi.fn().mockRejectedValue(new Error('Network error')),
+        pause: vi.fn(),
+        addEventListener: vi.fn(),
+        removeEventListener: vi.fn(),
         volume: 1,
         currentTime: 0,
         paused: true,
         src: audioUrl,
       };
 
-      global.Audio = jest.fn(() => mockAudio) as any;
+      global.Audio = vi.fn(function () { return mockAudio; }) as any;
       audioSystem = new AudioSystem();
 
       await audioSystem.playAudioWithFallback(audioUrl, elementName, pronunciation, {
@@ -334,17 +335,17 @@ describe('AudioSystem', () => {
     it('should return true when audio is playing', async () => {
       const audioUrl = 'https://example.com/audio/copper.mp3';
       const mockAudio = {
-        play: jest.fn().mockResolvedValue(undefined),
-        pause: jest.fn(),
-        addEventListener: jest.fn(),
-        removeEventListener: jest.fn(),
+        play: vi.fn().mockResolvedValue(undefined),
+        pause: vi.fn(),
+        addEventListener: vi.fn(),
+        removeEventListener: vi.fn(),
         volume: 1,
         currentTime: 0,
         paused: false,
         src: audioUrl,
       };
 
-      global.Audio = jest.fn(() => mockAudio) as any;
+      global.Audio = vi.fn(function () { return mockAudio; }) as any;
       audioSystem = new AudioSystem();
 
       await audioSystem.playAudio(audioUrl);
@@ -358,17 +359,17 @@ describe('AudioSystem', () => {
     it('should return false after stopping audio', async () => {
       const audioUrl = 'https://example.com/audio/zinc.mp3';
       const mockAudio = {
-        play: jest.fn().mockResolvedValue(undefined),
-        pause: jest.fn(),
-        addEventListener: jest.fn(),
-        removeEventListener: jest.fn(),
+        play: vi.fn().mockResolvedValue(undefined),
+        pause: vi.fn(),
+        addEventListener: vi.fn(),
+        removeEventListener: vi.fn(),
         volume: 1,
         currentTime: 0,
         paused: false,
         src: audioUrl,
       };
 
-      global.Audio = jest.fn(() => mockAudio) as any;
+      global.Audio = vi.fn(function () { return mockAudio; }) as any;
       audioSystem = new AudioSystem();
 
       await audioSystem.playAudio(audioUrl);
@@ -386,20 +387,20 @@ describe('AudioSystem', () => {
       const createMockAudio = (url: string) => {
         const listeners: { [key: string]: Function[] } = {};
         return {
-          play: jest.fn().mockImplementation(function () {
+          play: vi.fn().mockImplementation(function () {
             if (listeners['play']) {
               listeners['play'].forEach((cb) => cb());
             }
             return Promise.resolve();
           }),
-          pause: jest.fn(),
-          addEventListener: jest.fn().mockImplementation(function (event: string, cb: Function) {
+          pause: vi.fn(),
+          addEventListener: vi.fn().mockImplementation(function (event: string, cb: Function) {
             if (!listeners[event]) {
               listeners[event] = [];
             }
             listeners[event].push(cb);
           }),
-          removeEventListener: jest.fn(),
+          removeEventListener: vi.fn(),
           volume: 1,
           currentTime: 0,
           paused: true,
@@ -413,7 +414,7 @@ describe('AudioSystem', () => {
       const mocks = [availabilityCheckMock, mockAudio1, mockAudio2];
 
       let callCount = 0;
-      global.Audio = jest.fn(() => {
+      global.Audio = vi.fn(function () {
         const mock = mocks[callCount];
         callCount++;
         return mock;
@@ -433,17 +434,17 @@ describe('AudioSystem', () => {
     it('should reset current playing audio after cache clear', async () => {
       const audioUrl = 'https://example.com/audio/potassium.mp3';
       const mockAudio = {
-        play: jest.fn().mockResolvedValue(undefined),
-        pause: jest.fn(),
-        addEventListener: jest.fn(),
-        removeEventListener: jest.fn(),
+        play: vi.fn().mockResolvedValue(undefined),
+        pause: vi.fn(),
+        addEventListener: vi.fn(),
+        removeEventListener: vi.fn(),
         volume: 1,
         currentTime: 0,
         paused: false,
         src: audioUrl,
       };
 
-      global.Audio = jest.fn(() => mockAudio) as any;
+      global.Audio = vi.fn(function () { return mockAudio; }) as any;
       audioSystem = new AudioSystem();
 
       await audioSystem.playAudio(audioUrl);
@@ -459,7 +460,7 @@ describe('AudioSystem', () => {
     });
 
     it('should return false when audio creation fails', () => {
-      global.Audio = jest.fn(() => {
+      global.Audio = vi.fn(function () {
         throw new Error('Audio not supported');
       }) as any;
 
@@ -471,20 +472,20 @@ describe('AudioSystem', () => {
   describe('error handling', () => {
     it('should handle audio playback errors gracefully', async () => {
       const audioUrl = 'https://example.com/audio/invalid.mp3';
-      const onError = jest.fn();
+      const onError = vi.fn();
 
       const mockAudio = {
-        play: jest.fn().mockRejectedValue(new Error('Playback failed')),
-        pause: jest.fn(),
-        addEventListener: jest.fn(),
-        removeEventListener: jest.fn(),
+        play: vi.fn().mockRejectedValue(new Error('Playback failed')),
+        pause: vi.fn(),
+        addEventListener: vi.fn(),
+        removeEventListener: vi.fn(),
         volume: 1,
         currentTime: 0,
         paused: true,
         src: audioUrl,
       };
 
-      global.Audio = jest.fn(() => mockAudio) as any;
+      global.Audio = vi.fn(function () { return mockAudio; }) as any;
       audioSystem = new AudioSystem();
 
       await expect(audioSystem.playAudio(audioUrl, { onError })).rejects.toThrow();
@@ -493,20 +494,20 @@ describe('AudioSystem', () => {
 
     it('should handle non-Error exceptions', async () => {
       const audioUrl = 'https://example.com/audio/invalid.mp3';
-      const onError = jest.fn();
+      const onError = vi.fn();
 
       const mockAudio = {
-        play: jest.fn().mockRejectedValue('String error'),
-        pause: jest.fn(),
-        addEventListener: jest.fn(),
-        removeEventListener: jest.fn(),
+        play: vi.fn().mockRejectedValue('String error'),
+        pause: vi.fn(),
+        addEventListener: vi.fn(),
+        removeEventListener: vi.fn(),
         volume: 1,
         currentTime: 0,
         paused: true,
         src: audioUrl,
       };
 
-      global.Audio = jest.fn(() => mockAudio) as any;
+      global.Audio = vi.fn(function () { return mockAudio; }) as any;
       audioSystem = new AudioSystem();
 
       await expect(audioSystem.playAudio(audioUrl, { onError })).rejects.toThrow();
