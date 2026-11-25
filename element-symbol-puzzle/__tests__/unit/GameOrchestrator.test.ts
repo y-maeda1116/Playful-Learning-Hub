@@ -71,7 +71,7 @@ describe('GameOrchestrator', () => {
     });
 
     it('should emit sessionStarted event', () => {
-      const eventCallback = jest.fn();
+      const eventCallback = vi.fn();
       orchestrator.onGameEvent(eventCallback);
 
       orchestrator.startGameSession('matching', 3);
@@ -95,7 +95,7 @@ describe('GameOrchestrator', () => {
     });
 
     it('should emit questionDisplayed event', async () => {
-      const eventCallback = jest.fn();
+      const eventCallback = vi.fn();
       orchestrator.onGameEvent(eventCallback);
 
       orchestrator.startGameSession('matching', 3);
@@ -149,7 +149,7 @@ describe('GameOrchestrator', () => {
     });
 
     it('should emit answerSubmitted event', async () => {
-      const eventCallback = jest.fn();
+      const eventCallback = vi.fn();
       orchestrator.onGameEvent(eventCallback);
 
       orchestrator.startGameSession('matching', 3);
@@ -164,7 +164,7 @@ describe('GameOrchestrator', () => {
     });
 
     it('should emit feedbackDisplayed event', async () => {
-      const eventCallback = jest.fn();
+      const eventCallback = vi.fn();
       orchestrator.onGameEvent(eventCallback);
 
       orchestrator.startGameSession('matching', 3);
@@ -197,7 +197,7 @@ describe('GameOrchestrator', () => {
     });
 
     it('should emit sessionEnded event', async () => {
-      const eventCallback = jest.fn();
+      const eventCallback = vi.fn();
       orchestrator.onGameEvent(eventCallback);
 
       orchestrator.startGameSession('matching', 3);
@@ -228,8 +228,13 @@ describe('GameOrchestrator', () => {
   });
 
   describe('getUserProgress', () => {
-    it('should return user progress', () => {
-      orchestrator.setCurrentUser('user123');
+    it('should return user progress', async () => {
+      // 進捗はセッション完了時に作成されるため、先に1セッション完了させる
+      orchestrator.startGameSession('matching', 3, 'user123');
+      const question = await orchestrator.displayNextQuestion();
+      await orchestrator.submitAnswer(question.name);
+      await orchestrator.endGameSession();
+
       const progress = orchestrator.getUserProgress();
 
       expect(progress).toBeDefined();
@@ -241,8 +246,13 @@ describe('GameOrchestrator', () => {
   });
 
   describe('getUnlockedBadges', () => {
-    it('should return unlocked badges', () => {
-      orchestrator.setCurrentUser('user123');
+    it('should return unlocked badges', async () => {
+      // 進捗はセッション完了時に作成されるため、先に1セッション完了させる
+      orchestrator.startGameSession('matching', 3, 'user123');
+      const question = await orchestrator.displayNextQuestion();
+      await orchestrator.submitAnswer(question.name);
+      await orchestrator.endGameSession();
+
       const badges = orchestrator.getUnlockedBadges();
 
       expect(Array.isArray(badges)).toBe(true);
@@ -250,8 +260,13 @@ describe('GameOrchestrator', () => {
   });
 
   describe('getStreakDays', () => {
-    it('should return streak days', () => {
-      orchestrator.setCurrentUser('user123');
+    it('should return streak days', async () => {
+      // 進捗はセッション完了時に作成されるため、先に1セッション完了させる
+      orchestrator.startGameSession('matching', 3, 'user123');
+      const question = await orchestrator.displayNextQuestion();
+      await orchestrator.submitAnswer(question.name);
+      await orchestrator.endGameSession();
+
       const streakDays = orchestrator.getStreakDays();
 
       expect(typeof streakDays).toBe('number');
@@ -334,8 +349,8 @@ describe('GameOrchestrator', () => {
 
   describe('Event handling', () => {
     it('should handle multiple event listeners', async () => {
-      const callback1 = jest.fn();
-      const callback2 = jest.fn();
+      const callback1 = vi.fn();
+      const callback2 = vi.fn();
 
       orchestrator.onGameEvent(callback1);
       orchestrator.onGameEvent(callback2);
@@ -347,10 +362,10 @@ describe('GameOrchestrator', () => {
     });
 
     it('should continue processing events even if listener throws', async () => {
-      const callback1 = jest.fn(() => {
+      const callback1 = vi.fn(() => {
         throw new Error('Test error');
       });
-      const callback2 = jest.fn();
+      const callback2 = vi.fn();
 
       orchestrator.onGameEvent(callback1);
       orchestrator.onGameEvent(callback2);
@@ -364,7 +379,7 @@ describe('GameOrchestrator', () => {
 
   describe('Complete game flow', () => {
     it('should complete a full game session', async () => {
-      const eventCallback = jest.fn();
+      const eventCallback = vi.fn();
       orchestrator.onGameEvent(eventCallback);
 
       // Start session
